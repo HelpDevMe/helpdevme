@@ -18,14 +18,14 @@
         <div class="col">
             @if(session()->get('success'))
                 <div class="alert alert-success">
-                    {{ session()->get('success') }}  
+                    {{ session()->get('success') }}
                 </div>
             @endif
             @foreach($questions as $question)
                 <div class="card my-3 border-0 shadow-sm">
                     <div class="card-body">
                         <a href="#">
-                            <h2>{{ $question->title }}</h2>
+                            <h5>{{ $question->title }}</h5>
                         </a>
                         <p>{{ $question->body }}</p>
                     </div>
