@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'HelpDev.me') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'HelpDev.me') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -68,10 +68,10 @@
             </div>
         </nav>
         @yield('submenu')
-        <main role="main" class="py-3">
+        <main role="main">
             @yield('content')
         </main>
-        <footer class="navbar navbar-light bg-white">
+        <footer id="footer" class="navbar navbar-light bg-light position-absolute w-100">
             <div class="container">
                 <ul class="navbar-nav">
                     <li class="nav-item">

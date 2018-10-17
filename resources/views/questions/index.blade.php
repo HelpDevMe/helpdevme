@@ -13,25 +13,28 @@
 @endsection
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col">
-            @if(session()->get('success'))
-                <div class="alert alert-success">
-                    {{ session()->get('success') }}
-                </div>
-            @endif
-            @foreach($questions as $question)
-                <div class="card my-3 border-0 shadow-sm">
-                    <div class="card-body">
-                        <a href="#">
-                            <h5>{{ $question->title }}</h5>
-                        </a>
-                        <p>{{ $question->body }}</p>
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                @if(session()->get('success'))
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
                     </div>
-                </div>
-            @endforeach
+                @endif
+                @foreach($questions as $question)
+                    <blockquote class="blockquote">
+                        <h2 class="h5">
+                            <a href="{{ route('questions.show', $question->id) }}">{{ $question->title }}</a>
+                        </h2>
+                        <p>{{ $question->body }}</p>
+                        <footer class="blockquote-footer">
+                            <cite title="{{ $question->user->name }}">{{ $question->user->name }}</cite>
+                        </footer>
+                    </blockquote>
+                @endforeach
+            </div>
         </div>
     </div>
-</div>
+</section>
 @endsection

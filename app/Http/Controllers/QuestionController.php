@@ -52,25 +52,24 @@ class QuestionController extends Controller
             'body'=> 'required'
         ]);
 
-        $question = new Question([
-            'title' => $request->get('title'),
-            'body'=> $request->get('body')
-        ]);
+        $question = $request->all();
+        $question['user_id'] = auth()->user()->id;
 
-        $question->save();
+        Question::create($question);
 
-        return redirect('/questions')->with('success', 'Pergunta criada!');
+        return redirect()->route('questions.index')
+            ->with('success', 'Pergunta criada!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Question $question)
     {
-        //
+        return view('questions.show', compact('question'));
     }
 
     /**
