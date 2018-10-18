@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Question;
+use App\Post;
 use Illuminate\Http\Request;
 
-class QuestionController extends Controller
+class PostController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -14,7 +14,7 @@ class QuestionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('auth', ['except' => ['store']]);
     }
 
     /**
@@ -24,9 +24,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::all();
-
-        return view('questions.index', compact('questions'));
+        //
     }
 
     /**
@@ -36,7 +34,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('questions.create');
+        //
     }
 
     /**
@@ -48,38 +46,37 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:questions',
-            'body' => 'required'
+            'answer' => 'required',
+            'user_id' => 'required'
         ]);
 
-        $question = $request->all();
-        $question['slug'] = str_slug($request->title);
-        $question['user_id'] = auth()->user()->id;
+        $post = $request->all();
+        $post['user_id'] = auth()->user()->id;
 
-        Question::create($question);
+        Post::create($post);
 
         return redirect()->route('home')
-            ->with('success', 'Pergunta criada!');
+            ->with('success', 'Mensagem enviada!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Question  $question
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Question $question)
+    public function show(Post $post)
     {
-        return view('questions.show', compact('question'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
         //
     }
@@ -88,10 +85,10 @@ class QuestionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -99,10 +96,10 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
         //
     }

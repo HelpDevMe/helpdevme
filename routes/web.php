@@ -9,10 +9,18 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
-
-Route::get('/', 'QuestionController@index');
+ */
 
 Auth::routes();
 
-Route::resource('questions', 'QuestionController');
+Route::get('/', 'QuestionController@index')->name('home');
+
+Route::view('/about', 'about')->name('about');
+
+Route::get('/{question}', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);
+
+Route::resource('questions', 'QuestionController', ['except' => [
+    'index', 'show'
+]]);
+
+Route::resource('posts', 'PostController');

@@ -15,11 +15,11 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ route('home') }}">
                     {{ config('app.name', 'HelpDev.me') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -69,13 +69,17 @@
         </nav>
         @yield('submenu')
         <main role="main">
-            @yield('content')
+            <section class="py-5">
+                <div class="container">
+                    @yield('content')
+                </div>
+            </section>
         </main>
-        <footer id="footer" class="navbar navbar-light bg-light position-absolute w-100">
+        <footer class="navbar navbar-dark bg-dark">
             <div class="container">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Sobre</a>
+                    <a href="{{ route('about') }}" class="nav-link">Sobre</a>
                     </li>
                 </ul>
             </div>
