@@ -23,7 +23,7 @@
         @foreach($questions as $question)
             <blockquote class="blockquote mb-5 p-3 rounded border bg-white">
                 <address class="author small">
-                    <a rel="author" href="#">{{ $question->user->name }}</a>
+                    <a rel="author" href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
                 </address>
                 <h3>
                     <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
@@ -38,7 +38,7 @@
                                     @foreach($question->posts as $post)
                                         <li class="nav-item py-3">
                                             <div>
-                                                <a href="#">{{ $post->user->name }}</a>
+                                                <a href="{{ route('users.show', $post->user) }}">{{ $post->user->name }}</a>
                                                 {{ $post->answer }}
                                                 @if ($post->budget)
                                                     <span class="badge badge-success">@money($post->budget)</span>

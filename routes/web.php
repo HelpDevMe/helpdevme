@@ -17,10 +17,12 @@ Route::get('/', 'QuestionController@index')->name('home');
 
 Route::view('/about', 'about')->name('about');
 
-Route::get('/{question}', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);
-
 Route::resource('questions', 'QuestionController', ['except' => [
     'index', 'show'
 ]]);
 
 Route::resource('posts', 'PostController');
+
+Route::resource('users', 'UserController');
+
+Route::get('/{question}', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);

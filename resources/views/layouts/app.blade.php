@@ -29,7 +29,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -57,7 +59,11 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    <a class="dropdown-item" href="{{ route('users.show', Auth::user()) }}">
+                                        {{ __('Profile') }}
+                                    </a>
+
+                                    <form id="logout-form" class="d-none" action="{{ route('logout') }}" method="POST">
                                         @csrf
                                     </form>
                                 </div>
