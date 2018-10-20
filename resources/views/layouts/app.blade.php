@@ -73,7 +73,6 @@
                 </div>
             </div>
         </nav>
-        @yield('submenu')
         <main role="main">
             <section class="py-5">
                 <div class="container">

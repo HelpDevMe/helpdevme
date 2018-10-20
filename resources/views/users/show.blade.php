@@ -8,7 +8,7 @@
     @endif
     <h1>{{ $user->name }}</h1>
     <h2>{{ $user->email }}</h2>
-    @if (Auth::id() == $user->id)
+    @can('update', $user)
         <a href="{{ route('users.edit', $user) }}" class="btn btn-primary">Editar Perfil</a>
-    @endif
+    @endcan
 @endsection

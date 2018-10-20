@@ -14,7 +14,7 @@ class PostController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['store']]);
+        $this->middleware('auth');
     }
 
     /**
@@ -46,12 +46,11 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'answer' => 'required',
-            'user_id' => 'required'
+            'answer' => 'required'
         ]);
 
         $post = $request->all();
-        $post['user_id'] = auth()->user()->id;
+        $post['user_id'] = auth()->id();
 
         Post::create($post);
 

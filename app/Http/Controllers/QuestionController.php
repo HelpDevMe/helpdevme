@@ -36,7 +36,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('questions.create');
+        //
     }
 
     /**
@@ -54,7 +54,7 @@ class QuestionController extends Controller
 
         $question = $request->all();
         $question['slug'] = str_slug($request->title);
-        $question['user_id'] = auth()->user()->id;
+        $question['user_id'] = auth()->id();
 
         Question::create($question);
 

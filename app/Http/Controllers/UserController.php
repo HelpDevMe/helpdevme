@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+    
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -76,6 +86,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize($user);
+
         return view('users.edit', compact('user'));
     }
 
@@ -89,6 +101,8 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
+        
+        $this->authorize($user);
 
         $user->update($request->has('password') ? array_merge($request->except('password'), ['password' => bcrypt($request->input('password'))]) : $request->except('password'));
 
