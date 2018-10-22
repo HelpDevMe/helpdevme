@@ -8,6 +8,7 @@ use Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Events\PrivateMessageSent;
 
 class PostController extends Controller
 {
@@ -25,39 +26,28 @@ class PostController extends Controller
     {
         return Post::with('user')->get();
     }
-   
+
     public function privateMessages(User $user)
     {
-        $privateCommunication= Post::with('user')
-        ->where(['user_id'=> auth()->id(), 'receiver_id'=> $user->id])
-        ->orWhere(function($query) use($user){
-            $query->where(['user_id' => $user->id, 'receiver_id' => auth()->id()]);
-        })
-        ->get();
+        $privateCommunication = Post::with('user')
+            ->where(['user_id' => auth()->id(), 'receiver_id' => $user->id])
+            ->orWhere(function ($query) use ($user) {
+                $query->where(['user_id' => $user->id, 'receiver_id' => auth()->id()]);
+            })
+            ->get();
 
         return $privateCommunication;
     }
 
-    public function sendMessage(Request $request)
-    {
-        $message=auth()->user()->messages()->create(['message'=>$request->message]);
-
-        broadcast(new MessageSent(auth()->user(),$message->load('user')))->toOthers();
-        
-        return response(['status'=>'Message sent successfully','message'=>$message]);
-
-    }
-
     public function sendPrivateMessage(Request $request, User $user)
     {
-        dd(Auth::user());
-        $input=$request->all();
-        $input['receiver_id']=$user->id;
-        $message=auth()->user()->messages()->create($input);
+        $input = $request->all();
+        $input['receiver_id'] = $user->id;
+        $message = auth()->user()->messages()->create($input);
 
         broadcast(new PrivateMessageSent($message->load('user')))->toOthers();
-        
-        return response(['status'=>'Message private sent successfully','message'=>$message]);
+
+        return response(['status' => 'Message private sent successfully', 'message' => $message]);
 
     }
 }

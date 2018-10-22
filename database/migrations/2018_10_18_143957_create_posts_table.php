@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->increments('id');
             $table->text('body');
             $table->float('budget')->nullable();
-            $table->integer('question_id')->unsigned();
+            $table->integer('question_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();
             $table->integer('receiver_id')->unsigned();
             $table->timestamps();

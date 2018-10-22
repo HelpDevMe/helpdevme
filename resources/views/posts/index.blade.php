@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <private-chat :user="{{auth()->user()}}"></private-chat>
+    <private-chat :user="{{ auth()->user() }}"></private-chat>
     {{-- <h1>Posts</h1>
     <ul class="nav flex-column">
         @foreach($posts as $post)
