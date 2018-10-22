@@ -62,7 +62,7 @@
                                         <li class="nav-item py-3">
                                             <div>
                                                 <a href="{{ route('users.show', $post->user) }}">{{ $post->user->name }}</a>
-                                                {{ $post->answer }}
+                                                {{ $post->body }}
                                                 @if ($post->budget)
                                                     <span class="badge badge-success">R$ {{ number_format($post->budget, 2, ',', '.') }}</span>
                                                 @endif
@@ -97,9 +97,10 @@
                     <form method="POST" action="{{ route('posts.store') }}" class="mt-3">
                         @csrf
                         <input type="hidden" name="question_id" value="{{ $question->id }}">
+                        <input type="hidden" name="receiver_id" value="{{ $question->user->id }}">
                         <div class="form-row align-items-center">
                             <div class="col-7 form-group">
-                                <textarea name="answer" placeholder="Escreva uma mensagem" class="form-control" required></textarea>
+                                <textarea name="body" placeholder="Escreva uma mensagem" class="form-control" required></textarea>
                             </div>
                             <div class="col-3 form-group">
                                 <input type="number" class="form-control" name="budget" placeholder="Orçamento"/>

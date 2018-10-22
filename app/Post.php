@@ -9,10 +9,11 @@ class Post extends Model
     protected $with = ['user'];
 
     protected $fillable = [
-        'answer',
+        'body',
         'budget',
         'question_id',
-        'user_id'
+        'user_id',
+        'receiver_id'
     ];
 
     public function question()
@@ -23,5 +24,10 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+    
+    public function receiver()
+    {
+        return $this->belongsTo('App\User', 'receiver_id');
     }
 }

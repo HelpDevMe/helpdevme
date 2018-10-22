@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/users', function (Request $request) {
+    return \App\User::all();
 });
+
+Route::get('messages', 'Api\PostController@fetchMessages');
+Route::post('messages', 'Api\PostController@sendMessage');
+Route::get('/private-messages/{user}', 'Api\PostController@privateMessages')->name('privateMessages');
+Route::post('/private-messages/{user}', 'Api\PostController@sendPrivateMessage')->name('privateMessages.store');
