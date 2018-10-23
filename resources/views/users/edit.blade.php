@@ -5,9 +5,23 @@
     <div class="col">
         <div class="card">
             <div class="card-body">
-                <form method="POST" action="{{ route('users.update', $user) }}">
+                <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
+                    <div class="form-group row">
+                        <label for="avatar" class="col-md-4 col-form-label text-md-right">{{ __('Avatar') }}</label>
+                        <div class="col-md-6">
+                            <div class="row align-items-center">
+                                <div class="col-lg-2">
+                                    <img class="img-fluid rounded-circle" src="/storage/avatars/{{ $user->avatar }}" alt="{{ $user->name }}" title="{{ $user->name }}">
+                                </div>
+                                <div class="col">
+                                    <input type="file" class="form-control-file" name="avatar" id="avatarFile" aria-describedby="fileHelp">
+                                    <small id="fileHelp" class="form-text text-muted">Please upload a valid image file. Size of image should not be more than 2MB.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 

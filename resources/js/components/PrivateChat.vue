@@ -1,76 +1,31 @@
 <template>
-   <div>
-      <div class="online-users">
-         <div>
-            <div
-               v-for="friend in friends"
-               :color="(friend.id==activeFriend)?'green':''"
-               :key="friend.id"
-               @click="activeFriend=friend.id"
-               >
-               <div>
-                  <div :color="(onlineFriends.find(user=>user.id===friend.id))?'green':'red'">account_circle</div>
-               </div>
-               <div>
-                  <div>{{friend.name}}</div>
-               </div>
-            </div>
-         </div>
+   <div class="row">
+      <div class="col-lg-3">
+         <nav class="nav nav-pills nav-justified" role="tablist" aria-orientation="vertical">
+            <a href="javascript:void(0)" v-for="friend in friends" :class="(friend.id==activeFriend)?'active':''" :key="friend.id" @click="activeFriend=friend.id" class="nav-link w-100" role="tab">
+            <span class="mr-2" :class="(onlineFriends.find(user=>user.id===friend.id))?'text-success':'text-muted'">&#9679;</span>
+            <span>{{ friend.name }}</span>
+            </a>
+         </nav>
       </div>
-      <div id="privateMessageBox" class="messages mb-5">
-         <div>
-            <div
-               class="p-3"
-               v-for="(message, index) in allMessages"
-               :key="index"
-               >
-               <div
-                  :align-end="(user.id!==message.user.id)"
-                  column
-                  >
-                  <div>
-                     <div>
-                        <div>
-                           <span class="small font-italic">{{message.user.name}}</span>
-                        </div>
-                        <div>
-                           <div
-                              :color="(user.id!==message.user.id)?'red':'green'"
-                              text-color="white"
-                              >
-                              <div>
-                                 {{message.body}}
-                              </div>
-                           </div>
-                        </div>
-                        <div class="caption font-italic">
-                           {{message.created_at}}
-                        </div>
-                     </div>
-                  </div>
-               </div>
+      <div class="col-lg-9">
+         <div id="privateMessageBox">
+            <div class="d-flex flex-column p-3">
+                <div class="h5" v-for="(message, index) in allMessages" :key="index" :class="user.id==message.user.id ? 'text-right' : ''">
+                    <!-- <span class="small font-italic">{{ message.user.avatar }}</span> -->
+                    <img width="30px" height="30px" class="img-fluid rounded-circle" :src="'/storage/avatars/' + message.user.avatar" v-bind:alt="message.user.name" v-bind:title="message.user.name">
+                    <span class="badge badge-pill py-2 px-3" :class="(user.id!==message.user.id)?'badge-secondary':'badge-primary'">{{ message.body }}</span>
+                    <!-- <div class="caption font-italic">
+                    {{ message.created_at }}
+                    </div> -->
+                </div>
             </div>
-            <p v-if="typingFriend.name">{{typingFriend.name}} is typing</p>
-         </div>
-         <div
-            height="auto"
-            fixed
-            color="grey"
-            >
-            <div>
-               <div>
-                  <textarea
-                     rows=2
-                     v-model="body"
-                     label="Enter Message"
-                     single-line
-                     @keydown="onTyping"
-                     @keyup.enter="sendMessage"
-                     ></textarea>
-               </div>
-               <div>
-                  <button
-                     @click="sendMessage" class="mt-3 ml-2" color="green">send</button>
+            <p v-if="typingFriend.name">{{ typingFriend.name }} está digitando</p>
+            <!-- Form -->
+            <div class="input-group">
+               <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keyup.enter="sendMessage"></textarea>
+               <div class="input-group-append">
+                  <button @click="sendMessage" class="btn btn-primary">Enviar</button>
                </div>
             </div>
          </div>
@@ -129,6 +84,7 @@ export default {
         .then(response => {
           this.body = null;
           this.allMessages.push(response.data.message);
+          console.log('murilo 1');
           setTimeout(this.scrollToEnd, 100);
         });
     },
@@ -178,6 +134,7 @@ export default {
         console.log("pmessage sent");
         this.activeFriend = e.message.user_id;
         this.allMessages.push(e.message);
+        console.log('murilo 2');
         setTimeout(this.scrollToEnd, 100);
       })
       .listenForWhisper("typing", e => {
@@ -189,7 +146,7 @@ export default {
 
           this.typingClock = setTimeout(() => {
             this.typingFriend = {};
-          }, 100);
+          }, 900);
         }
       });
   }

@@ -28,6 +28,7 @@ class UserController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed'
@@ -103,6 +104,11 @@ class UserController extends Controller
         $user = Auth::user();
         
         $this->authorize($user);
+
+        $avatarName = $user->id . '_avatar' . time() . '.' . request()->avatar->getClientOriginalExtension();
+        $request->avatar->storeAs('avatars', $avatarName);
+
+        $user->avatar = $avatarName;
 
         $user->update($request->has('password') ? array_merge($request->except('password'), ['password' => bcrypt($request->input('password'))]) : $request->except('password'));
 
