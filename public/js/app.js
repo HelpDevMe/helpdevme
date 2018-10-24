@@ -57165,12 +57165,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
 
   data: function data() {
     return {
+      loading: true,
+      loadingMessage: true,
       body: null,
       activeFriend: null,
       typingFriend: {},
@@ -57194,6 +57200,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   watch: {
     activeFriend: function activeFriend(val) {
+      this.loadingMessage = true;
       this.fetchMessages();
     }
   },
@@ -57231,6 +57238,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
       axios.get("/api/private-messages/" + this.activeFriend).then(function (response) {
         _this3.allMessages = response.data;
+        _this3.loading = false;
+        _this3.loadingMessage = false;
       });
     },
     fetchUsers: function fetchUsers() {
@@ -57280,7 +57289,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         _this5.typingClock = setTimeout(function () {
           _this5.typingFriend = {};
-        }, 900);
+        }, 9000);
       }
     });
   }
@@ -57294,140 +57303,202 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-lg-3" }, [
-      _c(
-        "nav",
-        {
-          staticClass: "nav nav-pills nav-justified",
-          attrs: { role: "tablist", "aria-orientation": "vertical" }
-        },
-        _vm._l(_vm.friends, function(friend) {
-          return _c(
-            "a",
+  return _c("div", [
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: !_vm.loading,
+            expression: "!loading"
+          }
+        ],
+        staticClass: "row"
+      },
+      [
+        _c("div", { staticClass: "col-lg-3" }, [
+          _c(
+            "nav",
             {
-              key: friend.id,
-              staticClass: "nav-link w-100",
-              class: friend.id == _vm.activeFriend ? "active" : "",
-              attrs: { href: "javascript:void(0)", role: "tab" },
-              on: {
-                click: function($event) {
-                  _vm.activeFriend = friend.id
+              staticClass: "nav nav-pills nav-justified",
+              attrs: { role: "tablist", "aria-orientation": "vertical" }
+            },
+            _vm._l(_vm.friends, function(friend) {
+              return _c(
+                "a",
+                {
+                  key: friend.id,
+                  staticClass: "nav-link w-100",
+                  class: friend.id == _vm.activeFriend ? "active" : "",
+                  attrs: { href: "javascript:void(0)", role: "tab" },
+                  on: {
+                    click: function($event) {
+                      _vm.activeFriend = friend.id
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "mr-2",
+                      class: _vm.onlineFriends.find(function(user) {
+                        return user.id === friend.id
+                      })
+                        ? "text-success"
+                        : "text-muted"
+                    },
+                    [_vm._v("●")]
+                  ),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(_vm._s(friend.name))])
+                ]
+              )
+            })
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-9" }, [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !_vm.loadingMessage,
+                  expression: "!loadingMessage"
                 }
-              }
+              ],
+              attrs: { id: "privateMessageBox" }
             },
             [
               _c(
-                "span",
-                {
-                  staticClass: "mr-2",
-                  class: _vm.onlineFriends.find(function(user) {
-                    return user.id === friend.id
-                  })
-                    ? "text-success"
-                    : "text-muted"
-                },
-                [_vm._v("●")]
+                "div",
+                { staticClass: "d-flex flex-column p-3" },
+                _vm._l(_vm.allMessages, function(message, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: index,
+                      staticClass: "h5",
+                      class: _vm.user.id == message.user.id ? "text-right" : ""
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "img-fluid rounded-circle",
+                        attrs: {
+                          width: "30px",
+                          height: "30px",
+                          src: "/storage/avatars/" + message.user.avatar,
+                          alt: message.user.name,
+                          title: message.user.name
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "badge badge-pill py-2 px-3",
+                          class:
+                            _vm.user.id !== message.user.id
+                              ? "badge-secondary"
+                              : "badge-primary"
+                        },
+                        [_vm._v(_vm._s(message.body))]
+                      )
+                    ]
+                  )
+                })
               ),
               _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(friend.name))])
+              _vm.typingFriend.name
+                ? _c("p", [
+                    _vm._v(_vm._s(_vm.typingFriend.name) + " está digitando")
+                  ])
+                : _vm._e()
             ]
-          )
-        })
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-lg-9" }, [
-      _c("div", { attrs: { id: "privateMessageBox" } }, [
-        _c(
-          "div",
-          { staticClass: "d-flex flex-column p-3" },
-          _vm._l(_vm.allMessages, function(message, index) {
-            return _c(
-              "div",
-              {
-                key: index,
-                staticClass: "h5",
-                class: _vm.user.id == message.user.id ? "text-right" : ""
-              },
-              [
-                _c("img", {
-                  staticClass: "img-fluid rounded-circle",
-                  attrs: {
-                    width: "30px",
-                    height: "30px",
-                    src: "/storage/avatars/" + message.user.avatar,
-                    alt: message.user.name,
-                    title: message.user.name
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    staticClass: "badge badge-pill py-2 px-3",
-                    class:
-                      _vm.user.id !== message.user.id
-                        ? "badge-secondary"
-                        : "badge-primary"
-                  },
-                  [_vm._v(_vm._s(message.body))]
-                )
-              ]
-            )
-          })
-        ),
-        _vm._v(" "),
-        _vm.typingFriend.name
-          ? _c("p", [_vm._v(_vm._s(_vm.typingFriend.name) + " está digitando")])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-group" }, [
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.body,
-                expression: "body"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { placeholder: "Digite uma mensagem..." },
-            domProps: { value: _vm.body },
-            on: {
-              keydown: _vm.onTyping,
-              keyup: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                ) {
-                  return null
-                }
-                return _vm.sendMessage($event)
-              },
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.body = $event.target.value
-              }
-            }
-          }),
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "input-group-append" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: { click: _vm.sendMessage }
-              },
-              [_vm._v("Enviar")]
-            )
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.loadingMessage,
+                  expression: "loadingMessage"
+                }
+              ]
+            },
+            [_vm._v("carregando mensagens")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.body,
+                  expression: "body"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { placeholder: "Digite uma mensagem..." },
+              domProps: { value: _vm.body },
+              on: {
+                keydown: _vm.onTyping,
+                keyup: function($event) {
+                  if (
+                    !("button" in $event) &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.sendMessage($event)
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.body = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "input-group-append" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.sendMessage }
+                },
+                [_vm._v("Enviar")]
+              )
+            ])
           ])
         ])
-      ])
-    ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.loading,
+            expression: "loading"
+          }
+        ]
+      },
+      [_vm._v("carregando")]
+    )
   ])
 }
 var staticRenderFns = []

@@ -1,35 +1,39 @@
 <template>
-   <div class="row">
-      <div class="col-lg-3">
-         <nav class="nav nav-pills nav-justified" role="tablist" aria-orientation="vertical">
-            <a href="javascript:void(0)" v-for="friend in friends" :class="(friend.id==activeFriend)?'active':''" :key="friend.id" @click="activeFriend=friend.id" class="nav-link w-100" role="tab">
-            <span class="mr-2" :class="(onlineFriends.find(user=>user.id===friend.id))?'text-success':'text-muted'">&#9679;</span>
-            <span>{{ friend.name }}</span>
-            </a>
-         </nav>
-      </div>
-      <div class="col-lg-9">
-         <div id="privateMessageBox">
-            <div class="d-flex flex-column p-3">
-                <div class="h5" v-for="(message, index) in allMessages" :key="index" :class="user.id==message.user.id ? 'text-right' : ''">
-                    <!-- <span class="small font-italic">{{ message.user.avatar }}</span> -->
-                    <img width="30px" height="30px" class="img-fluid rounded-circle" :src="'/storage/avatars/' + message.user.avatar" v-bind:alt="message.user.name" v-bind:title="message.user.name">
-                    <span class="badge badge-pill py-2 px-3" :class="(user.id!==message.user.id)?'badge-secondary':'badge-primary'">{{ message.body }}</span>
-                    <!-- <div class="caption font-italic">
-                    {{ message.created_at }}
-                    </div> -->
-                </div>
+   <div>
+     <div class="row" v-show="!loading">
+        <div class="col-lg-3">
+          <nav class="nav nav-pills nav-justified" role="tablist" aria-orientation="vertical">
+              <a href="javascript:void(0)" v-for="friend in friends" :class="(friend.id==activeFriend)?'active':''" :key="friend.id" @click="activeFriend=friend.id" class="nav-link w-100" role="tab">
+              <span class="mr-2" :class="(onlineFriends.find(user=>user.id===friend.id))?'text-success':'text-muted'">&#9679;</span>
+              <span>{{ friend.name }}</span>
+              </a>
+          </nav>
+        </div>
+        <div class="col-lg-9">
+          <div id="privateMessageBox" v-show="!loadingMessage">
+              <div class="d-flex flex-column p-3">
+                  <div class="h5" v-for="(message, index) in allMessages" :key="index" :class="user.id==message.user.id ? 'text-right' : ''">
+                      <!-- <span class="small font-italic">{{ message.user.avatar }}</span> -->
+                      <img width="30px" height="30px" class="img-fluid rounded-circle" :src="'/storage/avatars/' + message.user.avatar" v-bind:alt="message.user.name" v-bind:title="message.user.name">
+                      <span class="badge badge-pill py-2 px-3" :class="(user.id!==message.user.id)?'badge-secondary':'badge-primary'">{{ message.body }}</span>
+                      <!-- <div class="caption font-italic">
+                      {{ message.created_at }}
+                      </div> -->
+                  </div>
+              </div>
+              <p v-if="typingFriend.name">{{ typingFriend.name }} está digitando</p>
+          </div>
+          <div v-show="loadingMessage">carregando mensagens</div>
+          <!-- Form -->
+          <div class="input-group">
+            <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keyup.enter="sendMessage"></textarea>
+            <div class="input-group-append">
+                <button @click="sendMessage" class="btn btn-primary">Enviar</button>
             </div>
-            <p v-if="typingFriend.name">{{ typingFriend.name }} está digitando</p>
-            <!-- Form -->
-            <div class="input-group">
-               <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keyup.enter="sendMessage"></textarea>
-               <div class="input-group-append">
-                  <button @click="sendMessage" class="btn btn-primary">Enviar</button>
-               </div>
-            </div>
-         </div>
+          </div>
+        </div>
       </div>
+      <div v-show="loading">carregando</div>
    </div>
 </template>
 
@@ -39,6 +43,8 @@ export default {
 
   data() {
     return {
+      loading: true,
+      loadingMessage: true,
       body: null,
       activeFriend: null,
       typingFriend: {},
@@ -59,6 +65,7 @@ export default {
 
   watch: {
     activeFriend(val) {
+      this.loadingMessage = true;
       this.fetchMessages();
     }
   },
@@ -94,6 +101,8 @@ export default {
       }
       axios.get("/api/private-messages/" + this.activeFriend).then(response => {
         this.allMessages = response.data;
+        this.loading = false;
+        this.loadingMessage = false;
       });
     },
     fetchUsers() {
@@ -146,7 +155,7 @@ export default {
 
           this.typingClock = setTimeout(() => {
             this.typingFriend = {};
-          }, 900);
+          }, 9000);
         }
       });
   }

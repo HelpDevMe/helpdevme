@@ -105,10 +105,13 @@ class UserController extends Controller
         
         $this->authorize($user);
 
-        $avatarName = $user->id . '_avatar' . time() . '.' . request()->avatar->getClientOriginalExtension();
-        $request->avatar->storeAs('avatars', $avatarName);
+        if(request()->avatar)
+        {    
+            $avatarName = $user->id . '_avatar' . time() . '.' . request()->avatar->getClientOriginalExtension();
+            $request->avatar->storeAs('avatars', $avatarName);
 
-        $user->avatar = $avatarName;
+            $user->avatar = $avatarName;
+        }
 
         $user->update($request->has('password') ? array_merge($request->except('password'), ['password' => bcrypt($request->input('password'))]) : $request->except('password'));
 
