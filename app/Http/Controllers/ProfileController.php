@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -14,9 +24,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $user = auth()->user();
 
-        return view('users.index', compact('users'));
+        return view('profile.index', compact('user'));
     }
 
     /**
@@ -43,12 +53,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return view('users.show', compact('user'));
+        //
     }
 
     /**
@@ -71,7 +81,29 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = auth()->user();
+
+        if($request->has('avatar'))
+        {
+            $avatarName = $user->id . '_avatar' . time() . '.' . $request->avatar->getClientOriginalExtension();
+            
+            $request->avatar->storeAs('avatars', $avatarName);
+
+            $user->avatar = $avatarName;
+        }
+
+        if($request->has('password'))
+        {
+            $this->validate($request, [
+                'password' => 'required|different:current_password|confirmed',
+            ]);
+            
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->update($request->all());
+
+        return redirect()->back()->with('success', 'Perfil Editado!');
     }
 
     /**

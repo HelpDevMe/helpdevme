@@ -52,11 +52,12 @@ class QuestionController extends Controller
             'body' => 'required'
         ]);
 
-        $question = $request->all();
-        $question['slug'] = str_slug($request->title);
-        $question['user_id'] = auth()->id();
+        $request->merge([
+            'slug' => str_slug($request->title),
+            'user_id' => auth()->id()
+        ]);
 
-        Question::create($question);
+        Question::create($request->all());
 
         return redirect()->route('home')
             ->with('success', 'Pergunta criada!');

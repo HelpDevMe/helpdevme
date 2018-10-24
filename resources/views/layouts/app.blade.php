@@ -65,7 +65,7 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <a class="dropdown-item" href="{{ route('users.show', Auth::user()) }}">
+                                    <a class="dropdown-item" href="{{ route('profile.index') }}">
                                         {{ __('Profile') }}
                                     </a>
 
