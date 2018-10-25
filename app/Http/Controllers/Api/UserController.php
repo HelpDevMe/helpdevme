@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
-use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Events\PrivateMessageSent;
 
-class PostController extends Controller
-{   
+class UserController extends Controller
+{
     /**
      * Create a new controller instance.
      *
@@ -19,7 +17,7 @@ class PostController extends Controller
     {
         $this->middleware('auth:api');
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return User::all();
     }
 
     /**
@@ -44,36 +42,22 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
-        $request->merge([
-            'receiver_id' => $user->id
-        ]);
-
-        $message = auth()->user()->messages()->create($request->all());
-
-        broadcast(new PrivateMessageSent($message->load('user')))->toOthers();
-
-        return response(['status' => 'Message private sent successfully', 'message' => $message]);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return Post::with('user')
-            ->where(['user_id' => auth()->id(), 'receiver_id' => $user->id])
-            ->orWhere(function ($query) use ($user) {
-                $query->where(['user_id' => $user->id, 'receiver_id' => auth()->id()]);
-            })
-            ->get();
+        //
     }
 
     /**

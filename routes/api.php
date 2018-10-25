@@ -12,15 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
+Route::resource('users', 'Api\UserController');
 
-Route::middleware('auth:api')->group(function () {
-
-    Route::get('users', function (Request $request) {
-        return \App\User::all();
-    });
-
-    Route::get('messages', 'Api\PostController@fetchMessages');
-    Route::post('messages', 'Api\PostController@sendMessage');
-    Route::get('private-messages/{user}', 'Api\PostController@privateMessages')->name('privateMessages');
-    Route::post('private-messages/{user}', 'Api\PostController@sendPrivateMessage')->name('privateMessages.store');
-});
+Route::get('posts/{user}', 'Api\PostController@show');
+Route::post('posts/{user}', 'Api\PostController@store');

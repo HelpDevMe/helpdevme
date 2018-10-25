@@ -83,11 +83,10 @@ export default {
       }
 
       axios
-        .post("/api/private-messages/" + this.activeFriend, { body: this.body })
+        .post("/api/posts/" + this.activeFriend, { body: this.body })
         .then(response => {
           this.body = null;
           this.allMessages.push(response.data.message);
-          console.log('murilo 1');
           setTimeout(this.scrollToEnd, 100);
         });
     },
@@ -95,7 +94,7 @@ export default {
       if (!this.activeFriend) {
         return alert("Please select friend");
       }
-      axios.get("/api/private-messages/" + this.activeFriend).then(response => {
+      axios.get("/api/posts/" + this.activeFriend).then(response => {
         this.allMessages = response.data;
         this.loading = false;
         this.loadingMessage = false;
@@ -139,7 +138,6 @@ export default {
         console.log("pmessage sent");
         this.activeFriend = e.message.user_id;
         this.allMessages.push(e.message);
-        console.log('murilo 2');
         setTimeout(this.scrollToEnd, 100);
       })
       .listenForWhisper("typing", e => {

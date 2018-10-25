@@ -57219,10 +57219,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return alert("Please select friend");
       }
 
-      axios.post("/api/private-messages/" + this.activeFriend, { body: this.body }).then(function (response) {
+      axios.post("/api/posts/" + this.activeFriend, { body: this.body }).then(function (response) {
         _this2.body = null;
         _this2.allMessages.push(response.data.message);
-        console.log('murilo 1');
         setTimeout(_this2.scrollToEnd, 100);
       });
     },
@@ -57232,7 +57231,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (!this.activeFriend) {
         return alert("Please select friend");
       }
-      axios.get("/api/private-messages/" + this.activeFriend).then(function (response) {
+      axios.get("/api/posts/" + this.activeFriend).then(function (response) {
         _this3.allMessages = response.data;
         _this3.loading = false;
         _this3.loadingMessage = false;
@@ -57274,7 +57273,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log("pmessage sent");
       _this5.activeFriend = e.message.user_id;
       _this5.allMessages.push(e.message);
-      console.log('murilo 2');
       setTimeout(_this5.scrollToEnd, 100);
     }).listenForWhisper("typing", function (e) {
       console.log("listenForWhisper typing");

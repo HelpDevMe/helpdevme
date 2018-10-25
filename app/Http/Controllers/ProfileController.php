@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Validator;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -102,7 +101,7 @@ class ProfileController extends Controller
 
             } else {
 
-                $validator = Validator::make($request->all(), [
+                Validator::make($request->all(), [
                     'password' => 'required|confirmed',
                 ])->validate();
 
