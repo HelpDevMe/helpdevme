@@ -14,5 +14,4 @@ use Illuminate\Http\Request;
  */
 Route::resource('users', 'Api\UserController');
 
-Route::get('posts/{user}', 'Api\PostController@show');
-Route::post('posts/{user}', 'Api\PostController@store');
+Route::resource('posts', 'Api\PostController');

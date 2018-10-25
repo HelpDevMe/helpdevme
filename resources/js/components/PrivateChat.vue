@@ -83,7 +83,10 @@ export default {
       }
 
       axios
-        .post("/api/posts/" + this.activeFriend, { body: this.body })
+        .post("/api/posts", {
+          body: this.body,
+          receiver_id: this.activeFriend
+        })
         .then(response => {
           this.body = null;
           this.allMessages.push(response.data.message);

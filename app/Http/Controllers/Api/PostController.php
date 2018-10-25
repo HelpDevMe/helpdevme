@@ -44,13 +44,12 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
         $request->merge([
-            'receiver_id' => $user->id
+            'receiver_id' => $request->receiver_id
         ]);
 
         $message = auth()->user()->messages()->create($request->all());

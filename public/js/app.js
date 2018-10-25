@@ -57219,7 +57219,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return alert("Please select friend");
       }
 
-      axios.post("/api/posts/" + this.activeFriend, { body: this.body }).then(function (response) {
+      axios.post("/api/posts", {
+        body: this.body,
+        receiver_id: this.activeFriend
+      }).then(function (response) {
         _this2.body = null;
         _this2.allMessages.push(response.data.message);
         setTimeout(_this2.scrollToEnd, 100);
