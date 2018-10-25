@@ -57165,10 +57165,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
@@ -57388,11 +57384,10 @@ var render = function() {
                     },
                     [
                       _c("img", {
-                        staticClass: "img-fluid rounded-circle",
+                        staticClass: "img-fluid",
                         attrs: {
-                          width: "30px",
-                          height: "30px",
-                          src: "/storage/avatars/" + message.user.avatar,
+                          width: "25",
+                          src: "/storage/img/avatars/" + message.user.avatar,
                           alt: message.user.name,
                           title: message.user.name
                         }

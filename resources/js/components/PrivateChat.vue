@@ -13,12 +13,8 @@
           <div id="privateMessageBox" v-show="!loadingMessage">
               <div class="d-flex flex-column p-3">
                   <div class="h5" v-for="(message, index) in allMessages" :key="index" :class="user.id==message.user.id ? 'text-right' : ''">
-                      <!-- <span class="small font-italic">{{ message.user.avatar }}</span> -->
-                      <img width="30px" height="30px" class="img-fluid rounded-circle" :src="'/storage/avatars/' + message.user.avatar" v-bind:alt="message.user.name" v-bind:title="message.user.name">
+                      <img width="25" class="img-fluid" :src="'/storage/img/avatars/' + message.user.avatar" v-bind:alt="message.user.name" v-bind:title="message.user.name">
                       <span class="badge badge-pill py-2 px-3" :class="(user.id!==message.user.id)?'badge-secondary':'badge-primary'">{{ message.body }}</span>
-                      <!-- <div class="caption font-italic">
-                      {{ message.created_at }}
-                      </div> -->
                   </div>
               </div>
               <p v-if="typingFriend.name">{{ typingFriend.name }} está digitando</p>

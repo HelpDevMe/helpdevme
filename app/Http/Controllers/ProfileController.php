@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -87,23 +89,32 @@ class ProfileController extends Controller
         {
             $avatarName = $user->id . '_avatar' . time() . '.' . $request->avatar->getClientOriginalExtension();
             
-            $request->avatar->storeAs('avatars', $avatarName);
+            $request->avatar->storeAs('img/avatars', $avatarName);
 
             $user->avatar = $avatarName;
         }
 
         if($request->has('password'))
         {
-            $this->validate($request, [
-                'password' => 'required|different:current_password|confirmed',
-            ]);
+            if(!Hash::check($request->current_password, $user->password)) {
             
-            $user->password = Hash::make($request->password);
+                return back()->withErrors('Senha errada!');
+
+            } else {
+
+                $validator = Validator::make($request->all(), [
+                    'password' => 'required|confirmed',
+                ])->validate();
+
+                $request->merge([
+                    'password' => Hash::make($request->password)
+                ]);
+            }
         }
 
         $user->update($request->all());
 
-        return redirect()->back()->with('success', 'Perfil Editado!');
+        return back()->with('success', 'Perfil Editado!');
     }
 
     /**

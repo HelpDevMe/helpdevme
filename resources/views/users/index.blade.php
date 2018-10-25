@@ -8,7 +8,8 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-lg-3">
-                                <img class="img-fluid rounded-circle" src="/storage/avatars/{{ $user->avatar }}" alt="{{ $user->name }}" title="{{ $user->name }}">
+                                @avatar(['user' => $user])
+                                @endavatar
                             </div>
                             <div class="col">
                                 <h5 class="card-title">
