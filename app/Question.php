@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
+    protected $primaryKey = 'slug';
+
     protected $fillable = [
         'title',
         'slug',
         'body',
-        'user_id'
+        'user_id',
+        'status_id'
     ];
 
     public function user()

@@ -13,19 +13,20 @@
 
 Auth::routes();
 
-Route::get('/', 'QuestionController@index')->name('home');
-
 Route::view('/about', 'about')->name('about');
-
-
-Route::resource('questions', 'QuestionController', ['except' => [
-    'index', 'show'
-]]);
     
 Route::resource('profile', 'ProfileController');
 
 Route::resource('posts', 'PostController');
 
 Route::resource('users', 'UserController');
+
+Route::resource('questions', 'QuestionController', ['except' => [
+    'index', 'show'
+]]);
+
+Route::patch('questions/accept/{question}', 'QuestionController@accept')->name('questions.accept');
+
+Route::get('/', 'QuestionController@index')->name('home');
 
 Route::get('/{question}', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);

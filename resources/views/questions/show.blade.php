@@ -10,7 +10,7 @@
                     <a rel="author" href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
                 </address>
             </header>
-            <p>{{ $question->body }}</p>
+            <div>{{ $question->body }}</div>
             <div class="row">
                 <div class="col">
                     <hr>
@@ -19,13 +19,15 @@
                         <div class="col">
                             <div class="d-flex flex-column">
                                 @foreach($question->posts as $post)
-                                    @comment(['post' => $post])
+                                    @comment([
+                                        'question' => $question,
+                                        'post' => $post
+                                    ])
                                     @endcomment
                                 @endforeach
                             </div>
                         </div>
                     </div>
-                    <hr>
                 </div>
             </div>
         </article>
