@@ -29,6 +29,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function questions()
+    {
+        return $this->hasMany('App\Question');
+    }
+
     public function messages()
     {
         return $this->hasMany('App\Post');

@@ -17,12 +17,12 @@ class CreatePostsTable extends Migration
             $table->increments('id');
             $table->text('body');
             $table->float('budget')->nullable();
-            $table->string('question_slug')->unsigned()->nullable();
+            $table->integer('question_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();
             $table->integer('receiver_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('question_slug')->references('id')->on('questions');
+            $table->foreign('question_id')->references('id')->on('questions');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('receiver_id')->references('id')->on('users');
         });

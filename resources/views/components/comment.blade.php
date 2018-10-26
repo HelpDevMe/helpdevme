@@ -17,7 +17,7 @@
 <!-- Modal -->
 <div class="modal fade" id="confirmModal{{ $post->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel{{ $post->id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form class="modal-content" method="POST" action="{{ route('questions.accept', $question) }}">
+        <form class="modal-content" method="POST" action="{{ route('questions.accept', $question->id) }}">
             @csrf
             @method('PATCH')
             <div class="modal-header">
