@@ -122,7 +122,7 @@ export default {
   created() {
     this.fetchUsers();
 
-    Echo.join("plchat")
+    Echo.join("privatechat")
       .here(users => {
         console.log("online", users);
         this.onlineFriends = users;
@@ -137,7 +137,7 @@ export default {
       });
 
     Echo.private("privatechat." + this.user.id)
-      .listen("PrivateMessageSent", e => {
+      .listen("PrivatePostSent", e => {
         console.log("pmessage sent");
         this.activeFriend = e.message.user_id;
         this.allMessages.push(e.message);

@@ -57261,7 +57261,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     this.fetchUsers();
 
-    Echo.join("plchat").here(function (users) {
+    Echo.join("privatechat").here(function (users) {
       console.log("online", users);
       _this5.onlineFriends = users;
     }).joining(function (user) {
@@ -57272,7 +57272,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log("leaving", user.name);
     });
 
-    Echo.private("privatechat." + this.user.id).listen("PrivateMessageSent", function (e) {
+    Echo.private("privatechat." + this.user.id).listen("PrivatePostSent", function (e) {
       console.log("pmessage sent");
       _this5.activeFriend = e.message.user_id;
       _this5.allMessages.push(e.message);

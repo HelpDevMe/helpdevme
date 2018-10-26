@@ -48,17 +48,10 @@ class PostController extends Controller
         $request->validate([
             'body' => 'required'
         ]);
-        
-        $request->merge([
-            'user_id' => auth()->id()
-        ]);
 
-        $post = $request->all();
+        auth()->user()->posts()->create($request->all());
 
-        Post::create($post);
-
-        return redirect()->route('home')
-            ->with('success', 'Mensagem enviada!');
+        return redirect()->route('home')->with('success', 'Mensagem enviada!');
     }
 
     /**
@@ -69,7 +62,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show');
+        //
     }
 
     /**

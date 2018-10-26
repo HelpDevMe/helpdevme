@@ -6,7 +6,7 @@ use App\User;
 use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Events\PrivateMessageSent;
+use App\Events\PrivatePostSent;
 
 class PostController extends Controller
 {   
@@ -52,11 +52,11 @@ class PostController extends Controller
             'receiver_id' => $request->receiver_id
         ]);
 
-        $message = auth()->user()->messages()->create($request->all());
+        $post = auth()->user()->posts()->create($request->all());
 
-        broadcast(new PrivateMessageSent($message->load('user')))->toOthers();
+        broadcast(new PrivatePostSent($post->load('user')))->toOthers();
 
-        return response(['status' => 'Message private sent successfully', 'message' => $message]);
+        return response(['status' => 'Post private sent successfully', 'message' => $post]);
     }
 
     /**
