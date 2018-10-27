@@ -88,8 +88,9 @@ export default {
           receiver_id: this.activeFriend
         })
         .then(response => {
+          console.log('response.data', response.data);
           this.body = null;
-          this.allMessages.push(response.data.message);
+          this.allMessages.push(response.data.post);
           setTimeout(this.scrollToEnd, 100);
         });
     },
@@ -129,7 +130,7 @@ export default {
       })
       .joining(user => {
         this.onlineFriends.push(user);
-        console.log("joining", user.name);
+        console.log("joining", user);
       })
       .leaving(user => {
         this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
@@ -139,8 +140,8 @@ export default {
     Echo.private("privatechat." + this.user.id)
       .listen("PrivatePostSent", e => {
         console.log("pmessage sent");
-        this.activeFriend = e.message.user_id;
-        this.allMessages.push(e.message);
+        this.activeFriend = e.post.user_id;
+        this.allMessages.push(e.post);
         setTimeout(this.scrollToEnd, 100);
       })
       .listenForWhisper("typing", e => {

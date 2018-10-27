@@ -57223,8 +57223,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         body: this.body,
         receiver_id: this.activeFriend
       }).then(function (response) {
+        console.log('response.data', response.data);
         _this2.body = null;
-        _this2.allMessages.push(response.data.message);
+        _this2.allMessages.push(response.data.post);
         setTimeout(_this2.scrollToEnd, 100);
       });
     },
@@ -57266,7 +57267,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       _this5.onlineFriends = users;
     }).joining(function (user) {
       _this5.onlineFriends.push(user);
-      console.log("joining", user.name);
+      console.log("joining", user);
     }).leaving(function (user) {
       _this5.onlineFriends.splice(_this5.onlineFriends.indexOf(user), 1);
       console.log("leaving", user.name);
@@ -57274,8 +57275,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     Echo.private("privatechat." + this.user.id).listen("PrivatePostSent", function (e) {
       console.log("pmessage sent");
-      _this5.activeFriend = e.message.user_id;
-      _this5.allMessages.push(e.message);
+      _this5.activeFriend = e.post.user_id;
+      _this5.allMessages.push(e.post);
       setTimeout(_this5.scrollToEnd, 100);
     }).listenForWhisper("typing", function (e) {
       console.log("listenForWhisper typing");

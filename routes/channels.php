@@ -12,12 +12,9 @@
 */
 
 Broadcast::channel('privatechat', function ($user) {
-    if(auth()->check())
-    {
-        return $user;
-    }
+    return auth()->check() ? $user : null;
 });
 
-Broadcast::channel('privatechat.{receiverid}', function ($user,$receiverid) {
+Broadcast::channel('privatechat.{receiverid}', function ($user, $receiverid) {
     return auth()->check();
 });

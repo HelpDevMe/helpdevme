@@ -56,21 +56,21 @@ class PostController extends Controller
 
         broadcast(new PrivatePostSent($post->load('user')))->toOthers();
 
-        return response(['status' => 'Post private sent successfully', 'message' => $post]);
+        return response(['post' => $post]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
         return Post::with('user')
-            ->where(['user_id' => auth()->id(), 'receiver_id' => $user->id])
-            ->orWhere(function ($query) use ($user) {
-                $query->where(['user_id' => $user->id, 'receiver_id' => auth()->id()]);
+            ->where(['user_id' => auth()->id(), 'receiver_id' => $id])
+            ->orWhere(function ($query) use ($id) {
+                $query->where(['user_id' => $id, 'receiver_id' => auth()->id()]);
             })
             ->get();
     }
