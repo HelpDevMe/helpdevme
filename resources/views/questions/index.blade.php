@@ -44,7 +44,7 @@
 <div class="row">
     <div class="col">
         @foreach($questions as $question)
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-body">
                     <address class="author">
                         <a rel="author" href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
@@ -52,11 +52,14 @@
                     <h3>
                         <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                     </h3>
+                    <span class="badge badge-secondary">
+                        @lang('questions.status.' . $question->status_id)
+                    </span>
                     <p>{{ $question->body }}</p>
                     <div class="row">
                         <div class="col">
                             <hr>
-                            <div class="mb-4">{{ count($question->posts) }} resposta(s)</div>
+                            <p>{{ count($question->posts) }} resposta(s)</p>
                             <div class="d-flex flex-column">
                                 @foreach($question->posts as $post)
                                     @comment(['post' => $post])
@@ -66,7 +69,7 @@
                             <hr>
                         </div>
                     </div>
-                    @cannot('view', $question)
+                    @cannot('comment', $question)
                         <form method="POST" action="{{ route('posts.store') }}" class="mt-3">
                             @csrf
                             <input type="hidden" name="question_id" value="{{ $question->id }}">

@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  props: ["user"],
+  props: ['user', 'owner_id'],
 
   data() {
     return {
@@ -68,24 +68,24 @@ export default {
 
   methods: {
     onTyping() {
-      console.log("onTyping");
-      Echo.private("privatechat." + this.activeFriend).whisper("typing", {
+      console.log('onTyping');
+      Echo.private('privatechat.' + this.activeFriend).whisper('typing', {
         user: this.user
       });
     },
     sendMessage() {
       //check if there message
       if (!this.body) {
-        return alert("Please enter message");
+        return alert('Please enter message');
       }
       if (!this.activeFriend) {
-        return alert("Please select friend");
+        return alert('Please select friend');
       }
 
       axios
-        .post("/api/posts", {
+        .post('/api/posts', {
           body: this.body,
-          receiver_id: this.activeFriend
+          owner_id: this.activeFriend
         })
         .then(response => {
           console.log('response.data', response.data);
@@ -96,25 +96,31 @@ export default {
     },
     fetchMessages() {
       if (!this.activeFriend) {
-        return alert("Please select friend");
+        return alert('Please select friend');
       }
-      axios.get("/api/posts/" + this.activeFriend).then(response => {
+      axios.get('/api/posts/' + this.activeFriend).then(response => {
         this.allMessages = response.data;
         this.loading = false;
         this.loadingMessage = false;
       });
     },
     fetchUsers() {
-      axios.get("/api/users").then(response => {
+      axios.get('/api/users').then(response => {
         this.users = response.data;
         if (this.friends.length > 0) {
-          this.activeFriend = this.friends[0].id;
+          if(this.owner_id) {
+            console.log('this.owner_id', this.owner_id)
+            console.log('this.friends', this.friends)
+            this.activeFriend = this.owner_id;
+          } else {
+            this.activeFriend = this.friends[0].id;
+          }
         }
       });
     },
 
     scrollToEnd() {
-      document.getElementById("privateMessageBox").scrollTo(0, 99999);
+      document.getElementById('privateMessageBox').scrollTo(0, 99999);
     }
   },
 
@@ -123,29 +129,29 @@ export default {
   created() {
     this.fetchUsers();
 
-    Echo.join("privatechat")
+    Echo.join('privatechat')
       .here(users => {
-        console.log("online", users);
+        console.log('online', users);
         this.onlineFriends = users;
       })
       .joining(user => {
         this.onlineFriends.push(user);
-        console.log("joining", user);
+        console.log('joining', user);
       })
       .leaving(user => {
         this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
-        console.log("leaving", user.name);
+        console.log('leaving', user.name);
       });
 
-    Echo.private("privatechat." + this.user.id)
-      .listen("PrivatePostSent", e => {
-        console.log("pmessage sent");
+    Echo.private('privatechat.' + this.user.id)
+      .listen('PrivatePostSent', e => {
+        console.log('pmessage sent');
         this.activeFriend = e.post.user_id;
         this.allMessages.push(e.post);
         setTimeout(this.scrollToEnd, 100);
       })
-      .listenForWhisper("typing", e => {
-        console.log("listenForWhisper typing");
+      .listenForWhisper('typing', e => {
+        console.log('listenForWhisper typing');
         if (e.user.id == this.activeFriend) {
           this.typingFriend = e.user;
 

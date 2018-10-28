@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session()->get('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+    @endif
     <h1 class="display-4">Depósito em garantia para</h1>
     <p class="lead">{{ $post->question->title }}</p>
     <div class="card">

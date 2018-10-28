@@ -58,12 +58,12 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  int  $user_id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($user_id)
     {
-        //
+        return view('posts.index', compact('user_id'));
     }
 
     /**
@@ -110,9 +110,13 @@ class PostController extends Controller
     public function accept(Request $request, $id)
     {
         $post = Post::with(['question'])->findOrFail($id);
+
+        $this->authorize('update', $post);
+
         $question = $post->question;
         $question->status_id = Question::WARRANTY;
         $question->update();
-        return redirect()->route('payments.show', ['id' => $id]);
+
+        return redirect()->route('payments.show', ['id' => $id])->with('success', 'Proposta aceita! Realize o deposito de garantia.');
     }
 }

@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col">
                     <hr>
-                    <div class="mb-4">{{ count($question->posts) }} resposta(s)</div>
+                    <p>{{ count($question->posts) }} resposta(s)</p>
                     <div class="row">
                         <div class="col">
                             <div class="d-flex flex-column">

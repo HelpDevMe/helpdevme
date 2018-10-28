@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Post' => 'App\Policies\PostPolicy',
         'App\User' => 'App\Policies\UserPolicy',
         'App\Question' => 'App\Policies\QuestionPolicy'
     ];
@@ -29,5 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Passport::routes();
+
+        Gate::define('comment', function ($user, $question) {
+            return $user->id == $question->user_id;
+        });
     }
 }

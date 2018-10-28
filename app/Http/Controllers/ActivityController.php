@@ -3,20 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Post;
 use Illuminate\Http\Request;
 
-class QuestionController extends Controller
+class ActivityController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +15,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::where('status_id', Question::ANALYZING)->get();
-
-        return view('questions.index', compact('questions'));
+        //
     }
 
     /**
@@ -47,31 +36,18 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|unique:questions',
-            'body' => 'required'
-        ]);
-
-        $request->merge([
-            'slug' => str_slug($request->title),
-            'user_id' => auth()->id()
-        ]);
-
-        Question::create($request->all());
-
-        return redirect()->route('home')
-            ->with('success', 'Pergunta criada!');
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Question  $question
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Question $question)
+    public function show($id)
     {
-        return view('questions.show', compact('question'));
+        //
     }
 
     /**
@@ -106,5 +82,21 @@ class QuestionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function client()
+    {
+        $questions = Question::where('user_id', auth()->id())->get();
+        
+        return view('activities.client.index', compact('questions'));
+    }
+    
+    public function freelancer()
+    {
+        $posts = Post::where('user_id', auth()->id())
+            ->whereNotNull('question_id')
+            ->get();
+        
+        return view('activities.freelancer.index', compact('posts'));
     }
 }

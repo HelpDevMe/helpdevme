@@ -23,6 +23,9 @@ Route::resource('users', 'UserController');
 
 Route::resource('payments', 'PaymentController');
 
+Route::get('activities/client', 'ActivityController@client')->name('activities.client.index');
+Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer.index');
+
 Route::post('payments/paypal', 'PaymentController@payWithPaypal')->name('payments.paypal');
 Route::get('payments/paypal/status', 'PaymentController@status')->name('payments.paypal.status');
 Route::get('payments/paypal/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
