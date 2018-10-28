@@ -21,11 +21,17 @@ Route::resource('posts', 'PostController');
 
 Route::resource('users', 'UserController');
 
+Route::resource('payments', 'PaymentController');
+
+Route::post('payments/paypal', 'PaymentController@payWithPaypal')->name('payments.paypal');
+Route::get('payments/paypal/status', 'PaymentController@status')->name('payments.paypal.status');
+Route::get('payments/paypal/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
+
 Route::resource('questions', 'QuestionController', ['except' => [
     'index', 'show'
 ]]);
 
-Route::patch('questions/accept/{question}', 'QuestionController@accept')->name('questions.accept');
+Route::patch('posts/accept/{question}', 'PostController@accept')->name('posts.accept');
 
 Route::get('/', 'QuestionController@index')->name('home');
 

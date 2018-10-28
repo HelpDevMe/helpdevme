@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use app\Question;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -97,5 +98,21 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+    /**
+     * Update the status_id filed.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function accept(Request $request, $id)
+    {
+        $post = Post::with(['question'])->findOrFail($id);
+        $question = $post->question;
+        $question->status_id = Question::WARRANTY;
+        $question->update();
+        return redirect()->route('payments.show', ['id' => $id]);
     }
 }

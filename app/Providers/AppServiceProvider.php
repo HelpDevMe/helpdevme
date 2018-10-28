@@ -14,8 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::component('components.comment', 'comment');
         Blade::component('components.avatar', 'avatar');
+        Blade::component('components.budget', 'budget');
+        Blade::component('components.comment', 'comment');
     }
 
     /**

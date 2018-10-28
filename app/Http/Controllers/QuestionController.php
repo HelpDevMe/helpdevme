@@ -96,21 +96,6 @@ class QuestionController extends Controller
     {
         //
     }
-    
-    /**
-     * Update the status_id filed.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function accept(Request $request, $id)
-    {
-        $question = Question::findOrFail($id);
-        $question->status_id = 1;
-        $question->update();
-        return back()->with('success', 'Proposta aceita, aguardando garantia!');
-    }
 
     /**
      * Remove the specified resource from storage.

@@ -19,10 +19,7 @@
                         <div class="col">
                             <div class="d-flex flex-column">
                                 @foreach($question->posts as $post)
-                                    @comment([
-                                        'question' => $question,
-                                        'post' => $post
-                                    ])
+                                    @comment(['post' => $post])
                                     @endcomment
                                 @endforeach
                             </div>

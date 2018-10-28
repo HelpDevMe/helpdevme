@@ -59,10 +59,7 @@
                             <div class="mb-4">{{ count($question->posts) }} resposta(s)</div>
                             <div class="d-flex flex-column">
                                 @foreach($question->posts as $post)
-                                    @comment([
-                                        'question' => $question,
-                                        'post' => $post
-                                    ])
+                                    @comment(['post' => $post])
                                     @endcomment
                                 @endforeach
                             </div>

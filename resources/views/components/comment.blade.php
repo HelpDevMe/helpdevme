@@ -3,10 +3,12 @@
         <a href="{{ route('users.show', $post->user) }}">{{ $post->user->name }}</a>
         <div>{{ $post->body }}</div>
         @if ($post->budget)
-            <span class="badge badge-success">R$ {{ number_format($post->budget, 2, ',', '.') }}</span>
+            <span class="badge badge-success">
+                @budget(['budget' => $post->budget])
+                @endbudget
+            </span>
         @endif
     </div>
-    <a href="#" class="btn btn-primary">Curtir</a>
     @if (Auth::check() && Auth::user()->can('view', $post->question))
         @if ($post->budget)
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal{{ $post->id }}">Aceitar</button>
@@ -17,7 +19,7 @@
 <!-- Modal -->
 <div class="modal fade" id="confirmModal{{ $post->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel{{ $post->id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form class="modal-content" method="POST" action="{{ route('questions.accept', $question->id) }}">
+        <form class="modal-content" method="POST" action="{{ route('posts.accept', $post->id) }}">
             @csrf
             @method('PATCH')
             <div class="modal-header">
@@ -29,7 +31,10 @@
             <div class="modal-body">
                 <div class="font-weight-bold">{{ $post->user->name }}</div>
                 <div>{{ $post->body }}</div>
-                <div class="text-success">R$ {{ number_format($post->budget, 2, ',', '.') }}</div>
+                <div class="text-success">
+                    @budget(['budget' => $post->budget])
+                    @endbudget
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

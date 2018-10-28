@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
+    const ANALYZING = 0;
+    const WARRANTY = 1;
+
     protected $fillable = [
         'title',
         'slug',
