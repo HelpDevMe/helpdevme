@@ -25,7 +25,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::where('user_id', auth()->id())
+            ->orWhere('receiver_id', auth()->id())
+            ->get();
+
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -63,9 +67,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        $question = Question::findOrFail($id);
         
-        return view('posts.show', compact('post'));
+        return view('posts.show', compact('question'));
     }
 
     /**

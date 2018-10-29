@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div>auth_id: {{ auth()->id() }}</div>
-    <div>user_id: {{ $post->user_id }}</div>
-    <div>receiver_id: {{ $post->receiver_id }}</div>
+    @php ($post = $question->posts[0])
+    @php ($opposite = auth()->id() === $post->user->id ? $post->receiver : $post->user)
     <section class="bg-white p-3 rounded">
-        <private-chat :user="{{ auth()->user() }}" :question="{{ $post->question }}" :post="{{ $post }}"></private-chat>
+        <private-chat :user="{{ auth()->user() }}" :question="{{ $question }}" :opposite="{{ $opposite }}"></private-chat>
     </section>
 @endsection

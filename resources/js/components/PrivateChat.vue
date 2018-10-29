@@ -1,21 +1,18 @@
 <template>
    <div>
+     <h1>Conversa com {{ opposite.name }}</h1>
+     <p class="lead">Em {{ question.title }}</p>
+     <hr>
      <div class="row">
-        <!-- <div class="col-lg-3">
-          <nav class="nav nav-pills nav-justified" role="tablist" aria-orientation="vertical">
-              <a href="javascript:void(0)" v-for="friend in friends" :class="(friend.id==activeFriend)?'active':''" :key="friend.id" @click="activeFriend=friend.id" class="nav-link w-100" role="tab">
-              <span class="mr-2" :class="(onlineFriends.find(user=>user.id===friend.id))?'text-success':'text-muted'">&#9679;</span>
-              <span>{{ friend.name }}</span>
-              </a>
-          </nav>
-        </div> -->
         <div class="col">
           <div id="privateMessageBox">
               <div class="d-flex flex-column p-3">
-                  <div class="h5" v-for="(message, index) in allMessages" :key="index" :class="user.id==message.user.id ? 'text-right' : ''">
-                      {{ message.user.name }}
-                      <img width="25" class="img-fluid" :src="'/storage/img/avatars/' + message.user.avatar" v-bind:alt="message.user.name" v-bind:title="message.user.name">
-                      <span class="badge badge-pill py-2 px-3" :class="(user.id!==message.user.id)?'badge-secondary':'badge-primary'">{{ message.body }}</span>
+                  <div class="h5" v-for="(post, index) in allPosts" :key="index" :class="user.id==post.user.id ? 'text-right' : ''">
+                      <!-- <pre class="my-5">
+                        {{ post }}
+                      </pre> -->
+                      <img width="25" class="img-fluid" :src="'/storage/img/avatars/' + post.user.avatar" v-bind:alt="post.user.name" v-bind:title="post.user.name">
+                      <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user.id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
                   </div>
               </div>
               <p v-if="typingFriend.name">{{ typingFriend.name }} está digitando</p>
@@ -34,38 +31,27 @@
 
 <script>
 export default {
-  props: ['user', 'question', 'post'],
+  props: ['user', 'question', 'opposite'],
 
   data() {
     return {
       body: null,
-      // activeFriend: null,
       typingFriend: {},
       onlineFriends: [],
-      allMessages: [],
-      typingClock: null,
-      // users: []
+      allPosts: [],
+      typingClock: null
     };
   },
 
   computed: {
-    // friends() {
-    //   return this.users.filter(user => {
-    //     return user.id !== this.user.id;
-    //   });
-    // }
   },
 
   watch: {
-    // activeFriend(val) {
-    //   this.fetchMessages();
-    // }
   },
 
   methods: {
     onTyping() {
-      console.log('onTyping');
-      Echo.private('privatechat.' + this.post.user_id).whisper('typing', {
+      Echo.private('privatechat.' + this.question.id).whisper('typing', {
         user: this.user
       });
     },
@@ -73,39 +59,19 @@ export default {
       axios
         .post('/api/posts', {
           body: this.body,
-          user_id: this.post.user_id,
+          receiver_id: this.opposite.id,
           question_id: this.question.id
         })
         .then(response => {
-          console.log('response.data', response.data);
           this.body = null;
-          this.allMessages.push(response.data.post);
-          // setTimeout(this.scrollToEnd, 100);
+          this.allPosts.push(response.data.post);
         });
     },
     fetchMessages() {
-      axios.get('/api/posts/' + this.post.user_id).then(response => {
-        this.allMessages = response.data;
+      axios.get('/api/posts/' + this.question.id).then(response => {
+        this.allPosts = response.data;
       });
     }
-    // fetchUsers() {
-    //   axios.get('/api/users').then(response => {
-    //     this.users = response.data;
-    //     if (this.friends.length > 0) {
-    //       if(this.user_id) {
-    //         console.log('this.user_id', this.user_id)
-    //         console.log('this.friends', this.friends)
-    //         this.post.user_id = this.post.user_id;
-    //       } else {
-    //         this.post.user_id = this.friends[0].id;
-    //       }
-    //     }
-    //   });
-    // },
-
-    // scrollToEnd() {
-    //   document.getElementById('privateMessageBox').scrollTo(0, 99999);
-    // }
   },
 
   mounted() {},
@@ -116,28 +82,23 @@ export default {
 
     Echo.join('privatechat')
       .here(users => {
-        // console.log('online', users);
         this.onlineFriends = users;
       })
       .joining(user => {
         this.onlineFriends.push(user);
-        // console.log('joining', user);
       })
       .leaving(user => {
         this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
-        // console.log('leaving', user.name);
       });
 
-    Echo.private('privatechat.' + this.user.id)
+    Echo.private('privatechat.' + this.question.id)
       .listen('PrivatePostSent', e => {
-        // console.log('pmessage sent');
-        this.post.user_id = e.post.user_id;
-        this.allMessages.push(e.post);
-        // setTimeout(this.scrollToEnd, 100);
+        this.opposite.id = e.post.user_id;
+        this.allPosts.push(e.post);
       })
       .listenForWhisper('typing', e => {
-        // console.log('listenForWhisper typing');
-        if (e.user.id == this.post.user_id) {
+
+        if (e.user.id == this.opposite.id) {
           this.typingFriend = e.user;
 
           if (this.typingClock) clearTimeout();

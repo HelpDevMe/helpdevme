@@ -57161,44 +57161,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'question', 'post'],
+  props: ['user', 'question', 'opposite'],
 
   data: function data() {
     return {
       body: null,
-      // activeFriend: null,
       typingFriend: {},
       onlineFriends: [],
-      allMessages: [],
+      allPosts: [],
       typingClock: null
-      // users: []
     };
   },
 
 
-  computed: {
-    // friends() {
-    //   return this.users.filter(user => {
-    //     return user.id !== this.user.id;
-    //   });
-    // }
-  },
+  computed: {},
 
-  watch: {
-    // activeFriend(val) {
-    //   this.fetchMessages();
-    // }
-  },
+  watch: {},
 
   methods: {
     onTyping: function onTyping() {
-      console.log('onTyping');
-      Echo.private('privatechat.' + this.post.user_id).whisper('typing', {
+      Echo.private('privatechat.' + this.question.id).whisper('typing', {
         user: this.user
       });
     },
@@ -57207,41 +57191,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       axios.post('/api/posts', {
         body: this.body,
-        user_id: this.post.user_id,
+        receiver_id: this.opposite.id,
         question_id: this.question.id
       }).then(function (response) {
-        console.log('response.data', response.data);
         _this.body = null;
-        _this.allMessages.push(response.data.post);
-        // setTimeout(this.scrollToEnd, 100);
+        _this.allPosts.push(response.data.post);
       });
     },
     fetchMessages: function fetchMessages() {
       var _this2 = this;
 
-      axios.get('/api/posts/' + this.post.user_id).then(function (response) {
-        _this2.allMessages = response.data;
+      axios.get('/api/posts/' + this.question.id).then(function (response) {
+        _this2.allPosts = response.data;
       });
     }
-    // fetchUsers() {
-    //   axios.get('/api/users').then(response => {
-    //     this.users = response.data;
-    //     if (this.friends.length > 0) {
-    //       if(this.user_id) {
-    //         console.log('this.user_id', this.user_id)
-    //         console.log('this.friends', this.friends)
-    //         this.post.user_id = this.post.user_id;
-    //       } else {
-    //         this.post.user_id = this.friends[0].id;
-    //       }
-    //     }
-    //   });
-    // },
-
-    // scrollToEnd() {
-    //   document.getElementById('privateMessageBox').scrollTo(0, 99999);
-    // }
-
   },
 
   mounted: function mounted() {},
@@ -57251,24 +57214,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     this.fetchMessages();
 
     Echo.join('privatechat').here(function (users) {
-      // console.log('online', users);
       _this3.onlineFriends = users;
     }).joining(function (user) {
       _this3.onlineFriends.push(user);
-      // console.log('joining', user);
     }).leaving(function (user) {
       _this3.onlineFriends.splice(_this3.onlineFriends.indexOf(user), 1);
-      // console.log('leaving', user.name);
     });
 
-    Echo.private('privatechat.' + this.user.id).listen('PrivatePostSent', function (e) {
-      // console.log('pmessage sent');
-      _this3.post.user_id = e.post.user_id;
-      _this3.allMessages.push(e.post);
-      // setTimeout(this.scrollToEnd, 100);
+    Echo.private('privatechat.' + this.question.id).listen('PrivatePostSent', function (e) {
+      _this3.opposite.id = e.post.user_id;
+      _this3.allPosts.push(e.post);
     }).listenForWhisper('typing', function (e) {
-      // console.log('listenForWhisper typing');
-      if (e.user.id == _this3.post.user_id) {
+
+      if (e.user.id == _this3.opposite.id) {
         _this3.typingFriend = e.user;
 
         if (_this3.typingClock) clearTimeout();
@@ -57290,33 +57248,36 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h1", [_vm._v("Conversa com " + _vm._s(_vm.opposite.name))]),
+    _vm._v(" "),
+    _c("p", { staticClass: "lead" }, [
+      _vm._v("Em " + _vm._s(_vm.question.title))
+    ]),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col" }, [
         _c("div", { attrs: { id: "privateMessageBox" } }, [
           _c(
             "div",
             { staticClass: "d-flex flex-column p-3" },
-            _vm._l(_vm.allMessages, function(message, index) {
+            _vm._l(_vm.allPosts, function(post, index) {
               return _c(
                 "div",
                 {
                   key: index,
                   staticClass: "h5",
-                  class: _vm.user.id == message.user.id ? "text-right" : ""
+                  class: _vm.user.id == post.user.id ? "text-right" : ""
                 },
                 [
-                  _vm._v(
-                    "\n                   " +
-                      _vm._s(message.user.name) +
-                      "\n                   "
-                  ),
                   _c("img", {
                     staticClass: "img-fluid",
                     attrs: {
                       width: "25",
-                      src: "/storage/img/avatars/" + message.user.avatar,
-                      alt: message.user.name,
-                      title: message.user.name
+                      src: "/storage/img/avatars/" + post.user.avatar,
+                      alt: post.user.name,
+                      title: post.user.name
                     }
                   }),
                   _vm._v(" "),
@@ -57325,11 +57286,11 @@ var render = function() {
                     {
                       staticClass: "badge badge-pill py-2 px-3",
                       class:
-                        _vm.user.id !== message.user.id
+                        _vm.user.id !== post.user.id
                           ? "badge-secondary"
                           : "badge-primary"
                     },
-                    [_vm._v(_vm._s(message.body))]
+                    [_vm._v(_vm._s(post.body))]
                   )
                 ]
               )

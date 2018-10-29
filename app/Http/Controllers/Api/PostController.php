@@ -69,11 +69,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return Post::with('user')
-            ->where(['user_id' => auth()->id(), 'receiver_id' => $id])
-            ->orWhere(function ($query) use ($id) {
-                $query->where(['user_id' => $id, 'receiver_id' => auth()->id()]);
-            })
+        return Post::where('question_id', $id)
+            ->where('user_id', auth()->id())
+            ->orWhere('receiver_id', auth()->id())
             ->get();
     }
 

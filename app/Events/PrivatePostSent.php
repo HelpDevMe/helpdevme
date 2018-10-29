@@ -35,6 +35,6 @@ class PrivatePostSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('privatechat.' . $this->post->receiver_id);
+        return new PrivateChannel('privatechat.' . $this->post->question->id);
     }
 }
