@@ -19,7 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->string('slug')->unique();
             $table->text('body');
             $table->integer('user_id')->unsigned();
-            $table->integer('status_id')->default(0);
+            $table->tinyInteger('status_id')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

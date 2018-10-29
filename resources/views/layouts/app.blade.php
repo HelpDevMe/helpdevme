@@ -51,7 +51,7 @@
                             </li>
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('posts.index') }}">
+                                <a class="nav-link" href="#">
                                     @lang('layouts.navbar.posts')
                                 </a>
                             </li>

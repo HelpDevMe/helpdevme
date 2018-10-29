@@ -49,7 +49,9 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'receiver_id' => $request->receiver_id
+            'question_id' => $request->question_id,
+            'receiver_id' => $request->receiver_id,
+            'comment' => 0
         ]);
 
         $post = auth()->user()->posts()->create($request->all());

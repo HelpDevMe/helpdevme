@@ -12,6 +12,7 @@ class Post extends Model
         'body',
         'budget',
         'question_id',
+        'comment',
         'user_id',
         'receiver_id'
     ];

@@ -25,6 +25,9 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
+                    @formComment(['question' => $question])
+                    @endformComment
                 </div>
             </div>
         </article>

@@ -25,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index');
+        //
     }
 
     /**
@@ -58,12 +58,14 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $user_id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id)
+    public function show($id)
     {
-        return view('posts.index', compact('user_id'));
+        $post = Post::findOrFail($id);
+        
+        return view('posts.show', compact('post'));
     }
 
     /**

@@ -16,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::component('components.avatar', 'avatar');
         Blade::component('components.budget', 'budget');
-        Blade::component('components.comment', 'comment');
+        Blade::component('components.comment.show', 'comment');
+        Blade::component('components.comment.create', 'formComment');
     }
 
     /**
