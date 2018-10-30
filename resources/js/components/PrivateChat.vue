@@ -1,8 +1,5 @@
 <template>
    <div>
-     <h1>Conversa com {{ opposite.name }}</h1>
-     <p class="lead">Em {{ question.title }}</p>
-     <hr>
      <div class="row">
         <div class="col">
           <div id="privateMessageBox">

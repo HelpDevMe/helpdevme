@@ -19,6 +19,8 @@ Route::resource('profile', 'ProfileController');
 
 Route::resource('posts', 'PostController');
 
+Route::resource('talks', 'TalkController');
+
 Route::resource('users', 'UserController');
 
 Route::resource('payments', 'PaymentController');

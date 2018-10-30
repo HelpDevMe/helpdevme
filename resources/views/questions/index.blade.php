@@ -59,10 +59,9 @@
                     <div class="row">
                         <div class="col">
                             <hr>
-                            <p>{{ count($question->posts) }} resposta(s)</p>
                             <div class="d-flex flex-column">
-                                @foreach($question->posts as $post)
-                                    @comment(['post' => $post])
+                                @foreach($question->talks as $talk)
+                                    @comment(['talk' => $talk])
                                     @endcomment
                                 @endforeach
                             </div>

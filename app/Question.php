@@ -17,18 +17,18 @@ class Question extends Model
         'status_id'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User');
     }
-
-    public function posts()
+    
+    public function talks()
     {
-        return $this->hasMany('App\Post');
-    }
-
-    public function getRouteKeyName()
-    {
-        return 'slug';
+        return $this->hasMany('App\Talk');
     }
 }

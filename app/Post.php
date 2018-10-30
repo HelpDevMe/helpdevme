@@ -6,29 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $with = ['user'];
-
     protected $fillable = [
         'body',
         'budget',
-        'question_id',
         'comment',
-        'user_id',
-        'receiver_id'
+        'talk_id'
     ];
 
-    public function question()
+    public function talk()
     {
-        return $this->belongsTo('App\Question');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo('App\User');
-    }
-    
-    public function receiver()
-    {
-        return $this->belongsTo('App\User', 'receiver_id');
+        return $this->belongsTo('App\Talk');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Talk;
 use App\Question;
 use Illuminate\Http\Request;
 
@@ -49,12 +50,24 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {        
         $request->validate([
             'body' => 'required'
         ]);
 
-        auth()->user()->posts()->create($request->all());
+        $talk = Talk::firstOrCreate([
+            'user_id' => $request->user_id,
+            'receiver_id' => $request->receiver_id,
+            'question_id' => $request->question_id
+        ]);
+
+        $post = new Post([
+            'talk_id' => $talk->id,
+            'body'=> $request->body,
+            'budget'=> $request->budget
+        ]);
+
+        $post->save();
 
         return redirect()->route('home')->with('success', 'Mensagem enviada!');
     }

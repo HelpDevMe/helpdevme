@@ -3,6 +3,7 @@
         @csrf
         <input type="hidden" name="question_id" value="{{ $question->id }}">
         <input type="hidden" name="receiver_id" value="{{ $question->user->id }}">
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
         <div class="form-row align-items-center">
             <div class="col-7 form-group">
                 <textarea name="body" placeholder="Escreva uma mensagem" class="form-control" required></textarea>

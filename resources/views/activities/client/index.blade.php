@@ -11,7 +11,7 @@
                 <h3 class="h5">
                     <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                 </h3>
-                <p>{{ count($question->posts) }} resposta(s)</p>
+                <p>{{ count($question->talks) }} resposta(s)</p>
                 <span class="badge badge-secondary">
                     @lang('questions.status.' . $question->status_id)
                 </span>

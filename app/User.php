@@ -34,13 +34,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Question');
     }
 
-    public function posts()
+    public function talks()
     {
-        return $this->hasMany('App\Post');
-    }
-    
-    public function receivers()
-    {
-        return $this->hasMany('App\Post', 'receiver_id');
+        return $this->hasMany('App\Talk');
     }
 }
