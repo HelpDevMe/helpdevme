@@ -20,18 +20,19 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        //
+        return $user->id === $post->user_id;
     }
 
     /**
      * Determine whether the user can create posts.
      *
      * @param  \App\User  $user
+     * @param  \App\Post  $post
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Post $post)
     {
-        //
+        return $user->id === $post->user_id;
     }
 
     /**
@@ -43,7 +44,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->receiver_id && $post->question->status_id === Question::ANALYZING;
+        return $user->id === $post->talk->receiver_id && $post->talk->question->status_id === Question::ANALYZING;
     }
 
     /**

@@ -63,6 +63,7 @@ class PostController extends Controller
 
         $post = new Post([
             'talk_id' => $talk->id,
+            'user_id' => auth()->id(),
             'body'=> $request->body,
             'budget'=> $request->budget
         ]);
@@ -128,11 +129,11 @@ class PostController extends Controller
      */
     public function accept(Request $request, $id)
     {
-        $post = Post::with(['question'])->findOrFail($id);
+        $post = Post::findOrFail($id);
 
         $this->authorize('update', $post);
 
-        $question = $post->question;
+        $question = $post->talk->question;
         $question->status_id = Question::WARRANTY;
         $question->update();
 

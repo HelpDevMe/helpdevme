@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\User;
 use App\Post;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -35,6 +34,6 @@ class PrivatePostSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('privatechat.' . $this->post->question->id);
+        return new PrivateChannel('privatechat.' . $this->post->talk->user_id . '.' . $this->post->talk->receiver_id . '.private');
     }
 }

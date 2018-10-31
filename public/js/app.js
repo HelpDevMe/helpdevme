@@ -57158,80 +57158,74 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'question', 'opposite'],
+  props: ['user', 'talk', 'opposite', 'posts'],
 
   data: function data() {
     return {
+      channel: 'privatechat.' + this.talk.user_id + '.' + this.talk.receiver_id,
       body: null,
-      typingFriend: {},
+      typing: false,
       onlineFriends: [],
-      allPosts: [],
-      typingClock: null
+      allPosts: []
     };
   },
 
 
-  computed: {},
-
-  watch: {},
-
   methods: {
     onTyping: function onTyping() {
-      Echo.private('privatechat.' + this.question.id).whisper('typing', {
-        user: this.user
-      });
+      Echo.private(this.channel + '.private').whisper('typing');
     },
     sendMessage: function sendMessage() {
       var _this = this;
 
       axios.post('/api/posts', {
         body: this.body,
-        receiver_id: this.opposite.id,
-        question_id: this.question.id
+        talk_id: this.talk.id
       }).then(function (response) {
         _this.body = null;
         _this.allPosts.push(response.data.post);
       });
     },
     fetchMessages: function fetchMessages() {
-      var _this2 = this;
-
-      axios.get('/api/posts/' + this.question.id).then(function (response) {
-        _this2.allPosts = response.data;
-      });
+      this.allPosts = this.posts;
     }
   },
 
-  mounted: function mounted() {},
   created: function created() {
-    var _this3 = this;
+    var _this2 = this;
 
     this.fetchMessages();
 
-    Echo.join('privatechat').here(function (users) {
-      _this3.onlineFriends = users;
+    Echo.join(this.channel + '.join').here(function (users) {
+      _this2.onlineFriends = users;
     }).joining(function (user) {
-      _this3.onlineFriends.push(user);
+      _this2.onlineFriends.push(user);
     }).leaving(function (user) {
-      _this3.onlineFriends.splice(_this3.onlineFriends.indexOf(user), 1);
+      console.log('leaving', user);
+      _this2.onlineFriends.splice(_this2.onlineFriends.indexOf(user), 1);
     });
 
-    Echo.private('privatechat.' + this.question.id).listen('PrivatePostSent', function (e) {
-      _this3.opposite.id = e.post.user_id;
-      _this3.allPosts.push(e.post);
+    Echo.private(this.channel + '.private').listen('PrivatePostSent', function (e) {
+      console.log('PrivatePostSent', e);
+      _this2.allPosts.push(e.post);
     }).listenForWhisper('typing', function (e) {
+      console.log('listenForWhisper');
+      _this2.typing = true;
 
-      if (e.user.id == _this3.opposite.id) {
-        _this3.typingFriend = e.user;
-
-        if (_this3.typingClock) clearTimeout();
-
-        _this3.typingClock = setTimeout(function () {
-          _this3.typingFriend = {};
-        }, 9000);
-      }
+      setTimeout(function () {
+        console.log('setTimeout');
+        _this2.typing = false;
+      }, 1000);
     });
   }
 });
@@ -57244,97 +57238,126 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col" }, [
-        _c("div", { attrs: { id: "privateMessageBox" } }, [
-          _c(
-            "div",
-            { staticClass: "d-flex flex-column p-3" },
-            _vm._l(_vm.allPosts, function(post, index) {
-              return _c(
-                "div",
-                {
-                  key: index,
-                  staticClass: "h5",
-                  class: _vm.user.id == post.user.id ? "text-right" : ""
-                },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      width: "25",
-                      src: "/storage/img/avatars/" + post.user.avatar,
-                      alt: post.user.name,
-                      title: post.user.name
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    {
-                      staticClass: "badge badge-pill py-2 px-3",
-                      class:
-                        _vm.user.id !== post.user.id
-                          ? "badge-secondary"
-                          : "badge-primary"
-                    },
-                    [_vm._v(_vm._s(post.body))]
-                  )
-                ]
-              )
+  return _c("section", [
+    _c("p", { staticClass: "lead" }, [
+      _c("span", [_vm._v("Conversa com")]),
+      _vm._v(" "),
+      _c("a", { staticClass: "badge badge-secondary", attrs: { href: "#" } }, [
+        _c(
+          "span",
+          {
+            class: _vm.onlineFriends.find(function(user) {
+              return user.id === _vm.opposite.id
             })
-          ),
-          _vm._v(" "),
-          _vm.typingFriend.name
-            ? _c("p", [
-                _vm._v(_vm._s(_vm.typingFriend.name) + " está digitando")
-              ])
-            : _vm._e()
-        ]),
+              ? "text-success"
+              : ""
+          },
+          [_vm._v("•")]
+        ),
         _vm._v(" "),
-        _c("div", { staticClass: "input-group" }, [
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.body,
-                expression: "body"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { placeholder: "Digite uma mensagem..." },
-            domProps: { value: _vm.body },
-            on: {
-              keydown: _vm.onTyping,
-              keyup: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                ) {
-                  return null
+        _c("span", [_vm._v(_vm._s(_vm.opposite.name))])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col" }, [
+            _c("div", { attrs: { id: "privateMessageBox" } }, [
+              _c(
+                "div",
+                { staticClass: "d-flex flex-column p-3" },
+                _vm._l(_vm.allPosts, function(post, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: index,
+                      staticClass: "h5",
+                      class: _vm.user.id == post.user_id ? "text-right" : ""
+                    },
+                    [
+                      _vm.user.id != post.user_id
+                        ? _c("img", {
+                            staticClass: "img-fluid",
+                            attrs: {
+                              width: "25",
+                              src:
+                                "/storage/img/avatars/" + _vm.opposite.avatar,
+                              alt: _vm.opposite.name,
+                              title: _vm.opposite.name
+                            }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "badge badge-pill py-2 px-3",
+                          class:
+                            _vm.user.id !== post.user_id
+                              ? "badge-secondary"
+                              : "badge-primary"
+                        },
+                        [_vm._v(_vm._s(post.body))]
+                      )
+                    ]
+                  )
+                })
+              ),
+              _vm._v(" "),
+              _vm.typing
+                ? _c("p", [
+                    _vm._v(_vm._s(_vm.opposite.name) + " está digitando")
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "input-group" }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.body,
+                    expression: "body"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { placeholder: "Digite uma mensagem..." },
+                domProps: { value: _vm.body },
+                on: {
+                  keydown: [
+                    _vm.onTyping,
+                    function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.sendMessage($event)
+                    }
+                  ],
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.body = $event.target.value
+                  }
                 }
-                return _vm.sendMessage($event)
-              },
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.body = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group-append" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: { click: _vm.sendMessage }
-              },
-              [_vm._v("Enviar")]
-            )
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "input-group-append" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: { click: _vm.sendMessage }
+                  },
+                  [_vm._v("Enviar")]
+                )
+              ])
+            ])
           ])
         ])
       ])

@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 class TalkController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:update,talk', ['only' => [
+            'show',
+        ]]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

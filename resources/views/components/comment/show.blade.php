@@ -41,8 +41,8 @@
                             </form>
                         </div>
                     </div>
+                    <a href="{{ route('talks.show', $talk) }}" class="btn btn-secondary">Conversar</a>
                 @endcan
-                <a href="{{ route('posts.show', $talk->question->id) }}" class="btn btn-secondary">Conversar</a>
             @endif
         </div>
     @endif

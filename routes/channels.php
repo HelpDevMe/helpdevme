@@ -11,10 +11,10 @@
 |
 */
 
-Broadcast::channel('privatechat', function ($user) {
-    return auth()->check() ? $user : null;
+Broadcast::channel('privatechat.{user_id}.{receiver_id}.join', function ($user, $user_id, $receiver_id) {
+    return auth()->check() && ((int)$user->id === (int)$user_id || $user->id === (int)$receiver_id) ? $user : false;
 });
 
-Broadcast::channel('privatechat.{question_id}', function ($user, $question_id) {
-    return auth()->check();
+Broadcast::channel('privatechat.{user_id}.{receiver_id}.private', function ($user, $user_id, $receiver_id) {
+    return auth()->check() && ((int)$user->id === (int)$user_id || $user->id === (int)$receiver_id);
 });

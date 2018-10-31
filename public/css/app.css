@@ -10466,3 +10466,14 @@ a.text-dark:focus {
   }
 }
 
+.avatar {
+  border-radius: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.nav-link .avatar {
+  width: 25px;
+  height: 25px;
+}
+

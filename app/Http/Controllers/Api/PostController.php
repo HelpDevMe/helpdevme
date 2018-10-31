@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Post;
+use App\Talk;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Events\PrivatePostSent;
@@ -49,14 +49,17 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'question_id' => $request->question_id,
-            'receiver_id' => $request->receiver_id,
-            'comment' => 0
+            'comment' => 0,
+            'user_id' => auth()->id()
         ]);
 
-        $post = auth()->user()->posts()->create($request->all());
+        $post = new Post($request->all());
 
-        broadcast(new PrivatePostSent($post->load('user')))->toOthers();
+        $this->authorize('update', $post->talk);
+
+        $post->save();
+
+        broadcast(new PrivatePostSent($post))->toOthers();
 
         return response(['post' => $post]);
     }
@@ -69,10 +72,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return Post::where('question_id', $id)
-            ->where('user_id', auth()->id())
-            ->orWhere('receiver_id', auth()->id())
-            ->get();
+        //
     }
 
     /**

@@ -10,11 +10,17 @@ class Post extends Model
         'body',
         'budget',
         'comment',
-        'talk_id'
+        'talk_id',
+        'user_id'
     ];
 
     public function talk()
     {
         return $this->belongsTo('App\Talk');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

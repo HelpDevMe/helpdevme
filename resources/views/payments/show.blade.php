@@ -7,7 +7,7 @@
         </div>
     @endif
     <h1 class="display-4">Depósito em garantia para</h1>
-    <p class="lead">{{ $post->question->title }}</p>
+    <p class="lead">{{ $post->talk->question->title }}</p>
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
@@ -29,7 +29,7 @@
                         <form action="{{ route('payments.paypal') }}" method="POST">
                             @csrf
                             <input type="hidden" name="budget" value="{{ $post->budget }}">
-                            <input type="hidden" name="title" value="{{ $post->question->title }}">
+                            <input type="hidden" name="title" value="{{ $post->talk->question->title }}">
                             <button type="submit" class="btn btn-success">Pagar</button>
                         </form>
                     </div>

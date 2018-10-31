@@ -1,63 +1,62 @@
 <template>
-   <div>
-     <div class="row">
-        <div class="col">
-          <div id="privateMessageBox">
-              <div class="d-flex flex-column p-3">
-                  <div class="h5" v-for="(post, index) in allPosts" :key="index" :class="user.id==post.user.id ? 'text-right' : ''">
-                      <!-- <pre class="my-5">
-                        {{ post }}
-                      </pre> -->
-                      <img width="25" class="img-fluid" :src="'/storage/img/avatars/' + post.user.avatar" v-bind:alt="post.user.name" v-bind:title="post.user.name">
-                      <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user.id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
+   <section>
+      <p class="lead">
+        <span>Conversa com</span>
+        <a href="#" class="badge badge-secondary">
+          <span :class="(onlineFriends.find(user=>user.id===opposite.id))?'text-success':''">&bull;</span>
+          <span>{{ opposite.name }}</span>
+        </a>
+      </p>
+      <div class="card">
+         <div class="card-body">
+            <div class="row">
+               <div class="col">
+                  <div id="privateMessageBox">
+                     <div class="d-flex flex-column p-3">
+                        <div class="h5" v-for="(post, index) in allPosts" :key="index" :class="user.id==post.user_id ? 'text-right' : ''">
+                           <img v-if="user.id!=post.user_id" width="25" class="img-fluid" :src="'/storage/img/avatars/' + opposite.avatar" v-bind:alt="opposite.name" v-bind:title="opposite.name">
+                           <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
+                        </div>
+                     </div>
+                     <p v-if="typing">{{ opposite.name }} está digitando</p>
                   </div>
-              </div>
-              <p v-if="typingFriend.name">{{ typingFriend.name }} está digitando</p>
-          </div>
-          <!-- Form -->
-          <div class="input-group">
-            <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keyup.enter="sendMessage"></textarea>
-            <div class="input-group-append">
-                <button @click="sendMessage" class="btn btn-primary">Enviar</button>
+                  <!-- Form -->
+                  <div class="input-group">
+                     <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keydown.enter="sendMessage"></textarea>
+                     <div class="input-group-append">
+                        <button @click="sendMessage" class="btn btn-primary">Enviar</button>
+                     </div>
+                  </div>
+               </div>
             </div>
-          </div>
-        </div>
+         </div>
       </div>
-   </div>
+   </section>
 </template>
 
 <script>
 export default {
-  props: ['user', 'question', 'opposite'],
+  props: ['user', 'talk', 'opposite', 'posts'],
 
   data() {
     return {
+      channel: `privatechat.${this.talk.user_id}.${this.talk.receiver_id}`,
       body: null,
-      typingFriend: {},
+      typing: false,
       onlineFriends: [],
-      allPosts: [],
-      typingClock: null
+      allPosts: []
     };
-  },
-
-  computed: {
-  },
-
-  watch: {
   },
 
   methods: {
     onTyping() {
-      Echo.private('privatechat.' + this.question.id).whisper('typing', {
-        user: this.user
-      });
+      Echo.private(this.channel + '.private').whisper('typing');
     },
     sendMessage() {
       axios
         .post('/api/posts', {
           body: this.body,
-          receiver_id: this.opposite.id,
-          question_id: this.question.id
+          talk_id: this.talk.id
         })
         .then(response => {
           this.body = null;
@@ -65,19 +64,15 @@ export default {
         });
     },
     fetchMessages() {
-      axios.get('/api/posts/' + this.question.id).then(response => {
-        this.allPosts = response.data;
-      });
+      this.allPosts = this.posts;
     }
   },
-
-  mounted() {},
 
   created() {
 
     this.fetchMessages();
 
-    Echo.join('privatechat')
+    Echo.join(this.channel + '.join')
       .here(users => {
         this.onlineFriends = users;
       })
@@ -85,25 +80,23 @@ export default {
         this.onlineFriends.push(user);
       })
       .leaving(user => {
+        console.log('leaving', user);
         this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
       });
 
-    Echo.private('privatechat.' + this.question.id)
+    Echo.private(this.channel + '.private')
       .listen('PrivatePostSent', e => {
-        this.opposite.id = e.post.user_id;
+        console.log('PrivatePostSent', e);
         this.allPosts.push(e.post);
       })
       .listenForWhisper('typing', e => {
+        console.log('listenForWhisper');
+        this.typing = true;
 
-        if (e.user.id == this.opposite.id) {
-          this.typingFriend = e.user;
-
-          if (this.typingClock) clearTimeout();
-
-          this.typingClock = setTimeout(() => {
-            this.typingFriend = {};
-          }, 9000);
-        }
+        setTimeout(() => {
+          console.log('setTimeout');
+          this.typing = false;
+        }, 1000);
       });
   }
 };

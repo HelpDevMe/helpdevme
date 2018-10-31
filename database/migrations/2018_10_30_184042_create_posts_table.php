@@ -19,9 +19,11 @@ class CreatePostsTable extends Migration
             $table->float('budget')->nullable();
             $table->tinyInteger('comment')->default(1);
             $table->integer('talk_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('talk_id')->references('id')->on('talks');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
