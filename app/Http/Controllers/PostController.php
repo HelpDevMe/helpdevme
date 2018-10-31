@@ -6,6 +6,7 @@ use App\Post;
 use App\Talk;
 use App\Question;
 use Illuminate\Http\Request;
+use App\Events\PrivatePostSent;
 
 class PostController extends Controller
 {
@@ -137,6 +138,13 @@ class PostController extends Controller
         $question->status_id = Question::WARRANTY;
         $question->update();
 
-        return redirect()->route('payments.show', ['id' => $id])->with('success', 'Proposta aceita! Realize o deposito de garantia.');
+        broadcast(new PrivatePostSent($post));
+
+        return redirect()->action(
+            'Api\PostController@sendRequest', [
+                'talk_id' => $post->talk->id,
+                'body' => 'Proposta aceita'
+            ]
+        );
     }
 }

@@ -20,6 +20,26 @@ class PostController extends Controller
         $this->middleware('auth:api');
     }
 
+    public function sendRequest(Request $request)
+    {
+        $request->merge([
+            'comment' => 0,
+            'user_id' => auth()->id()
+        ]);
+
+        dd($request->body);
+
+        $post = new Post($request->all());
+
+        $this->authorize('update', $post->talk);
+
+        $post->save();
+
+        broadcast(new PrivatePostSent($post))->toOthers();
+
+        return response(['post' => $post]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,20 +68,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge([
-            'comment' => 0,
-            'user_id' => auth()->id()
-        ]);
-
-        $post = new Post($request->all());
-
-        $this->authorize('update', $post->talk);
-
-        $post->save();
-
-        broadcast(new PrivatePostSent($post))->toOthers();
-
-        return response(['post' => $post]);
+        $this->sendRequest($request);
     }
 
     /**

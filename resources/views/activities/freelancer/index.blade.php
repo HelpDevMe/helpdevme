@@ -6,14 +6,14 @@
         <div class="card">
             <div class="card-body">
                 <address class="author">
-                    <a rel="author" href="{{ route('users.show', $post->receiver) }}">{{ $post->receiver->name }}</a>
+                    {{-- <a rel="author" href="{{ route('users.show', $post->receiver) }}">{{ $post->receiver->name }}</a> --}}
                 </address>
                 <h3 class="h5">
-                    <a href="{{ route('questions.show', $post->question) }}">{{ $post->question->title }}</a>
+                    <a href="{{ route('questions.show', $post->talk->question) }}">{{ $post->talk->question->title }}</a>
                 </h3>
-                <p>{{ count($post->question->posts) }} resposta(s)</p>
+                <p>{{ count($post->talk->question->posts) }} resposta(s)</p>
                 <span class="badge badge-secondary">
-                    @lang('questions.status.' . $post->question->status_id)
+                    @lang('questions.status.' . $post->talk->question->status_id)
                 </span>
                 <span class="badge badge-success">
                     @budget(['budget' => $post->budget])

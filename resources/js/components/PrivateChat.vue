@@ -80,21 +80,20 @@ export default {
         this.onlineFriends.push(user);
       })
       .leaving(user => {
-        console.log('leaving', user);
         this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
       });
 
     Echo.private(this.channel + '.private')
       .listen('PrivatePostSent', e => {
-        console.log('PrivatePostSent', e);
+
+        console.log('PrivatePostSent', e.post);
+        
         this.allPosts.push(e.post);
       })
       .listenForWhisper('typing', e => {
-        console.log('listenForWhisper');
         this.typing = true;
 
         setTimeout(() => {
-          console.log('setTimeout');
           this.typing = false;
         }, 1000);
       });

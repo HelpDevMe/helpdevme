@@ -94,7 +94,6 @@ class ActivityController extends Controller
     public function freelancer()
     {
         $posts = Post::where('user_id', auth()->id())
-            ->whereNotNull('question_id')
             ->get();
         
         return view('activities.freelancer.index', compact('posts'));

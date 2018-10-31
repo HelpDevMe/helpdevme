@@ -57211,19 +57211,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }).joining(function (user) {
       _this2.onlineFriends.push(user);
     }).leaving(function (user) {
-      console.log('leaving', user);
       _this2.onlineFriends.splice(_this2.onlineFriends.indexOf(user), 1);
     });
 
     Echo.private(this.channel + '.private').listen('PrivatePostSent', function (e) {
-      console.log('PrivatePostSent', e);
+
+      console.log('PrivatePostSent', e.post);
+
       _this2.allPosts.push(e.post);
     }).listenForWhisper('typing', function (e) {
-      console.log('listenForWhisper');
       _this2.typing = true;
 
       setTimeout(function () {
-        console.log('setTimeout');
         _this2.typing = false;
       }, 1000);
     });
