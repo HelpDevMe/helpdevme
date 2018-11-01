@@ -138,10 +138,8 @@ class PostController extends Controller
         $question->status_id = Question::WARRANTY;
         $question->update();
 
-        broadcast(new PrivatePostSent($post));
-
         return redirect()->action(
-            'Api\PostController@sendRequest', [
+            'Api\PostController@setAccept', [
                 'talk_id' => $post->talk->id,
                 'body' => 'Proposta aceita'
             ]

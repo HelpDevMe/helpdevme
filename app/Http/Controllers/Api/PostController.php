@@ -22,13 +22,6 @@ class PostController extends Controller
 
     public function sendRequest(Request $request)
     {
-        $request->merge([
-            'comment' => 0,
-            'user_id' => auth()->id()
-        ]);
-
-        dd($request->body);
-
         $post = new Post($request->all());
 
         $this->authorize('update', $post->talk);
@@ -37,7 +30,20 @@ class PostController extends Controller
 
         broadcast(new PrivatePostSent($post))->toOthers();
 
-        return response(['post' => $post]);
+        return $post;
+    }
+
+    public function setAccept(Request $request)
+    {
+        dd($request->talk_id);
+        $request->merge([
+            'comment' => 0,
+            'user_id' => auth()->id()
+        ]);
+
+        $post = $this->sendRequest($request);
+
+        return redirect()->route('talks.show', $post->id)->with(['post' => $post]);
     }
 
     /**
@@ -68,7 +74,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->sendRequest($request);
+        $request->merge([
+            'comment' => 0,
+            'user_id' => auth()->id()
+        ]);
+
+        return response(['post' => $this->sendRequest($request)]);
     }
 
     /**
