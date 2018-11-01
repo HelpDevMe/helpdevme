@@ -14,4 +14,3 @@ use Illuminate\Http\Request;
  */
 
 Route::resource('posts', 'Api\PostController');
-Route::get('posts', 'Api\PostController@setAccept');

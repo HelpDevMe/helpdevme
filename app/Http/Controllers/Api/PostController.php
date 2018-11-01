@@ -20,32 +20,6 @@ class PostController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function sendRequest(Request $request)
-    {
-        $post = new Post($request->all());
-
-        $this->authorize('update', $post->talk);
-
-        $post->save();
-
-        broadcast(new PrivatePostSent($post))->toOthers();
-
-        return $post;
-    }
-
-    public function setAccept(Request $request)
-    {
-        dd($request->talk_id);
-        $request->merge([
-            'comment' => 0,
-            'user_id' => auth()->id()
-        ]);
-
-        $post = $this->sendRequest($request);
-
-        return redirect()->route('talks.show', $post->id)->with(['post' => $post]);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -75,11 +49,19 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'comment' => 0,
+            'type' => Post::MESSAGE,
             'user_id' => auth()->id()
         ]);
 
-        return response(['post' => $this->sendRequest($request)]);
+        $post = new Post($request->all());
+
+        $this->authorize('update', $post->talk);
+
+        $post->save();
+
+        broadcast(new PrivatePostSent($post))->toOthers();
+
+        return response(['post' => $post]);
     }
 
     /**

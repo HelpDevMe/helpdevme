@@ -138,11 +138,15 @@ class PostController extends Controller
         $question->status_id = Question::WARRANTY;
         $question->update();
 
-        return redirect()->action(
-            'Api\PostController@setAccept', [
-                'talk_id' => $post->talk->id,
-                'body' => 'Proposta aceita'
-            ]
-        );
+        $alert = new Post;
+        $alert->talk_id = $post->talk->id;
+        $alert->user_id = auth()->id();
+        $alert->body = 'Proposta aceita';
+        $alert->type = Post::ALERT;
+        $alert->save();
+
+        broadcast(new PrivatePostSent($alert));
+
+        return redirect()->route('payments.show', ['id' => $id])->with('success', 'Proposta aceita! Realize o deposito de garantia.');
     }
 }

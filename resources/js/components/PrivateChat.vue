@@ -13,9 +13,14 @@
                <div class="col">
                   <div id="privateMessageBox">
                      <div class="d-flex flex-column p-3">
-                        <div class="h5" v-for="(post, index) in allPosts" :key="index" :class="user.id==post.user_id ? 'text-right' : ''">
-                           <img v-if="user.id!=post.user_id" width="25" class="img-fluid" :src="'/storage/img/avatars/' + opposite.avatar" v-bind:alt="opposite.name" v-bind:title="opposite.name">
-                           <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
+                        <div v-for="(post, index) in allPosts" :key="index" class="h5">
+                            <div v-if="post.type==2" class="text-center">
+                              <span class="badge badge-pill py-2 px-3 badge-success">{{ post.body }}</span>
+                            </div>
+                            <div v-if="post.type!=2" :class="user.id==post.user_id ? 'text-right' : ''">
+                              <img v-if="user.id!=post.user_id" width="25" class="img-fluid" :src="'/storage/img/avatars/' + opposite.avatar" v-bind:alt="opposite.name" v-bind:title="opposite.name">
+                              <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
+                            </div>
                         </div>
                      </div>
                      <p v-if="typing">{{ opposite.name }} está digitando</p>
@@ -84,10 +89,7 @@ export default {
       });
 
     Echo.private(this.channel + '.private')
-      .listen('PrivatePostSent', e => {
-
-        console.log('PrivatePostSent', e.post);
-        
+      .listen('PrivatePostSent', e => {        
         this.allPosts.push(e.post);
       })
       .listenForWhisper('typing', e => {

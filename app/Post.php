@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    const MESSAGE = 0;
+    const COMMENT = 1;
+    const ALERT = 2;
+
     protected $fillable = [
         'body',
         'budget',
-        'comment',
+        'type',
         'talk_id',
         'user_id'
     ];

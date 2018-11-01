@@ -57166,6 +57166,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'talk', 'opposite', 'posts'],
@@ -57215,9 +57220,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     });
 
     Echo.private(this.channel + '.private').listen('PrivatePostSent', function (e) {
-
-      console.log('PrivatePostSent', e.post);
-
       _this2.allPosts.push(e.post);
     }).listenForWhisper('typing', function (e) {
       _this2.typing = true;
@@ -57267,40 +57269,57 @@ var render = function() {
                 "div",
                 { staticClass: "d-flex flex-column p-3" },
                 _vm._l(_vm.allPosts, function(post, index) {
-                  return _c(
-                    "div",
-                    {
-                      key: index,
-                      staticClass: "h5",
-                      class: _vm.user.id == post.user_id ? "text-right" : ""
-                    },
-                    [
-                      _vm.user.id != post.user_id
-                        ? _c("img", {
-                            staticClass: "img-fluid",
-                            attrs: {
-                              width: "25",
-                              src:
-                                "/storage/img/avatars/" + _vm.opposite.avatar,
-                              alt: _vm.opposite.name,
-                              title: _vm.opposite.name
-                            }
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          staticClass: "badge badge-pill py-2 px-3",
-                          class:
-                            _vm.user.id !== post.user_id
-                              ? "badge-secondary"
-                              : "badge-primary"
-                        },
-                        [_vm._v(_vm._s(post.body))]
-                      )
-                    ]
-                  )
+                  return _c("div", { key: index, staticClass: "h5" }, [
+                    post.type == 2
+                      ? _c("div", { staticClass: "text-center" }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "badge badge-pill py-2 px-3 badge-success"
+                            },
+                            [_vm._v(_vm._s(post.body))]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    post.type != 2
+                      ? _c(
+                          "div",
+                          {
+                            class:
+                              _vm.user.id == post.user_id ? "text-right" : ""
+                          },
+                          [
+                            _vm.user.id != post.user_id
+                              ? _c("img", {
+                                  staticClass: "img-fluid",
+                                  attrs: {
+                                    width: "25",
+                                    src:
+                                      "/storage/img/avatars/" +
+                                      _vm.opposite.avatar,
+                                    alt: _vm.opposite.name,
+                                    title: _vm.opposite.name
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                staticClass: "badge badge-pill py-2 px-3",
+                                class:
+                                  _vm.user.id !== post.user_id
+                                    ? "badge-secondary"
+                                    : "badge-primary"
+                              },
+                              [_vm._v(_vm._s(post.body))]
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ])
                 })
               ),
               _vm._v(" "),

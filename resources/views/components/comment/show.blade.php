@@ -1,5 +1,5 @@
 @foreach ($talk->posts as $post)
-    @if($post->comment === 1)
+    @if($post->type === App\Post::COMMENT)
         <div class="py-3">
             <div class="mb-3">
                 <a href="{{ route('users.show', $talk->user) }}">{{ $talk->user->name }}</a>
