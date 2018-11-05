@@ -57171,6 +57171,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'talk', 'opposite', 'posts'],
@@ -57276,6 +57282,19 @@ var render = function() {
                             "span",
                             {
                               staticClass:
+                                "badge badge-pill py-2 px-3 badge-info"
+                            },
+                            [_vm._v(_vm._s(post.body))]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    post.type == 3
+                      ? _c("div", { staticClass: "text-center" }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass:
                                 "badge badge-pill py-2 px-3 badge-success"
                             },
                             [_vm._v(_vm._s(post.body))]
@@ -57283,7 +57302,7 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    post.type != 2
+                    post.type == 0 || post.type == 1
                       ? _c(
                           "div",
                           {

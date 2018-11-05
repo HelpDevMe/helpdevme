@@ -8,6 +8,7 @@ class Question extends Model
 {
     const ANALYZING = 0;
     const WARRANTY = 1;
+    const PAYMENT = 2;
 
     protected $fillable = [
         'title',

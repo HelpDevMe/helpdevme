@@ -28,9 +28,17 @@ Route::resource('payments', 'PaymentController');
 Route::get('activities/client', 'ActivityController@client')->name('activities.client.index');
 Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer.index');
 
-Route::post('payments/paypal', 'PaymentController@payWithPaypal')->name('payments.paypal');
-Route::get('payments/paypal/status', 'PaymentController@status')->name('payments.paypal.status');
-Route::get('payments/paypal/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
+Route::prefix('payments/paypal')->group(function () {
+    
+    Route::post('/', 'PaymentController@payWithPaypal')->name('payments.paypal');
+    
+    Route::prefix('/{post}')->group(function () {
+    
+        Route::get('/status', 'PaymentController@status')->name('payments.paypal.status');
+    
+        Route::get('/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
+    });
+});
 
 Route::resource('questions', 'QuestionController', ['except' => [
     'index', 'show'

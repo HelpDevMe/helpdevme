@@ -14,10 +14,16 @@
                   <div id="privateMessageBox">
                      <div class="d-flex flex-column p-3">
                         <div v-for="(post, index) in allPosts" :key="index" class="h5">
+                            <!-- Proposta Aceita -->
                             <div v-if="post.type==2" class="text-center">
+                              <span class="badge badge-pill py-2 px-3 badge-info">{{ post.body }}</span>
+                            </div>
+                            <!-- Pagamento Efetuado -->
+                            <div v-if="post.type==3" class="text-center">
                               <span class="badge badge-pill py-2 px-3 badge-success">{{ post.body }}</span>
                             </div>
-                            <div v-if="post.type!=2" :class="user.id==post.user_id ? 'text-right' : ''">
+                            <!-- Post -->
+                            <div v-if="post.type==0 || post.type==1" :class="user.id==post.user_id ? 'text-right' : ''">
                               <img v-if="user.id!=post.user_id" width="25" class="img-fluid" :src="'/storage/img/avatars/' + opposite.avatar" v-bind:alt="opposite.name" v-bind:title="opposite.name">
                               <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
                             </div>

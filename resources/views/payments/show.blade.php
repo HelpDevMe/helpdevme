@@ -28,6 +28,7 @@
                     <div class="form-group">
                         <form action="{{ route('payments.paypal') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="id" value="{{ $post->id }}">
                             <input type="hidden" name="budget" value="{{ $post->budget }}">
                             <input type="hidden" name="title" value="{{ $post->talk->question->title }}">
                             <button type="submit" class="btn btn-success">Pagar</button>

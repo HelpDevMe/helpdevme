@@ -8,7 +8,8 @@ class Post extends Model
 {
     const MESSAGE = 0;
     const COMMENT = 1;
-    const ALERT = 2;
+    const WARRANTY = 2;
+    const PAYMENT = 3;
 
     protected $fillable = [
         'body',

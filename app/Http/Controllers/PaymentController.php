@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use App\Events\PrivatePostSent;
 
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
@@ -116,6 +117,7 @@ class PaymentController extends Controller
 
     public function payWithPaypal(Request $request)
     {
+        $id = $request->id;
         $title = $request->title;
         $budget = $request->budget;
 
@@ -142,10 +144,9 @@ class PaymentController extends Controller
             ->setDescription('Comprando algo do meu site')
             ->setInvoiceNumber(uniqid());
 
-        $baseUrl = route('payments.paypal');
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($baseUrl . '/status')
-            ->setCancelUrl($baseUrl . '/canceled');
+        $redirectUrls->setReturnUrl(route('payments.paypal.status', ['id' => $id]))
+            ->setCancelUrl(route('payments.paypal.canceled', ['id' => $id]));
 
         $payment = new Payment();
         $payment->setIntent('sale')
@@ -164,11 +165,15 @@ class PaymentController extends Controller
         return redirect($paymentLink);
     }
 
-    public function status(Request $request)
+    public function status(Request $request, $id)
     {
+        $post = Post::findOrFail($id);
+
+        $this->authorize('update', $post);
+
         if (empty($request->input('PayerID')) || empty($request->input('token')))
         {
-            die('Payment Failed');
+            return redirect()->route('home')->with('error', 'Pagamento Falhou');
         }
 
         $paymentId = $request->get('paymentId');
@@ -179,7 +184,20 @@ class PaymentController extends Controller
 
         if ($result->getState() == 'approved')
         {
-            return redirect()->route('home')->with('success', 'Payment success');
+            $question = $post->talk->question;
+            $question->status_id = Question::PAYMENT;
+            $question->update();
+
+            $alert = new Post;
+            $alert->talk_id = $post->talk->id;
+            $alert->user_id = auth()->id();
+            $alert->body = 'Pagamento Efetuado';
+            $alert->type = Post::PAYMENT;
+            $alert->save();
+
+            broadcast(new PrivatePostSent($alert));
+
+            return redirect()->route('talks.show', $post->talk)->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
         }
 
         return redirect()->route('home')->with('error', 'Payment failed');
@@ -187,6 +205,6 @@ class PaymentController extends Controller
     
     public function canceled()
     {
-        return 'Pagamento Cancelado';
+        return redirect()->route('home')->with('error', 'Pagamento Cancelado');
     }
 }
