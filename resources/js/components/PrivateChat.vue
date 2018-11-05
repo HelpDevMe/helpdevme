@@ -22,8 +22,19 @@
                             <div v-if="post.type==3" class="text-center">
                               <span class="badge badge-pill py-2 px-3 badge-success">{{ post.body }}</span>
                             </div>
+                            <!-- Proposta -->
+                            <div v-if="post.budget" class="card bg-light mb-3">
+                              <div class="card-body">
+                                <p class="card-text">
+                                  {{ post.body }}
+                                  <span class="text-success">R$ {{ formatPrice(post.budget) }}</span>
+                                </p>
+                                <a :href="'/payments/' + post.id" class="btn btn-success">Pagar</a>
+                                <button type="button" class="btn btn-link text-secondary">Recusar</button>
+                              </div>
+                            </div>
                             <!-- Post -->
-                            <div v-if="post.type==0 || post.type==1" :class="user.id==post.user_id ? 'text-right' : ''">
+                            <div v-if="(post.type==0 || post.type==1) && !post.budget" :class="user.id==post.user_id ? 'text-right' : ''">
                               <img v-if="user.id!=post.user_id" width="25" class="img-fluid" :src="'/storage/img/avatars/' + opposite.avatar" v-bind:alt="opposite.name" v-bind:title="opposite.name">
                               <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
                             </div>
@@ -60,6 +71,10 @@ export default {
   },
 
   methods: {
+    formatPrice(value) {
+      let val = (value/1).toFixed(2).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    },
     onTyping() {
       Echo.private(this.channel + '.private').whisper('typing');
     },

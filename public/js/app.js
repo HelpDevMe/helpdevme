@@ -57177,6 +57177,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'talk', 'opposite', 'posts'],
@@ -57193,6 +57204,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
+    formatPrice: function formatPrice(value) {
+      var val = (value / 1).toFixed(2).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
     onTyping: function onTyping() {
       Echo.private(this.channel + '.private').whisper('typing');
     },
@@ -57302,7 +57317,44 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    post.type == 0 || post.type == 1
+                    post.budget
+                      ? _c("div", { staticClass: "card bg-light mb-3" }, [
+                          _c("div", { staticClass: "card-body" }, [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v(
+                                "\n                               " +
+                                  _vm._s(post.body) +
+                                  "\n                               "
+                              ),
+                              _c("span", { staticClass: "text-success" }, [
+                                _vm._v(
+                                  "R$ " + _vm._s(_vm.formatPrice(post.budget))
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-success",
+                                attrs: { href: "/payments/" + post.id }
+                              },
+                              [_vm._v("Pagar")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-link text-secondary",
+                                attrs: { type: "button" }
+                              },
+                              [_vm._v("Recusar")]
+                            )
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    (post.type == 0 || post.type == 1) && !post.budget
                       ? _c(
                           "div",
                           {
