@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Question;
-use App\Post;
+use App\Talk;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -93,9 +93,9 @@ class ActivityController extends Controller
     
     public function freelancer()
     {
-        $posts = Post::where('user_id', auth()->id())
+        $talks = Talk::where('user_id', auth()->id())
             ->get();
         
-        return view('activities.freelancer.index', compact('posts'));
+        return view('activities.freelancer.index', compact('talks'));
     }
 }

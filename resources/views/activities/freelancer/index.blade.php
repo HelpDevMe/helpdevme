@@ -2,23 +2,24 @@
 
 @section('content')
     <h1 class="display-4">Minhas Atividades como Freelancer</h1>
-    @foreach($posts as $post)
+    @foreach($talks as $talk)
+        {{ $talk->posts }}
         <div class="card">
             <div class="card-body">
                 <address class="author">
-                    {{-- <a rel="author" href="{{ route('users.show', $post->receiver) }}">{{ $post->receiver->name }}</a> --}}
+                    <a rel="author" href="{{ route('users.show', $talk->user_id) }}">{{ $talk->user->name }}</a>
                 </address>
                 <h3 class="h5">
-                    <a href="{{ route('questions.show', $post->talk->question) }}">{{ $post->talk->question->title }}</a>
+                    <a href="{{ route('questions.show', $talk->question) }}">{{ $talk->question->title }}</a>
                 </h3>
-                <p>{{ count($post->talk->question->posts) }} resposta(s)</p>
+                <p>{{ count($talk->question->talks) }} resposta(s)</p>
                 <span class="badge badge-secondary">
-                    @lang('questions.status.' . $post->talk->question->status_id)
+                    @lang('questions.status.' . $talk->question->status_id)
                 </span>
-                <span class="badge badge-success">
+                {{-- <span class="badge badge-success">
                     @budget(['budget' => $post->budget])
                     @endbudget
-                </span>
+                </span> --}}
             </div>
         </div>
     @endforeach
