@@ -14,8 +14,6 @@
 Auth::routes();
 
 Route::view('/about', 'about')->name('about');
-    
-Route::resource('profile', 'ProfileController');
 
 Route::resource('posts', 'PostController');
 

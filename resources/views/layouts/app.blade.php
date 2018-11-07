@@ -17,7 +17,7 @@
 </head>
 <body class="bg-light">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white sticky-top shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ route('home') }}">
                     {{ config('app.name', 'HelpDev.me') }}

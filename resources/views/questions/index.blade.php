@@ -46,10 +46,7 @@
         @foreach($questions as $question)
             <div class="card mb-4">
                 <div class="card-body">
-                    <address class="author">
-                        <a rel="author" href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
-                    </address>
-                    <h3>
+                    <h3 class="h5">
                         <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                     </h3>
                     <span class="badge badge-secondary">
@@ -57,20 +54,27 @@
                     </span>
                     <p>{{ $question->body }}</p>
                     <div class="row">
+                        <div class="col"></div>
+                        <div class="col text-right">
+                            <div class="small">
+                                <span>Perguntado {{ $question->created_at->diffForHumans() }} por</span>
+                                <a href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
-                            <hr>
                             <div class="d-flex flex-column">
                                 @foreach($question->talks as $talk)
                                     @comment(['talk' => $talk])
                                     @endcomment
                                 @endforeach
                             </div>
-                            <hr>
                         </div>
                     </div>
-                    @formComment(['question' => $question])
-                    @endformComment
                 </div>
+                @formComment(['question' => $question])
+                @endformComment
             </div>
         @endforeach
     </div>

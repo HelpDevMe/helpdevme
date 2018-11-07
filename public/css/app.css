@@ -10477,3 +10477,7 @@ a.text-dark:focus {
   height: 25px;
 }
 
+textarea {
+  resize: none;
+}
+

@@ -25,9 +25,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-
-        return view('profile.index', compact('user'));
+        //
     }
 
     /**
@@ -125,5 +123,15 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function profile()
+    {
+        return view('profile.infos');
+    }
+    
+    public function password()
+    {
+        return view('profile.password');
     }
 }
