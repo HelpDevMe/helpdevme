@@ -49,7 +49,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'type' => Post::MESSAGE,
+            'type' => Post::types['message'],
             'user_id' => auth()->id()
         ]);
 

@@ -142,7 +142,7 @@ class PostController extends Controller
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
         $alert->body = 'Proposta Aceita';
-        $alert->type = Post::WARRANTY;
+        $alert->type = Post::types['warranty'];
         $alert->save();
 
         broadcast(new PrivatePostSent($alert));

@@ -45,6 +45,6 @@ class Question extends Model
 
     public function comments()
     {
-        return $this->posts->where('type', \App\Post::COMMENT);
+        return $this->posts->where('type', \App\Post::types['comment']);
     }
 }

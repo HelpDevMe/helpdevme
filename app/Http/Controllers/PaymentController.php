@@ -192,7 +192,7 @@ class PaymentController extends Controller
             $alert->talk_id = $post->talk->id;
             $alert->user_id = auth()->id();
             $alert->body = 'Pagamento Efetuado';
-            $alert->type = Post::PAYMENT;
+            $alert->status = Post::status['payment'];
             $alert->save();
 
             broadcast(new PrivatePostSent($alert));
