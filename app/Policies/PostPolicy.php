@@ -44,7 +44,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->talk->receiver_id && $post->talk->question->status_id === Question::ANALYZING;
+        return $user->id === $post->talk->receiver_id && $post->talk->question->status === Question::ANALYZING;
     }
 
     /**

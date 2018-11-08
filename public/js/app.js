@@ -57188,6 +57188,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'talk', 'opposite', 'posts'],
@@ -57318,7 +57324,7 @@ var render = function() {
                       : _vm._e(),
                     _vm._v(" "),
                     post.budget
-                      ? _c("div", { staticClass: "card bg-light mb-3" }, [
+                      ? _c("div", { staticClass: "card bg-light mb-5" }, [
                           _c("div", { staticClass: "card-body" }, [
                             _c("p", { staticClass: "card-text" }, [
                               _vm._v(
@@ -57331,26 +57337,30 @@ var render = function() {
                                   "R$ " + _vm._s(_vm.formatPrice(post.budget))
                                 )
                               ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass: "btn btn-success",
-                                attrs: { href: "/payments/" + post.id }
-                              },
-                              [_vm._v("Pagar")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-link text-secondary",
-                                attrs: { type: "button" }
-                              },
-                              [_vm._v("Recusar")]
-                            )
-                          ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.user.id == _vm.talk.receiver_id
+                            ? _c("div", { staticClass: "card-footer" }, [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "btn btn-success",
+                                    attrs: { href: "/payments/" + post.id }
+                                  },
+                                  [_vm._v("Pagar")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-link text-secondary",
+                                    attrs: { type: "button" }
+                                  },
+                                  [_vm._v("Recusar")]
+                                )
+                              ])
+                            : _vm._e()
                         ])
                       : _vm._e(),
                     _vm._v(" "),
@@ -57399,8 +57409,23 @@ var render = function() {
                     _vm._v(_vm._s(_vm.opposite.name) + " está digitando")
                   ])
                 : _vm._e()
-            ]),
-            _vm._v(" "),
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-footer" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.sendMessage($event)
+              }
+            }
+          },
+          [
             _c("div", { staticClass: "input-group" }, [
               _c("textarea", {
                 directives: [
@@ -57412,7 +57437,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { placeholder: "Digite uma mensagem..." },
+                attrs: { placeholder: "Digite uma mensagem...", required: "" },
                 domProps: { value: _vm.body },
                 on: {
                   keydown: [
@@ -57436,24 +57461,28 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticClass: "input-group-append" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: { click: _vm.sendMessage }
-                  },
-                  [_vm._v("Enviar")]
-                )
-              ])
+              _vm._m(0)
             ])
-          ])
-        ])
+          ]
+        )
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Enviar")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

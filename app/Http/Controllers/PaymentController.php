@@ -185,7 +185,7 @@ class PaymentController extends Controller
         if ($result->getState() == 'approved')
         {
             $question = $post->talk->question;
-            $question->status_id = Question::PAYMENT;
+            $question->status = Question::PAYMENT;
             $question->update();
 
             $alert = new Post;

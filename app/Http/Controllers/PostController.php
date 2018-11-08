@@ -122,7 +122,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the status_id filed.
+     * Update the status filed.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -135,7 +135,7 @@ class PostController extends Controller
         $this->authorize('update', $post);
 
         $question = $post->talk->question;
-        $question->status_id = Question::WARRANTY;
+        $question->status = Question::WARRANTY;
         $question->update();
 
         $alert = new Post;

@@ -15,7 +15,7 @@ class Question extends Model
         'slug',
         'body',
         'user_id',
-        'status_id'
+        'status'
     ];
 
     public function getRouteKeyName()

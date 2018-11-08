@@ -23,12 +23,15 @@
                               <span class="badge badge-pill py-2 px-3 badge-success">{{ post.body }}</span>
                             </div>
                             <!-- Proposta -->
-                            <div v-if="post.budget" class="card bg-light mb-3">
+                            <div v-if="post.budget" class="card bg-light mb-5">
                               <div class="card-body">
                                 <p class="card-text">
                                   {{ post.body }}
                                   <span class="text-success">R$ {{ formatPrice(post.budget) }}</span>
                                 </p>
+                              </div>
+                              <div class="card-footer" v-if="user.id==talk.receiver_id">
+                                <!-- Não exibir se for quem enviou a proposta -->
                                 <a :href="'/payments/' + post.id" class="btn btn-success">Pagar</a>
                                 <button type="button" class="btn btn-link text-secondary">Recusar</button>
                               </div>
@@ -42,15 +45,18 @@
                      </div>
                      <p v-if="typing">{{ opposite.name }} está digitando</p>
                   </div>
-                  <!-- Form -->
-                  <div class="input-group">
-                     <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keydown.enter="sendMessage"></textarea>
-                     <div class="input-group-append">
-                        <button @click="sendMessage" class="btn btn-primary">Enviar</button>
-                     </div>
-                  </div>
                </div>
             </div>
+         </div>
+         <div class="card-footer">
+           <form @submit.prevent="sendMessage">
+              <div class="input-group">
+                <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keydown.enter="sendMessage" required></textarea>
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+              </div>
+            </form>
          </div>
       </div>
    </section>

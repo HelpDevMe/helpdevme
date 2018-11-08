@@ -21,7 +21,7 @@
                 </h3>
                 <p>{{ count($question->comments()) }} resposta(s)</p>
                 <span class="badge badge-secondary">
-                    @lang('questions.status.' . $question->status_id)
+                    @lang('questions.status.' . $question->status)
                 </span>
                 <div class="row">
                     <div class="col text-right">

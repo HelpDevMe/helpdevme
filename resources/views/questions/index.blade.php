@@ -50,7 +50,7 @@
                         <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                     </h3>
                     <span class="badge badge-secondary">
-                        @lang('questions.status.' . $question->status_id)
+                        @lang('questions.status.' . $question->status)
                     </span>
                     <p>{{ $question->body }}</p>
                     <div class="row">
