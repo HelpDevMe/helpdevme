@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
             $table->text('body');
             $table->float('budget')->nullable();
             $table->tinyInteger('type')->default(1);
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(0);
             $table->integer('talk_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->timestamps();
