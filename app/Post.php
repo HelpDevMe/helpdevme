@@ -15,13 +15,16 @@ class Post extends Model
     ];
 
     const status = [
+        'analyzing' => 0,
+        'refused' => 1,
+        'accept' => 2,
         'payment' => 3
     ];
 
     const types = [
         'message' => 0,
         'comment' => 1,
-        'warranty' => 2
+        'alert' => 2
     ];
 
     public function talk()

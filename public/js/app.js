@@ -57297,7 +57297,7 @@ var render = function() {
                 { staticClass: "d-flex flex-column p-3" },
                 _vm._l(_vm.allPosts, function(post, index) {
                   return _c("div", { key: index, staticClass: "h5" }, [
-                    post.type == 2
+                    post.type == 2 && post.status == 2
                       ? _c("div", { staticClass: "text-center" }, [
                           _c(
                             "span",
@@ -57310,7 +57310,7 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    post.type == 3
+                    post.type == 2 && post.status == 3
                       ? _c("div", { staticClass: "text-center" }, [
                           _c(
                             "span",
@@ -57323,7 +57323,7 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    post.budget
+                    post.type != 2 && post.budget
                       ? _c("div", { staticClass: "card bg-light mb-5" }, [
                           _c("div", { staticClass: "card-body" }, [
                             _c("p", { staticClass: "card-text" }, [
@@ -57364,7 +57364,7 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    (post.type == 0 || post.type == 1) && !post.budget
+                    post.type != 2 && !post.budget
                       ? _c(
                           "div",
                           {

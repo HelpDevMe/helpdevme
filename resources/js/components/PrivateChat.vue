@@ -15,15 +15,15 @@
                      <div class="d-flex flex-column p-3">
                         <div v-for="(post, index) in allPosts" :key="index" class="h5">
                             <!-- Proposta Aceita -->
-                            <div v-if="post.type==2" class="text-center">
+                            <div v-if="post.type==2 && post.status==2" class="text-center">
                               <span class="badge badge-pill py-2 px-3 badge-info">{{ post.body }}</span>
                             </div>
                             <!-- Pagamento Efetuado -->
-                            <div v-if="post.type==3" class="text-center">
+                            <div v-if="post.type==2 && post.status==3" class="text-center">
                               <span class="badge badge-pill py-2 px-3 badge-success">{{ post.body }}</span>
                             </div>
                             <!-- Proposta -->
-                            <div v-if="post.budget" class="card bg-light mb-5">
+                            <div v-if="post.type!=2 && post.budget" class="card bg-light mb-5">
                               <div class="card-body">
                                 <p class="card-text">
                                   {{ post.body }}
@@ -37,7 +37,7 @@
                               </div>
                             </div>
                             <!-- Post -->
-                            <div v-if="(post.type==0 || post.type==1) && !post.budget" :class="user.id==post.user_id ? 'text-right' : ''">
+                            <div v-if="post.type!=2 && !post.budget" :class="user.id==post.user_id ? 'text-right' : ''">
                               <img v-if="user.id!=post.user_id" width="25" class="img-fluid" :src="'/storage/img/avatars/' + opposite.avatar" v-bind:alt="opposite.name" v-bind:title="opposite.name">
                               <span class="badge badge-pill py-2 px-3" :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'">{{ post.body }}</span>
                             </div>
