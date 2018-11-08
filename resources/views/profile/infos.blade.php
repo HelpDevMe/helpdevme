@@ -3,6 +3,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <ul class="nav nav-pills mb-5">
         <li class="nav-item">
             <a class="nav-link active" href="{{ route('profile.index') }}">Informações Pessoais</a>
@@ -11,6 +12,7 @@
             <a class="nav-link" href="{{ route('profile.password') }}">Senha</a>
         </li>
     </ul>
+
     @if(session()->get('success'))
         <div class="alert alert-success">
             {{ session()->get('success') }}
@@ -22,6 +24,7 @@
             {{ $error }}
         </div>
     @endforeach
+
     <h2 class="display-4 my-5">Informações Pessoais</h2>
     <div class="row">
         <div class="col">
@@ -48,7 +51,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ $user->name }}" required autofocus>
+                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ $user->name }}" required>
 
                                 @if ($errors->has('name'))
                                     <span class="invalid-feedback" role="alert">

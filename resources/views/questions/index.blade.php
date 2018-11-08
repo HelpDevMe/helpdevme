@@ -54,10 +54,9 @@
                     </span>
                     <p>{{ $question->body }}</p>
                     <div class="row">
-                        <div class="col"></div>
                         <div class="col text-right">
                             <div class="small">
-                                <span>Perguntado {{ $question->created_at->diffForHumans() }} por</span>
+                                <span>{{ $question->created_at->diffForHumans() }} por</span>
                                 <a href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
                             </div>
                         </div>

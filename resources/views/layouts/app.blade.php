@@ -62,8 +62,8 @@
                                 </a>
                                 
                                 <div class="dropdown-menu" aria-labelledby="dropdownActivities">
-                                    <a class="dropdown-item" href="{{ route('activities.client.index') }}">Como Cliente</a>
-                                    <a class="dropdown-item" href="{{ route('activities.freelancer.index') }}">Como Freelancer</a>
+                                    <a class="dropdown-item" href="{{ route('activities.client') }}">Como Cliente</a>
+                                    <a class="dropdown-item" href="{{ route('activities.freelancer') }}">Como Freelancer</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

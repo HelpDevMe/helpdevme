@@ -88,7 +88,7 @@ class ActivityController extends Controller
     {
         $questions = Question::where('user_id', auth()->id())->get();
         
-        return view('activities.client.index', compact('questions'));
+        return view('activities.client', compact('questions'));
     }
     
     public function freelancer()
@@ -96,6 +96,6 @@ class ActivityController extends Controller
         $talks = Talk::where('user_id', auth()->id())
             ->get();
         
-        return view('activities.freelancer.index', compact('talks'));
+        return view('activities.freelancer', compact('talks'));
     }
 }

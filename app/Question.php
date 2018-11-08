@@ -37,4 +37,14 @@ class Question extends Model
     {
         return $this->belongsToMany('App\Tag');
     }
+    
+    public function posts()
+    {
+        return $this->hasManyThrough('App\Post', 'App\Talk');
+    }
+
+    public function comments()
+    {
+        return $this->posts->where('type', \App\Post::COMMENT);
+    }
 }

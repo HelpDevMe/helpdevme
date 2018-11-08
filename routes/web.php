@@ -23,8 +23,8 @@ Route::resource('users', 'UserController');
 
 Route::resource('payments', 'PaymentController');
 
-Route::get('activities/client', 'ActivityController@client')->name('activities.client.index');
-Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer.index');
+Route::get('activities/client', 'ActivityController@client')->name('activities.client');
+Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer');
 
 Route::prefix('payments/paypal')->group(function () {
     
