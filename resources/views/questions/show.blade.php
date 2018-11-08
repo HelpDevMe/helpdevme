@@ -9,6 +9,7 @@
                 <address class="author">
                     <a rel="author" href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
                 </address>
+                {{ $question->tags }}
             </header>
             <div>{{ $question->body }}</div>
             <div class="row">

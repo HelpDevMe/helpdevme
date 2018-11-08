@@ -21,12 +21,12 @@
 </div>
 <div class="row">
     <div class="col">
-        <div class="card mb-5">
+        <div class="card mb-5 shadow">
             <div class="card-body">
                 <form method="post" action="{{ route('questions.store') }}">
                     <div class="form-group">
                         @csrf
-                        <input type="text" class="form-control" name="title" placeholder="Título" required/>
+                        <input type="text" class="form-control form-control-lg" name="title" placeholder="Como podemos te ajudar?" required/>
                     </div>
                     <div class="form-group">
                         <textarea name="body" class="form-control" placeholder="Pergunta" required></textarea>

@@ -15,14 +15,11 @@ class CreateQuestionTagTable extends Migration
     {
         Schema::create('question_tag', function (Blueprint $table) {
             $table->integer('question_id')->unsigned()->nullable();
-            $table->foreign('question_id')->references('id')
-                ->on('questions')->onDelete('cascade');
-
             $table->integer('tag_id')->unsigned()->nullable();
-            $table->foreign('tag_id')->references('id')
-                ->on('tags')->onDelete('cascade');
-
             $table->timestamps();
+
+            $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('tag_id')->references('id')->on('tags');
         });
     }
 

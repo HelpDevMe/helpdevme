@@ -32,4 +32,9 @@ class Question extends Model
     {
         return $this->hasMany('App\Talk');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
 }
