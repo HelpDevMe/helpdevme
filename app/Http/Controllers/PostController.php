@@ -153,4 +153,26 @@ class PostController extends Controller
 
         return redirect()->route('payments.show', ['id' => $id])->with('success', 'Proposta aceita! Realize o deposito de garantia.');
     }
+
+    public function refused(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+
+        $this->authorize('refused', $post);
+
+        $post->status = Post::status['refused'];
+        $post->update();
+
+        $alert = new Post;
+        $alert->talk_id = $post->talk->id;
+        $alert->user_id = auth()->id();
+        $alert->body = 'Proposta Recusada';
+        $alert->type = Post::types['alert'];
+        $alert->status = Post::status['refused'];
+        $alert->save();
+
+        broadcast(new PrivatePostSent($alert));
+
+        return back()->with('success', 'Proposta recusada!');
+    }
 }

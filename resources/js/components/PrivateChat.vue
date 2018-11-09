@@ -14,13 +14,17 @@
                   <div id="privateMessageBox">
                      <div class="d-flex flex-column p-3">
                         <div v-for="(post, index) in allPosts" :key="index" class="h5">
+                            <!-- Proposta Recusada -->
+                            <div v-if="post.type==2 && post.status==1" class="text-center">
+                              <span class="badge badge-pill py-2 px-4 badge-danger">{{ post.body }}</span>
+                            </div>
                             <!-- Proposta Aceita -->
                             <div v-if="post.type==2 && post.status==2" class="text-center">
-                              <span class="badge badge-pill py-2 px-3 badge-info">{{ post.body }}</span>
+                              <span class="badge badge-pill py-2 px-4 badge-info">{{ post.body }}</span>
                             </div>
                             <!-- Pagamento Efetuado -->
                             <div v-if="post.type==2 && post.status==3" class="text-center">
-                              <span class="badge badge-pill py-2 px-3 badge-success">{{ post.body }}</span>
+                              <span class="badge badge-pill py-2 px-4 badge-success">{{ post.body }}</span>
                             </div>
                             <!-- Proposta -->
                             <div v-if="post.type!=2 && post.budget" class="card bg-light mb-5">

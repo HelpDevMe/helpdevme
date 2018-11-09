@@ -9,6 +9,7 @@ class Post extends Model
     protected $fillable = [
         'body',
         'budget',
+        'status',
         'type',
         'talk_id',
         'user_id'
