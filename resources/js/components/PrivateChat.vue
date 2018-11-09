@@ -35,12 +35,12 @@
                                 </p>
                               </div>
                               <!-- Não exibir se for quem enviou a proposta -->
-                              <div class="card-footer" v-if="user.id==talk.receiver_id && talk.question.status!=2">
+                              <div class="card-footer" v-if="(user.id==talk.receiver_id && talk.question.status==2) || post.status!=1">
                                 <!-- Proposta NÃO aceita ainda -->
                                 <a v-if="post.status==0" :href="'/posts/accept/' + post.id" class="btn btn-success">Aceitar e Pagar</a>
                                 <!-- Proposta aceita -->
                                 <a v-if="post.status==2" :href="'/payments/' + post.id" class="btn btn-success">Pagar</a>
-                                <button type="button" class="btn btn-link text-secondary">Recusar</button>
+                                <a :href="'/posts/refused/' + post.id" class="btn btn-link btn-sm text-secondary">Recusar</a>
                               </div>
                             </div>
                             <!-- Post -->

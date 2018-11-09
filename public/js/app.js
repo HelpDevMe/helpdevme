@@ -57368,8 +57368,9 @@ var render = function() {
                             ])
                           ]),
                           _vm._v(" "),
-                          _vm.user.id == _vm.talk.receiver_id &&
-                          _vm.talk.question.status != 2
+                          (_vm.user.id == _vm.talk.receiver_id &&
+                            _vm.talk.question.status == 2) ||
+                          post.status != 1
                             ? _c("div", { staticClass: "card-footer" }, [
                                 post.status == 0
                                   ? _c(
@@ -57396,10 +57397,11 @@ var render = function() {
                                   : _vm._e(),
                                 _vm._v(" "),
                                 _c(
-                                  "button",
+                                  "a",
                                   {
-                                    staticClass: "btn btn-link text-secondary",
-                                    attrs: { type: "button" }
+                                    staticClass:
+                                      "btn btn-link btn-sm text-secondary",
+                                    attrs: { href: "/posts/refused/" + post.id }
                                   },
                                   [_vm._v("Recusar")]
                                 )
