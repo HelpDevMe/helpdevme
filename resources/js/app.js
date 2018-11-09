@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('PrivateChat', require('./components/PrivateChat.vue'));
+Vue.component('CreateQuestion', require('./components/CreateQuestion.vue'));
 
 const app = new Vue({
     el: '#app'

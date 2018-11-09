@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "laravel-echo": "^1.4.0",
-        "pusher-js": "^4.3.1"
+        "pusher-js": "^4.3.1",
+        "vue-multiselect": "^2.1.3"
     }
 }

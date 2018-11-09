@@ -21,24 +21,7 @@
 </div>
 <div class="row">
     <div class="col">
-        <div class="card mb-5 shadow">
-            <div class="card-body">
-                <form method="post" action="{{ route('questions.store') }}">
-                    <div class="form-group">
-                        @csrf
-                        <input type="text" class="form-control form-control-lg" name="title" placeholder="Como podemos te ajudar?" required/>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="body" class="form-control" placeholder="Pergunta" required></textarea>
-                    </div>
-                    <div class="form-row justify-content-end">
-                        <div class="col-lg-3">
-                            <button type="submit" class="btn btn-success btn-block">Enviar</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <create-question></create-question>
     </div>
 </div>
 <div class="row">
