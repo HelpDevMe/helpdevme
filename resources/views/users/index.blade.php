@@ -4,7 +4,7 @@
     <div class="row">
         @foreach($users as $user)
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card my-3">
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-lg-3">
