@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Question;
 use Illuminate\Http\Request;
 use App\Events\PrivatePostSent;
 
@@ -169,7 +170,7 @@ class PaymentController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        $this->authorize('update', $post);
+        $this->authorize('status', $post);
 
         if (empty($request->input('PayerID')) || empty($request->input('token')))
         {
@@ -196,6 +197,7 @@ class PaymentController extends Controller
             $alert->user_id = auth()->id();
             $alert->body = 'Pagamento Efetuado';
             $alert->type = Post::types['alert'];
+            $alert->status = Post::status['payment'];
             $alert->save();
 
             broadcast(new PrivatePostSent($alert));

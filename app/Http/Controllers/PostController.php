@@ -132,17 +132,21 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        $this->authorize('update', $post);
+        $this->authorize('accept', $post);
 
         $question = $post->talk->question;
         $question->status = Question::WARRANTY;
         $question->update();
 
+        $post->status = Post::status['accept'];
+        $post->update();
+
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
         $alert->body = 'Proposta Aceita';
-        $alert->status = Post::types['alert'];
+        $alert->type = Post::types['alert'];
+        $alert->status = Post::status['accept'];
         $alert->save();
 
         broadcast(new PrivatePostSent($alert));

@@ -16,9 +16,7 @@
                         <!-- Modal -->
                         <div class="modal fade" id="confirmModal{{ $post->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel{{ $post->id }}" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                                <form class="modal-content" method="POST" action="{{ route('posts.accept', $post->id) }}">
-                                    @csrf
-                                    @method('PATCH')
+                                <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="confirmModalLabel{{ $post->id }}">Você está prestes a aceitar uma proposta para sua pergunta</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -35,9 +33,9 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-success">Aceitar e Pagar</button>
+                                        <a href="{{ route('posts.accept', $post->id) }}" class="btn btn-success">Aceitar e Pagar</a>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                         <a href="{{ route('talks.show', $talk) }}" class="btn btn-secondary">Conversar</a>

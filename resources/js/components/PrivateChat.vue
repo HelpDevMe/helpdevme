@@ -2,7 +2,7 @@
    <section>
       <p class="lead">
         <span>Conversa com</span>
-        <a href="#" class="badge badge-secondary">
+        <a :href="'/users/' + opposite.id" class="badge badge-secondary">
           <span :class="(onlineFriends.find(user=>user.id===opposite.id))?'text-success':''">&bull;</span>
           <span>{{ opposite.name }}</span>
         </a>
@@ -30,9 +30,12 @@
                                   <span class="text-success">R$ {{ formatPrice(post.budget) }}</span>
                                 </p>
                               </div>
-                              <div class="card-footer" v-if="user.id==talk.receiver_id">
-                                <!-- Não exibir se for quem enviou a proposta -->
-                                <a :href="'/payments/' + post.id" class="btn btn-success">Pagar</a>
+                              <!-- Não exibir se for quem enviou a proposta -->
+                              <div class="card-footer" v-if="user.id==talk.receiver_id && talk.question.status!=2">
+                                <!-- Proposta NÃO aceita ainda -->
+                                <a v-if="post.status==0" :href="'/posts/accept/' + post.id" class="btn btn-success">Aceitar e Pagar</a>
+                                <!-- Proposta aceita -->
+                                <a v-if="post.status==2" :href="'/payments/' + post.id" class="btn btn-success">Pagar</a>
                                 <button type="button" class="btn btn-link text-secondary">Recusar</button>
                               </div>
                             </div>
