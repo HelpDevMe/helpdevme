@@ -42,7 +42,7 @@ Route::resource('questions', 'QuestionController', ['except' => [
     'index', 'show'
 ]]);
 
-Route::patch('posts/accept/{question}', 'PostController@accept')->name('posts.accept');
+Route::get('posts/accept/{post}', 'PostController@accept')->name('posts.accept');
 
 Route::get('/', 'QuestionController@index')->name('home');
 

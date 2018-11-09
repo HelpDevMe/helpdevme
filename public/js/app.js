@@ -57194,6 +57194,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user', 'talk', 'opposite', 'posts'],
@@ -57270,21 +57273,28 @@ var render = function() {
     _c("p", { staticClass: "lead" }, [
       _c("span", [_vm._v("Conversa com")]),
       _vm._v(" "),
-      _c("a", { staticClass: "badge badge-secondary", attrs: { href: "#" } }, [
-        _c(
-          "span",
-          {
-            class: _vm.onlineFriends.find(function(user) {
-              return user.id === _vm.opposite.id
-            })
-              ? "text-success"
-              : ""
-          },
-          [_vm._v("•")]
-        ),
-        _vm._v(" "),
-        _c("span", [_vm._v(_vm._s(_vm.opposite.name))])
-      ])
+      _c(
+        "a",
+        {
+          staticClass: "badge badge-secondary",
+          attrs: { href: "/users/" + _vm.opposite.id }
+        },
+        [
+          _c(
+            "span",
+            {
+              class: _vm.onlineFriends.find(function(user) {
+                return user.id === _vm.opposite.id
+              })
+                ? "text-success"
+                : ""
+            },
+            [_vm._v("•")]
+          ),
+          _vm._v(" "),
+          _c("span", [_vm._v(_vm._s(_vm.opposite.name))])
+        ]
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
@@ -57340,16 +57350,32 @@ var render = function() {
                             ])
                           ]),
                           _vm._v(" "),
-                          _vm.user.id == _vm.talk.receiver_id
+                          _vm.user.id == _vm.talk.receiver_id &&
+                          _vm.talk.question.status != 2
                             ? _c("div", { staticClass: "card-footer" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "btn btn-success",
-                                    attrs: { href: "/payments/" + post.id }
-                                  },
-                                  [_vm._v("Pagar")]
-                                ),
+                                post.status == 0
+                                  ? _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-success",
+                                        attrs: {
+                                          href: "/posts/accept/" + post.id
+                                        }
+                                      },
+                                      [_vm._v("Aceitar e Pagar")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                post.status == 2
+                                  ? _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-success",
+                                        attrs: { href: "/payments/" + post.id }
+                                      },
+                                      [_vm._v("Pagar")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
                                 _c(
                                   "button",

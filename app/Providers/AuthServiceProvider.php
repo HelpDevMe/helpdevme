@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Question;
+
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -33,6 +35,14 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('comment', function ($user, $question) {
             return $user->id == $question->user_id;
+        });
+        
+        Gate::define('accept', function ($user, $post) {
+            return $user->id === $post->talk->receiver_id && $post->talk->question->status === Question::ANALYZING;
+        });
+        
+        Gate::define('status', function ($user, $post) {
+            return $user->id === $post->talk->receiver_id && $post->talk->question->status === Question::WARRANTY;
         });
     }
 }
