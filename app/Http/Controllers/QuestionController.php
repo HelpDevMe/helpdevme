@@ -47,8 +47,6 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        
         $request->validate([
             'title' => 'required|unique:questions',
             'body' => 'required'
