@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Question;
+use App\Tag;
+
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class QuestionController extends Controller
+class TagController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -14,7 +16,7 @@ class QuestionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('auth:api');
     }
 
     /**
@@ -24,9 +26,9 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::where('status', Question::ANALYZING)->get();
+        $tags = Tag::all();
 
-        return view('questions.index', compact('questions'));
+        return response(['tags' => $tags]);
     }
 
     /**
@@ -47,33 +49,21 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        
-        $request->validate([
-            'title' => 'required|unique:questions',
-            'body' => 'required'
-        ]);
+        $tag = new Tag($request->all());
+        $tag->save();
 
-        $request->merge([
-            'slug' => str_slug($request->title),
-            'user_id' => auth()->id()
-        ]);
-
-        Question::create($request->all());
-
-        return redirect()->route('home')
-            ->with('success', 'Pergunta criada!');
+        return response(['tag' => $tag]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Question  $question
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Question $question)
+    public function show($id)
     {
-        return view('questions.show', compact('question'));
+        //
     }
 
     /**

@@ -1,7 +1,7 @@
 <template>
     <div class="card mb-5 shadow">
         <div class="card-body">
-            <form>
+            <form action="/questions" method="POST" role="form">
                 <div class="form-group">
                     <input type="text" class="form-control" name="title" placeholder="Como podemos te ajudar?" required/>
                 </div>
@@ -9,11 +9,7 @@
                     <textarea name="body" class="form-control" placeholder="Pergunta" required></textarea>
                 </div>
                 <div class="form-group">
-                    <multiselect
-                        v-model="selected"
-                        :multiple="true"
-                        :options="options">
-                    </multiselect>
+                    <multiselect v-model="value" tag-placeholder="Adicione isto como nova tag" placeholder="Pesquise ou adicione uma tag" label="title" track-by="id" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
                 </div>
                 <div class="form-row justify-content-end">
                     <div class="col-lg-3">
@@ -26,16 +22,43 @@
 </template>
 
 <script>
-  import Multiselect from 'vue-multiselect';
-  export default {
-    components: { Multiselect },
-    data () {
-      return {
-        selected: null,
-        options: ['list', 'of', 'options']
-      }
+    import Multiselect from 'vue-multiselect';
+    
+    export default {
+        components: {
+            Multiselect
+        },
+        data () {
+            return {
+                value: [],
+                options: []
+            }
+        },
+        methods: {
+            addTag (newTag) {
+                axios
+                    .post('/api/tags', {
+                        title: newTag
+                    })
+                    .then(response => {
+                        let tag = response.data.tag;
+                        
+                        this.options.push(tag);
+                        this.value.push(tag);
+                    });
+            },
+            listTags () {
+                axios
+                    .get('/api/tags')
+                    .then(response => {
+                        this.options = response.data.tags;
+                    });
+            }
+        },
+        mounted () {
+            this.listTags();
+        }
     }
-  }
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

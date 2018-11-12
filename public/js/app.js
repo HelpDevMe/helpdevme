@@ -58001,20 +58001,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: { Multiselect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a },
-  data: function data() {
-    return {
-      selected: null,
-      options: ['list', 'of', 'options']
-    };
-  }
+    components: {
+        Multiselect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a
+    },
+    data: function data() {
+        return {
+            value: [],
+            options: []
+        };
+    },
+
+    methods: {
+        addTag: function addTag(newTag) {
+            var _this = this;
+
+            axios.post('/api/tags', {
+                title: newTag
+            }).then(function (response) {
+                var tag = response.data.tag;
+
+                _this.options.push(tag);
+                _this.value.push(tag);
+            });
+        },
+        listTags: function listTags() {
+            var _this2 = this;
+
+            axios.get('/api/tags').then(function (response) {
+                _this2.options = response.data.tags;
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.listTags();
+    }
 });
 
 /***/ }),
@@ -58033,31 +58057,44 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-5 shadow" }, [
     _c("div", { staticClass: "card-body" }, [
-      _c("form", [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _c("multiselect", {
-              attrs: { multiple: true, options: _vm.options },
-              model: {
-                value: _vm.selected,
-                callback: function($$v) {
-                  _vm.selected = $$v
+      _c(
+        "form",
+        { attrs: { action: "/questions", method: "POST", role: "form" } },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("multiselect", {
+                attrs: {
+                  "tag-placeholder": "Adicione isto como nova tag",
+                  placeholder: "Pesquise ou adicione uma tag",
+                  label: "title",
+                  "track-by": "id",
+                  options: _vm.options,
+                  multiple: true,
+                  taggable: true
                 },
-                expression: "selected"
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _vm._m(2)
-      ])
+                on: { tag: _vm.addTag },
+                model: {
+                  value: _vm.value,
+                  callback: function($$v) {
+                    _vm.value = $$v
+                  },
+                  expression: "value"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm._m(2)
+        ]
+      )
     ])
   ])
 }
