@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Post;
-use App\Talk;
+use App\Finance;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Events\PrivatePostSent;
 
-class PostController extends Controller
-{   
+class FinanceController extends Controller
+{
     /**
      * Create a new controller instance.
      *
@@ -17,7 +14,7 @@ class PostController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth');
     }
 
     /**
@@ -27,7 +24,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $finances = Finance::all();
+
+        return view('finances.index', compact('finances'));
     }
 
     /**
@@ -48,29 +47,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge([
-            'type' => Post::types['message'],
-            'user_id' => auth()->id()
-        ]);
-
-        $post = new Post($request->all());
-
-        $this->authorize('message', $post);
-
-        $post->save();
-
-        broadcast(new PrivatePostSent($post))->toOthers();
-
-        return response(['post' => $post]);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Finance  $finance
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Finance $finance)
     {
         //
     }
@@ -78,10 +64,10 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Finance  $finance
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Finance $finance)
     {
         //
     }
@@ -90,10 +76,10 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Finance  $finance
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Finance $finance)
     {
         //
     }
@@ -101,10 +87,10 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Finance  $finance
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Finance $finance)
     {
         //
     }

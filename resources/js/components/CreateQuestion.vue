@@ -1,7 +1,8 @@
 <template>
     <div class="card mb-5 shadow">
         <div class="card-body">
-            <form>
+            <form method="post" action="/questions" role="form">
+                <input type="hidden" name="_token" :value="token.content">
                 <div class="form-group">
                     <input type="text" class="form-control" name="title" placeholder="Como podemos te ajudar?" required/>
                 </div>
@@ -32,7 +33,8 @@
     data () {
       return {
         selected: null,
-        options: ['list', 'of', 'options']
+        options: ['list', 'of', 'options'],
+        token: document.head.querySelector('meta[name="csrf-token"]')
       }
     }
   }

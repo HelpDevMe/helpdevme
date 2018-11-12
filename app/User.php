@@ -38,4 +38,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Talk');
     }
+
+    public function posts()
+    {
+        return $this->hasManyThrough('App\Post', 'App\Talk');
+    }
+
+    public function comments()
+    {
+        return $this->posts->where('type', \App\Post::types['comment']);
+    }
 }

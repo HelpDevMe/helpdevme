@@ -37,6 +37,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id == $question->user_id;
         });
         
+        Gate::define('store-comment', function ($user, $talk) {
+            return $user->id == $talk->user_id && $talk->question->status === Question::ANALYZING;
+        });
+        
         Gate::define('accept', function ($user, $post) {
             return $user->id === $post->talk->receiver_id && $post->talk->question->status === Question::ANALYZING;
         });
@@ -47,6 +51,14 @@ class AuthServiceProvider extends ServiceProvider
         
         Gate::define('status', function ($user, $post) {
             return $user->id === $post->talk->receiver_id && $post->talk->question->status === Question::WARRANTY;
+        });
+        
+        Gate::define('message', function ($user, $post) {
+            return ($user->id === $post->talk->user_id || $user->id === $post->talk->receiver_id) && $post->talk->status !== \App\Talk::status['inactive'];
+        });
+        
+        Gate::define('payment', function ($user, $post) {
+            return $user->id === $post->talk->receiver_id && $post->status !== \App\Post::status['refused'];
         });
     }
 }

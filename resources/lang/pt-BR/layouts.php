@@ -10,6 +10,7 @@ return [
         'login' => 'Entrar',
         'register' => 'Registrar-se',
         'logout' => 'Sair',
+        'finances' => 'Finanças',
         'profile' => 'Perfil'
     ]
 ];

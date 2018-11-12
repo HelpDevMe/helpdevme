@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Question;
+use App\Finance;
 use Illuminate\Http\Request;
 use App\Events\PrivatePostSent;
 
@@ -79,6 +80,9 @@ class PaymentController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
+        
+        $this->authorize('payment', $post);
+
         return view('payments.show', compact('post'));
     }
 
@@ -185,6 +189,11 @@ class PaymentController extends Controller
 
         if ($result->getState() == 'approved')
         {
+            $finance = new Finance;
+            $finance->description = 'Pagamento';
+            $finance->post_id = $post->id;
+            $finance->save();
+
             $question = $post->talk->question;
             $question->status = Question::PAYMENT;
             $question->update();

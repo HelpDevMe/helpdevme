@@ -16,15 +16,15 @@
                         <div v-for="(post, index) in allPosts" :key="index" class="h5">
                             <!-- Proposta Recusada -->
                             <div v-if="post.type==2 && post.status==1" class="text-center">
-                              <span class="badge badge-pill py-2 px-4 badge-danger">{{ post.body }}</span>
+                              <span class="badge badge-pill py-2 px-5 badge-danger">{{ post.body }}</span>
                             </div>
                             <!-- Proposta Aceita -->
                             <div v-if="post.type==2 && post.status==2" class="text-center">
-                              <span class="badge badge-pill py-2 px-4 badge-info">{{ post.body }}</span>
+                              <span class="badge badge-pill py-2 px-5 badge-info">{{ post.body }}</span>
                             </div>
                             <!-- Pagamento Efetuado -->
                             <div v-if="post.type==2 && post.status==3" class="text-center">
-                              <span class="badge badge-pill py-2 px-4 badge-success">{{ post.body }}</span>
+                              <span class="badge badge-pill py-2 px-5 badge-success">{{ post.body }}</span>
                             </div>
                             <!-- Proposta -->
                             <div v-if="post.type!=2 && post.budget" class="card bg-light mb-5">
@@ -35,12 +35,14 @@
                                 </p>
                               </div>
                               <!-- Não exibir se for quem enviou a proposta -->
-                              <div class="card-footer" v-if="(user.id==talk.receiver_id && talk.question.status==2) || post.status!=1">
+                              <!-- Só mostrar se o usuario for quem recebeu a proposta, quem efetuou essa proposta não verá -->
+                              <div class="card-footer" v-if="user.id==talk.receiver_id && post.status!=3">
                                 <!-- Proposta NÃO aceita ainda -->
-                                <a v-if="post.status==0" :href="'/posts/accept/' + post.id" class="btn btn-success">Aceitar e Pagar</a>
+                                <a v-if="post.status==0 || post.status==1" :href="'/posts/accept/' + post.id" class="btn btn-success">Aceitar</a>
                                 <!-- Proposta aceita -->
                                 <a v-if="post.status==2" :href="'/payments/' + post.id" class="btn btn-success">Pagar</a>
-                                <a :href="'/posts/refused/' + post.id" class="btn btn-link btn-sm text-secondary">Recusar</a>
+                                <!-- Proposta aceita OU proposta em analise -->
+                                <a v-if="post.status!=1" :href="'/posts/refused/' + post.id" class="btn btn-link btn-sm text-secondary">Recusar</a>
                               </div>
                             </div>
                             <!-- Post -->
@@ -55,7 +57,7 @@
                </div>
             </div>
          </div>
-         <div class="card-footer">
+         <div v-if="formActive" class="card-footer">
            <form @submit.prevent="sendMessage">
               <div class="input-group">
                 <textarea class="form-control" placeholder="Digite uma mensagem..." v-model="body" @keydown="onTyping" @keydown.enter="sendMessage" required></textarea>
@@ -71,12 +73,13 @@
 
 <script>
 export default {
-  props: ['user', 'talk', 'opposite', 'posts'],
+  props: ["user", "talk", "opposite", "posts"],
 
   data() {
     return {
       channel: `privatechat.${this.talk.user_id}.${this.talk.receiver_id}`,
       body: null,
+      formActive: true,
       typing: false,
       onlineFriends: [],
       allPosts: []
@@ -85,15 +88,15 @@ export default {
 
   methods: {
     formatPrice(value) {
-      let val = (value/1).toFixed(2).replace('.', ',')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      let val = (value / 1).toFixed(2).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
     onTyping() {
-      Echo.private(this.channel + '.private').whisper('typing');
+      Echo.private(this.channel + ".private").whisper("typing");
     },
     sendMessage() {
       axios
-        .post('/api/posts', {
+        .post("/api/posts", {
           body: this.body,
           talk_id: this.talk.id
         })
@@ -104,14 +107,17 @@ export default {
     },
     fetchMessages() {
       this.allPosts = this.posts;
+      this.talkStatus(this.talk);
+    },
+    talkStatus(talk) {
+      this.formActive = talk.status == 1 ? false : true;
     }
   },
 
   created() {
-
     this.fetchMessages();
 
-    Echo.join(this.channel + '.join')
+    Echo.join(this.channel + ".join")
       .here(users => {
         this.onlineFriends = users;
       })
@@ -122,11 +128,12 @@ export default {
         this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
       });
 
-    Echo.private(this.channel + '.private')
-      .listen('PrivatePostSent', e => {        
-        this.allPosts.push(e.post);
+    Echo.private(this.channel + ".private")
+      .listen("PrivatePostSent", response => {
+        this.talkStatus(response.post.talk);
+        this.allPosts.push(response.post);
       })
-      .listenForWhisper('typing', e => {
+      .listenForWhisper("typing", e => {
         this.typing = true;
 
         setTimeout(() => {

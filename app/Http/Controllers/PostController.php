@@ -62,16 +62,20 @@ class PostController extends Controller
             'question_id' => $request->question_id
         ]);
 
-        $post = new Post([
-            'talk_id' => $talk->id,
-            'user_id' => auth()->id(),
-            'body'=> $request->body,
-            'budget'=> $request->budget
-        ]);
+        $this->authorize('store-comment', $talk);
 
-        $post->save();
+        Post::updateOrCreate(
+            [
+                'talk_id' => $talk->id,
+                'user_id' => auth()->id()
+            ],
+            [
+                'body'=> $request->body,
+                'budget'=> $request->budget
+            ]
+        );
 
-        return redirect()->route('home')->with('success', 'Mensagem enviada!');
+        return back()->with('success', 'Mensagem enviada!');
     }
 
     /**
@@ -141,6 +145,10 @@ class PostController extends Controller
         $post->status = Post::status['accept'];
         $post->update();
 
+        $talk = $post->talk;
+        $talk->status = Talk::status['active'];
+        $talk->update();
+
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
@@ -151,7 +159,7 @@ class PostController extends Controller
 
         broadcast(new PrivatePostSent($alert));
 
-        return redirect()->route('payments.show', ['id' => $id])->with('success', 'Proposta aceita! Realize o deposito de garantia.');
+        return back()->with('success', 'Proposta aceita! Realize o deposito de garantia.');
     }
 
     public function refused(Request $request, $id)
@@ -160,8 +168,16 @@ class PostController extends Controller
 
         $this->authorize('refused', $post);
 
+        $question = $post->talk->question;
+        $question->status = Question::ANALYZING;
+        $question->update();
+
         $post->status = Post::status['refused'];
         $post->update();
+        
+        $talk = $post->talk;
+        $talk->status = Talk::status['inactive'];
+        $talk->update();
 
         $alert = new Post;
         $alert->talk_id = $post->talk->id;

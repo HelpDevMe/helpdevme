@@ -17,6 +17,7 @@ class CreateTalksTable extends Migration
             $table->increments('id');
             $table->integer('question_id')->unsigned();
             $table->integer('user_id')->unsigned();
+            $table->tinyInteger('status')->default(0);
             $table->integer('receiver_id')->unsigned();
             $table->timestamps();
             
