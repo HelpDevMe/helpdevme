@@ -1,7 +1,7 @@
 <template>
     <div class="card mb-5 shadow">
         <div class="card-body">
-            <form action="/questions" method="POST" role="form">
+            <form>
                 <div class="form-group">
                     <input type="text" class="form-control" name="title" placeholder="Como podemos te ajudar?" required/>
                 </div>

@@ -58057,44 +58057,40 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-5 shadow" }, [
     _c("div", { staticClass: "card-body" }, [
-      _c(
-        "form",
-        { attrs: { action: "/questions", method: "POST", role: "form" } },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "form-group" },
-            [
-              _c("multiselect", {
-                attrs: {
-                  "tag-placeholder": "Adicione isto como nova tag",
-                  placeholder: "Pesquise ou adicione uma tag",
-                  label: "title",
-                  "track-by": "id",
-                  options: _vm.options,
-                  multiple: true,
-                  taggable: true
+      _c("form", [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "form-group" },
+          [
+            _c("multiselect", {
+              attrs: {
+                "tag-placeholder": "Adicione isto como nova tag",
+                placeholder: "Pesquise ou adicione uma tag",
+                label: "title",
+                "track-by": "id",
+                options: _vm.options,
+                multiple: true,
+                taggable: true
+              },
+              on: { tag: _vm.addTag },
+              model: {
+                value: _vm.value,
+                callback: function($$v) {
+                  _vm.value = $$v
                 },
-                on: { tag: _vm.addTag },
-                model: {
-                  value: _vm.value,
-                  callback: function($$v) {
-                    _vm.value = $$v
-                  },
-                  expression: "value"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm._m(2)
-        ]
-      )
+                expression: "value"
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm._m(2)
+      ])
     ])
   ])
 }
