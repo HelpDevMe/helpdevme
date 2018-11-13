@@ -21,6 +21,8 @@ Route::resource('users', 'UserController');
 
 Route::resource('payments', 'PaymentController');
 
+Route::resource('tags', 'TagController');
+
 Route::get('activities/client', 'ActivityController@client')->name('activities.client');
 Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer');
 

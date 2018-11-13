@@ -512,7 +512,7 @@ module.exports = defaults;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.14.4
+ * @version 1.14.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -609,7 +609,8 @@ function getStyleComputedProperty(element, property) {
     return [];
   }
   // NOTE: 1 DOM access here
-  var css = getComputedStyle(element, null);
+  var window = element.ownerDocument.defaultView;
+  var css = window.getComputedStyle(element, null);
   return property ? css[property] : css;
 }
 
@@ -697,7 +698,7 @@ function getOffsetParent(element) {
   var noOffsetParent = isIE(10) ? document.body : null;
 
   // NOTE: 1 DOM access here
-  var offsetParent = element.offsetParent;
+  var offsetParent = element.offsetParent || null;
   // Skip hidden elements which don't have an offsetParent
   while (offsetParent === noOffsetParent && element.nextElementSibling) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
@@ -709,9 +710,9 @@ function getOffsetParent(element) {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
-  // .offsetParent will return the closest TD or TABLE in case
+  // .offsetParent will return the closest TH, TD or TABLE in case
   // no offsetParent is present, I hate this job...
-  if (['TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
+  if (['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
     return getOffsetParent(offsetParent);
   }
 
@@ -1259,7 +1260,8 @@ function getReferenceOffsets(state, popper, reference) {
  * @returns {Object} object containing width and height properties
  */
 function getOuterSizes(element) {
-  var styles = getComputedStyle(element);
+  var window = element.ownerDocument.defaultView;
+  var styles = window.getComputedStyle(element);
   var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
   var result = {
@@ -36694,7 +36696,11 @@ var PusherConnector = function (_Connector) {
     createClass(PusherConnector, [{
         key: 'connect',
         value: function connect() {
-            this.pusher = new Pusher(this.options.key, this.options);
+            if (typeof this.options.client !== 'undefined') {
+                this.pusher = this.options.client;
+            } else {
+                this.pusher = new Pusher(this.options.key, this.options);
+            }
         }
     }, {
         key: 'listen',
@@ -36783,7 +36789,7 @@ var SocketIoConnector = function (_Connector) {
             if (typeof io !== 'undefined') {
                 return io;
             }
-            if (this.options.client !== 'undefined') {
+            if (typeof this.options.client !== 'undefined') {
                 return this.options.client;
             }
             throw new Error('Socket.io client not found. Should be globally available or passed via options.client');
@@ -58025,7 +58031,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-<<<<<<< HEAD
 
 
 
@@ -58035,7 +58040,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            value: [],
+            title: undefined,
+            body: undefined,
+            tags: [],
             options: []
         };
     },
@@ -58044,13 +58051,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addTag: function addTag(newTag) {
             var _this = this;
 
+            console.log('add tag');
             axios.post('/api/tags', {
                 title: newTag
             }).then(function (response) {
                 var tag = response.data.tag;
 
                 _this.options.push(tag);
-                _this.value.push(tag);
+                _this.tags.push(tag);
             });
         },
         listTags: function listTags() {
@@ -58059,29 +58067,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/tags').then(function (response) {
                 _this2.options = response.data.tags;
             });
+        },
+        addQuestion: function addQuestion() {
+            axios.post('/api/questions', {
+                title: this.title,
+                body: this.body,
+                tags: this.tags.map(function (tag) {
+                    return tag.id;
+                })
+            }).then(function (response) {
+                console.log('addQuestion response', response);
+            });
         }
     },
     mounted: function mounted() {
         this.listTags();
     }
-=======
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: { Multiselect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a },
-  data: function data() {
-    return {
-      selected: null,
-      options: ['list', 'of', 'options'],
-      token: document.head.querySelector('meta[name="csrf-token"]')
-    };
-  }
->>>>>>> master
 });
 
 /***/ }),
@@ -58100,108 +58101,104 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-5 shadow" }, [
     _c("div", { staticClass: "card-body" }, [
-<<<<<<< HEAD
-      _c("form", [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _c("multiselect", {
-              attrs: {
-                "tag-placeholder": "Adicione isto como nova tag",
-                placeholder: "Pesquise ou adicione uma tag",
-                label: "title",
-                "track-by": "id",
-                options: _vm.options,
-                multiple: true,
-                taggable: true
-              },
-              on: { tag: _vm.addTag },
-              model: {
-                value: _vm.value,
-                callback: function($$v) {
-                  _vm.value = $$v
-                },
-                expression: "value"
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _vm._m(2)
-      ])
-=======
       _c(
         "form",
-        { attrs: { method: "post", action: "/questions", role: "form" } },
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.addQuestion($event)
+            }
+          }
+        },
         [
-          _c("input", {
-            attrs: { type: "hidden", name: "_token" },
-            domProps: { value: _vm.token.content }
-          }),
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.title,
+                  expression: "title"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "text",
+                name: "title",
+                placeholder: "Como podemos te ajudar?",
+                required: ""
+              },
+              domProps: { value: _vm.title },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.title = $event.target.value
+                }
+              }
+            })
+          ]),
           _vm._v(" "),
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
+          _c("div", { staticClass: "form-group" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.body,
+                  expression: "body"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { name: "body", placeholder: "Pergunta", required: "" },
+              domProps: { value: _vm.body },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.body = $event.target.value
+                }
+              }
+            })
+          ]),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "form-group" },
             [
               _c("multiselect", {
-                attrs: { multiple: true, options: _vm.options },
+                attrs: {
+                  "tag-placeholder": "Adicione isto como nova tag",
+                  placeholder: "Pesquise ou adicione uma tag",
+                  label: "title",
+                  "track-by": "id",
+                  options: _vm.options,
+                  multiple: true,
+                  taggable: true
+                },
+                on: { tag: _vm.addTag },
                 model: {
-                  value: _vm.selected,
+                  value: _vm.tags,
                   callback: function($$v) {
-                    _vm.selected = $$v
+                    _vm.tags = $$v
                   },
-                  expression: "selected"
+                  expression: "tags"
                 }
               })
             ],
             1
           ),
           _vm._v(" "),
-          _vm._m(2)
+          _vm._m(0)
         ]
       )
->>>>>>> master
     ])
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          name: "title",
-          placeholder: "Como podemos te ajudar?",
-          required: ""
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("textarea", {
-        staticClass: "form-control",
-        attrs: { name: "body", placeholder: "Pergunta", required: "" }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
