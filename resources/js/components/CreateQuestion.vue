@@ -10,11 +10,7 @@
                     <textarea name="body" class="form-control" placeholder="Pergunta" required></textarea>
                 </div>
                 <div class="form-group">
-                    <multiselect
-                        v-model="selected"
-                        :multiple="true"
-                        :options="options">
-                    </multiselect>
+                    <multiselect v-model="value" tag-placeholder="Adicione isto como nova tag" placeholder="Pesquise ou adicione uma tag" label="title" track-by="id" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
                 </div>
                 <div class="form-row justify-content-end">
                     <div class="col-lg-3">
@@ -27,6 +23,44 @@
 </template>
 
 <script>
+<<<<<<< HEAD
+    import Multiselect from 'vue-multiselect';
+    
+    export default {
+        components: {
+            Multiselect
+        },
+        data () {
+            return {
+                value: [],
+                options: []
+            }
+        },
+        methods: {
+            addTag (newTag) {
+                axios
+                    .post('/api/tags', {
+                        title: newTag
+                    })
+                    .then(response => {
+                        let tag = response.data.tag;
+                        
+                        this.options.push(tag);
+                        this.value.push(tag);
+                    });
+            },
+            listTags () {
+                axios
+                    .get('/api/tags')
+                    .then(response => {
+                        this.options = response.data.tags;
+                    });
+            }
+        },
+        mounted () {
+            this.listTags();
+        }
+=======
   import Multiselect from 'vue-multiselect';
   export default {
     components: { Multiselect },
@@ -36,8 +70,8 @@
         options: ['list', 'of', 'options'],
         token: document.head.querySelector('meta[name="csrf-token"]')
       }
+>>>>>>> master
     }
-  }
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

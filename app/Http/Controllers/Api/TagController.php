@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Post;
-use App\Talk;
+use App\Tag;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Events\PrivatePostSent;
 
-class PostController extends Controller
-{   
+class TagController extends Controller
+{
     /**
      * Create a new controller instance.
      *
@@ -28,7 +26,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::all();
+
+        return response(['tags' => $tags]);
     }
 
     /**
@@ -49,20 +49,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge([
-            'type' => Post::types['message'],
-            'user_id' => auth()->id()
-        ]);
+        $tag = new Tag($request->all());
+        $tag->save();
 
-        $post = new Post($request->all());
-
-        $this->authorize('message', $post);
-
-        $post->save();
-
-        broadcast(new PrivatePostSent($post))->toOthers();
-
-        return response(['post' => $post]);
+        return response(['tag' => $tag]);
     }
 
     /**
