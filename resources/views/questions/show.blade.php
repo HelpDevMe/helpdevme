@@ -6,7 +6,6 @@
         <article>
             <header>
                 <h1 class="display-4">{{ $question->title }}</h1>
-                {{ $question->tags }}
             </header>
             <span class="badge badge-secondary">
                 @lang('questions.status.' . $question->status)
@@ -21,6 +20,13 @@
                         <span>{{ $question->created_at->diffForHumans() }} por</span>
                         <a href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
                     </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    @foreach($question->tags as $tag)
+                        <a href="{{ route('tags.show', $tag) }}" class="badge badge-primary">{{ $tag->title }}</a>
+                    @endforeach
                 </div>
             </div>
             <div class="row">

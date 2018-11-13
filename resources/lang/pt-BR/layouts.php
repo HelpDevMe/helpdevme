@@ -11,6 +11,7 @@ return [
         'register' => 'Registrar-se',
         'logout' => 'Sair',
         'finances' => 'Finanças',
-        'profile' => 'Perfil'
+        'profile' => 'Perfil',
+        'tags' => 'Tags',
     ]
 ];

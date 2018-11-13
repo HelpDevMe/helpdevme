@@ -35,6 +35,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}">@lang('layouts.navbar.users')</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('tags.index') }}">@lang('layouts.navbar.tags')</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

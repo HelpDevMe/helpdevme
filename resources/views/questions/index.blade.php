@@ -49,6 +49,13 @@
                     </div>
                     <div class="row">
                         <div class="col">
+                            @foreach($question->tags as $tag)
+                                <a href="{{ route('tags.show', $tag) }}" class="badge badge-primary">{{ $tag->title }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <div class="d-flex flex-column">
                                 @foreach($question->talks as $talk)
                                     @comment(['talk' => $talk])
