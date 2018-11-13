@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <a href="{{ route('posts.accept', $post->id) }}" class="btn btn-success">Aceitar e Pagar</a>
+                                        <a href="{{ route('posts.accept', $post->id) }}" class="btn btn-success">Aceitar</a>
                                     </div>
                                 </div>
                             </div>

@@ -37,8 +37,11 @@
                     </span>
                     <p>{{ $question->body }}</p>
                     <div class="row">
+                        <div class="col">
+                            <p class="small">{{ count($question->comments()) }} resposta(s)</p>
+                        </div>
                         <div class="col text-right">
-                            <div class="small">
+                            <div class="small mb-3">
                                 <span>{{ $question->created_at->diffForHumans() }} por</span>
                                 <a href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
                             </div>

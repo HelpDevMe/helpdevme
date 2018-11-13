@@ -38,10 +38,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapProfileRoutes();
+        
+        $this->mapFinancesRoutes();
+        
+        $this->mapPostRoutes();
 
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
@@ -78,5 +80,19 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/profile.php'));
+    }
+    
+    protected function mapPostRoutes()
+    {
+        Route::middleware('web')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/post.php'));
+    }
+    
+    protected function mapFinancesRoutes()
+    {
+        Route::middleware('web')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/finances.php'));
     }
 }

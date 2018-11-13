@@ -1,7 +1,8 @@
 <template>
     <div class="card mb-5 shadow">
         <div class="card-body">
-            <form>
+            <form method="post" action="/questions" role="form">
+                <input type="hidden" name="_token" :value="token.content">
                 <div class="form-group">
                     <input type="text" class="form-control" name="title" placeholder="Como podemos te ajudar?" required/>
                 </div>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+<<<<<<< HEAD
     import Multiselect from 'vue-multiselect';
     
     export default {
@@ -58,6 +60,17 @@
         mounted () {
             this.listTags();
         }
+=======
+  import Multiselect from 'vue-multiselect';
+  export default {
+    components: { Multiselect },
+    data () {
+      return {
+        selected: null,
+        options: ['list', 'of', 'options'],
+        token: document.head.querySelector('meta[name="csrf-token"]')
+      }
+>>>>>>> master
     }
 </script>
 

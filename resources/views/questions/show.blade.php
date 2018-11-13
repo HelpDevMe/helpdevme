@@ -5,16 +5,26 @@
     <div class="col">
         <article>
             <header>
-                <h1>{{ $question->title }}</h1>
-                <address class="author">
-                    <a rel="author" href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
-                </address>
+                <h1 class="display-4">{{ $question->title }}</h1>
                 {{ $question->tags }}
             </header>
-            <div>{{ $question->body }}</div>
+            <span class="badge badge-secondary">
+                @lang('questions.status.' . $question->status)
+            </span>
+            <p class="lead">{{ $question->body }}</p>
             <div class="row">
                 <div class="col">
-                    <hr>
+                    <p class="small">{{ count($question->comments()) }} resposta(s)</p>
+                </div>
+                <div class="col text-right">
+                    <div class="small mb-3">
+                        <span>{{ $question->created_at->diffForHumans() }} por</span>
+                        <a href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="row">
                         <div class="col">
                             <div class="d-flex flex-column">
@@ -25,7 +35,6 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
                     @formComment(['question' => $question])
                     @endformComment
                 </div>

@@ -55,6 +55,11 @@
                                     @lang('layouts.navbar.posts')
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('finances.index') }}">
+                                    @lang('layouts.navbar.finances')
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
 
                                 <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownActivities" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

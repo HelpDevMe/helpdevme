@@ -15,8 +15,6 @@ Auth::routes();
 
 Route::view('/about', 'about')->name('about');
 
-Route::resource('posts', 'PostController');
-
 Route::resource('talks', 'TalkController');
 
 Route::resource('users', 'UserController');
@@ -41,8 +39,6 @@ Route::prefix('payments/paypal')->group(function () {
 Route::resource('questions', 'QuestionController', ['except' => [
     'index', 'show'
 ]]);
-
-Route::get('posts/accept/{post}', 'PostController@accept')->name('posts.accept');
 
 Route::get('/', 'QuestionController@index')->name('home');
 

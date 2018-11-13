@@ -19,11 +19,14 @@
                 <h3 class="h5">
                     <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                 </h3>
-                <p>{{ count($question->comments()) }} resposta(s)</p>
                 <span class="badge badge-secondary">
                     @lang('questions.status.' . $question->status)
                 </span>
+                <hr>
                 <div class="row">
+                    <div class="col">
+                        <p class="small">{{ count($question->comments()) }} resposta(s)</p>
+                    </div>
                     <div class="col text-right">
                         <div class="small">{{ $question->created_at->diffForHumans() }}</div>
                     </div>

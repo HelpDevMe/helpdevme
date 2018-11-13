@@ -57202,14 +57202,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user', 'talk', 'opposite', 'posts'],
+  props: ["user", "talk", "opposite", "posts"],
 
   data: function data() {
     return {
-      channel: 'privatechat.' + this.talk.user_id + '.' + this.talk.receiver_id,
+      channel: "privatechat." + this.talk.user_id + "." + this.talk.receiver_id,
       body: null,
+      formActive: true,
       typing: false,
       onlineFriends: [],
       allPosts: []
@@ -57219,16 +57222,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     formatPrice: function formatPrice(value) {
-      var val = (value / 1).toFixed(2).replace('.', ',');
+      var val = (value / 1).toFixed(2).replace(".", ",");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
     onTyping: function onTyping() {
-      Echo.private(this.channel + '.private').whisper('typing');
+      Echo.private(this.channel + ".private").whisper("typing");
     },
     sendMessage: function sendMessage() {
       var _this = this;
 
-      axios.post('/api/posts', {
+      axios.post("/api/posts", {
         body: this.body,
         talk_id: this.talk.id
       }).then(function (response) {
@@ -57238,6 +57241,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     fetchMessages: function fetchMessages() {
       this.allPosts = this.posts;
+      this.talkStatus(this.talk);
+    },
+    talkStatus: function talkStatus(talk) {
+      this.formActive = talk.status == 1 ? false : true;
     }
   },
 
@@ -57246,7 +57253,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     this.fetchMessages();
 
-    Echo.join(this.channel + '.join').here(function (users) {
+    Echo.join(this.channel + ".join").here(function (users) {
       _this2.onlineFriends = users;
     }).joining(function (user) {
       _this2.onlineFriends.push(user);
@@ -57254,9 +57261,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       _this2.onlineFriends.splice(_this2.onlineFriends.indexOf(user), 1);
     });
 
-    Echo.private(this.channel + '.private').listen('PrivatePostSent', function (e) {
-      _this2.allPosts.push(e.post);
-    }).listenForWhisper('typing', function (e) {
+    Echo.private(this.channel + ".private").listen("PrivatePostSent", function (response) {
+      _this2.talkStatus(response.post.talk);
+      _this2.allPosts.push(response.post);
+    }).listenForWhisper("typing", function (e) {
       _this2.typing = true;
 
       setTimeout(function () {
@@ -57318,7 +57326,7 @@ var render = function() {
                             "span",
                             {
                               staticClass:
-                                "badge badge-pill py-2 px-4 badge-danger"
+                                "badge badge-pill py-2 px-5 badge-danger"
                             },
                             [_vm._v(_vm._s(post.body))]
                           )
@@ -57331,7 +57339,7 @@ var render = function() {
                             "span",
                             {
                               staticClass:
-                                "badge badge-pill py-2 px-4 badge-info"
+                                "badge badge-pill py-2 px-5 badge-info"
                             },
                             [_vm._v(_vm._s(post.body))]
                           )
@@ -57344,7 +57352,7 @@ var render = function() {
                             "span",
                             {
                               staticClass:
-                                "badge badge-pill py-2 px-4 badge-success"
+                                "badge badge-pill py-2 px-5 badge-success"
                             },
                             [_vm._v(_vm._s(post.body))]
                           )
@@ -57369,9 +57377,9 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _vm.user.id == _vm.talk.receiver_id &&
-                          _vm.talk.question.status != 2
+                          post.status != 3
                             ? _c("div", { staticClass: "card-footer" }, [
-                                post.status == 0
+                                post.status == 0 || post.status == 1
                                   ? _c(
                                       "a",
                                       {
@@ -57380,7 +57388,7 @@ var render = function() {
                                           href: "/posts/accept/" + post.id
                                         }
                                       },
-                                      [_vm._v("Aceitar e Pagar")]
+                                      [_vm._v("Aceitar")]
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
@@ -57395,14 +57403,19 @@ var render = function() {
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-link text-secondary",
-                                    attrs: { type: "button" }
-                                  },
-                                  [_vm._v("Recusar")]
-                                )
+                                post.status != 1
+                                  ? _c(
+                                      "a",
+                                      {
+                                        staticClass:
+                                          "btn btn-link btn-sm text-secondary",
+                                        attrs: {
+                                          href: "/posts/refused/" + post.id
+                                        }
+                                      },
+                                      [_vm._v("Recusar")]
+                                    )
+                                  : _vm._e()
                               ])
                             : _vm._e()
                         ])
@@ -57458,58 +57471,69 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-footer" }, [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.sendMessage($event)
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "input-group" }, [
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.body,
-                    expression: "body"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { placeholder: "Digite uma mensagem...", required: "" },
-                domProps: { value: _vm.body },
+      _vm.formActive
+        ? _c("div", { staticClass: "card-footer" }, [
+            _c(
+              "form",
+              {
                 on: {
-                  keydown: [
-                    _vm.onTyping,
-                    function($event) {
-                      if (
-                        !("button" in $event) &&
-                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                      ) {
-                        return null
-                      }
-                      return _vm.sendMessage($event)
-                    }
-                  ],
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.body = $event.target.value
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.sendMessage($event)
                   }
                 }
-              }),
-              _vm._v(" "),
-              _vm._m(0)
-            ])
-          ]
-        )
-      ])
+              },
+              [
+                _c("div", { staticClass: "input-group" }, [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.body,
+                        expression: "body"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      placeholder: "Digite uma mensagem...",
+                      required: ""
+                    },
+                    domProps: { value: _vm.body },
+                    on: {
+                      keydown: [
+                        _vm.onTyping,
+                        function($event) {
+                          if (
+                            !("button" in $event) &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.sendMessage($event)
+                        }
+                      ],
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.body = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ])
+              ]
+            )
+          ])
+        : _vm._e()
     ])
   ])
 }
@@ -58001,6 +58025,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+<<<<<<< HEAD
 
 
 
@@ -58039,6 +58064,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         this.listTags();
     }
+=======
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: { Multiselect: __WEBPACK_IMPORTED_MODULE_0_vue_multiselect___default.a },
+  data: function data() {
+    return {
+      selected: null,
+      options: ['list', 'of', 'options'],
+      token: document.head.querySelector('meta[name="csrf-token"]')
+    };
+  }
+>>>>>>> master
 });
 
 /***/ }),
@@ -58057,6 +58100,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card mb-5 shadow" }, [
     _c("div", { staticClass: "card-body" }, [
+<<<<<<< HEAD
       _c("form", [
         _vm._m(0),
         _vm._v(" "),
@@ -58091,6 +58135,42 @@ var render = function() {
         _vm._v(" "),
         _vm._m(2)
       ])
+=======
+      _c(
+        "form",
+        { attrs: { method: "post", action: "/questions", role: "form" } },
+        [
+          _c("input", {
+            attrs: { type: "hidden", name: "_token" },
+            domProps: { value: _vm.token.content }
+          }),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("multiselect", {
+                attrs: { multiple: true, options: _vm.options },
+                model: {
+                  value: _vm.selected,
+                  callback: function($$v) {
+                    _vm.selected = $$v
+                  },
+                  expression: "selected"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm._m(2)
+        ]
+      )
+>>>>>>> master
     ])
   ])
 }

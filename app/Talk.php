@@ -2,10 +2,17 @@
 
 namespace App;
 
+use App\Post;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Talk extends Model
 {
+    const status = [
+        'active' => 0,
+        'inactive' => 1
+    ];
+
     protected $fillable = [
         'user_id',
         'question_id',
