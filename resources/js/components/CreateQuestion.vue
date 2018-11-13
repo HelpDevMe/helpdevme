@@ -23,7 +23,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
     import Multiselect from 'vue-multiselect';
     
     export default {
@@ -60,17 +59,6 @@
         mounted () {
             this.listTags();
         }
-=======
-  import Multiselect from 'vue-multiselect';
-  export default {
-    components: { Multiselect },
-    data () {
-      return {
-        selected: null,
-        options: ['list', 'of', 'options'],
-        token: document.head.querySelector('meta[name="csrf-token"]')
-      }
->>>>>>> master
     }
 </script>
 
