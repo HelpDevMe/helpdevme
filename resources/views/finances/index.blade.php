@@ -17,11 +17,22 @@
                 <tbody>
                     @foreach($finances as $finance)
                         <tr>
-                            <th scope="row">{{ $finance->created_at }}</th>
+                            <th scope="row">{{ $finance->created_at->format('d M Y') }}</th>
                             <td>{{ $finance->description }}</td>
-                            <td>{{ $finance->post->user->name }}</td>
-                            <td>{{ $finance->post->budget }}</td>
-                            <td>{{ $finance->post->budget }}</td>
+                            <td>
+                                <a href="{{ route('users.show', $finance->post->user) }}">
+                                    {{ $finance->post->user->name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('questions.show', $finance->post->talk->question) }}">
+                                    {{ $finance->post->talk->question->title }}
+                                </a>
+                            </td>
+                            <td>
+                                @budget(['budget' => $finance->post->budget])
+                                @endbudget
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
