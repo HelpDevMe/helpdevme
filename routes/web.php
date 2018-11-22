@@ -37,11 +37,3 @@ Route::prefix('payments/paypal')->group(function () {
         Route::get('/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
     });
 });
-
-Route::resource('questions', 'QuestionController', ['except' => [
-    'index', 'show'
-]]);
-
-Route::get('/', 'QuestionController@index')->name('home');
-
-Route::get('/{question}', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);

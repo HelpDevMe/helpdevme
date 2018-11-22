@@ -107,4 +107,18 @@ class QuestionController extends Controller
     {
         //
     }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function finalize(Question $question)
+    {
+        $who = auth()->id() == $question->user_id ? 'user_ended' : 'freelancer_ended';
+        $question[$who] = 1;
+        $question->save();
+        return back();
+    }
 }

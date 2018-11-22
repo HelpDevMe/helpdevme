@@ -57210,6 +57210,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "talk", "opposite", "posts"],
@@ -57220,6 +57237,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       body: null,
       formActive: true,
       typing: false,
+      iFinished: this.talk.question.user_id == this.user.id && this.talk.question.user_ended == 1 || this.talk.question.user_id != this.user.id && this.talk.question.freelancer_ended == 1,
       onlineFriends: [],
       allPosts: []
     };
@@ -57315,6 +57333,41 @@ var render = function() {
         ]
       )
     ]),
+    _vm._v(" "),
+    !_vm.iFinished
+      ? _c("div", { staticClass: "form-group" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-warning",
+              attrs: { href: "/" + _vm.talk.question.slug + "/finalize" }
+            },
+            [_vm._v("Finalizar Questão")]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.iFinished
+      ? _c("div", [
+          _c("div", { staticClass: "card text-white bg-warning mb-3" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h5", { staticClass: "card-title" }, [
+                _vm._v("Você finalizou essa questão!")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(
+                  "Esperamos que tudo esteja bem e " +
+                    _vm._s(_vm.opposite.name) +
+                    " também finalize. Caso contrário ambos poderão solicitiar o processo de arbitragem."
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
+          ])
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-body" }, [
@@ -57534,7 +57587,7 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(0)
+                  _vm._m(1)
                 ])
               ]
             )
@@ -57544,6 +57597,27 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-sm btn-outline-light",
+          attrs: { type: "button" }
+        },
+        [_vm._v("Solicitar Arbitragem")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-sm btn-success", attrs: { type: "button" } },
+        [_vm._v("Continuar Trabalhando")]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
