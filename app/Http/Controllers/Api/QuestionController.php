@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Question;
+use App\Vote;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -91,7 +92,19 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Vote::updateOrCreate(
+            [
+                'question_id' => $id,
+                'user_id' => auth()->id()
+            ],
+            [
+                'vote'=> $request->vote
+            ]
+        );
+
+        $votes = Vote::where('question_id', $id)->where('vote', 1)->count();
+
+        return response(['votes' => $votes]);
     }
 
     /**

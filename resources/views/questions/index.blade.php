@@ -29,13 +29,20 @@
         @foreach($questions as $question)
             <div class="card mb-4">
                 <div class="card-body">
-                    <h3 class="h5">
-                        <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
-                    </h3>
-                    <span class="badge badge-secondary">
-                        @lang('questions.status.' . $question->status)
-                    </span>
-                    <p>{{ $question->body }}</p>
+                    <div class="row">
+                        <div class="col flex-grow-0">
+                            <votes-question :initi-votes="{{ count($question->votes) }}" :question="{{ $question }}"></votes-question>
+                        </div>
+                        <div class="col">
+                            <h3 class="h5">
+                                <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
+                            </h3>
+                            <span class="badge badge-secondary">
+                                @lang('questions.status.' . $question->status)
+                            </span>
+                            <p>{{ $question->body }}</p>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <p class="small">{{ count($question->comments()) }} resposta(s)</p>

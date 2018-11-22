@@ -50,4 +50,9 @@ class Question extends Model
     {
         return $this->posts->where('type', \App\Post::types['comment']);
     }
+
+    public function votes()
+    {
+        return $this->hasMany('App\Vote');
+    }
 }
