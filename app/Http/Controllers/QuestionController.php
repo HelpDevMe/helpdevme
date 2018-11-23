@@ -24,7 +24,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::where('status', Question::ANALYZING)->get();
+        $questions = Question::where('status', Question::status['analyzing'])->get();
 
         return view('questions.index', compact('questions'));
     }

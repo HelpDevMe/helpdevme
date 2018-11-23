@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    const ANALYZING = 0;
-    const WARRANTY = 1;
-    const PAYMENT = 2;
+    const status = [
+        'analyzing' => 0,
+        'warranty' => 1,
+        'payment' => 2
+    ];
 
     protected $fillable = [
         'title',
@@ -37,8 +39,7 @@ class Question extends Model
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag')
-            ->withTimestamps();
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
     
     public function posts()

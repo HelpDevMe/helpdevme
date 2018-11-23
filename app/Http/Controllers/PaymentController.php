@@ -195,7 +195,7 @@ class PaymentController extends Controller
             $finance->save();
 
             $question = $post->talk->question;
-            $question->status = Question::PAYMENT;
+            $question->status = Question::status['payment'];
             $question->update();
 
             $post->status = Post::status['payment'];

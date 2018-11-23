@@ -28,7 +28,11 @@ class FinanceController extends Controller
     {
         $finances = auth()->user()->finances;
 
-        return view('finances.index', compact('finances'));
+        $balance = $finances->reduce(function ($balance, $finance) {
+            return $balance + $finance->post->budget;
+        });
+
+        return view('finances.index', compact('finances', 'balance'));
     }
 
     /**

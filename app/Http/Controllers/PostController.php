@@ -139,7 +139,7 @@ class PostController extends Controller
         $this->authorize('accept', $post);
 
         $question = $post->talk->question;
-        $question->status = Question::WARRANTY;
+        $question->status = Question::status['warranty'];
         $question->update();
 
         $post->status = Post::status['accept'];
@@ -169,7 +169,7 @@ class PostController extends Controller
         $this->authorize('refused', $post);
 
         $question = $post->talk->question;
-        $question->status = Question::ANALYZING;
+        $question->status = Question::status['analyzing'];
         $question->update();
 
         $post->status = Post::status['refused'];
