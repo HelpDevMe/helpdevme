@@ -18,7 +18,7 @@
                     @foreach($finances as $finance)
                         <tr>
                             <th scope="row">{{ $finance->created_at->format('d M Y') }}</th>
-                            <td>{{ $finance->description }}</td>
+                            <td>@lang('finances.types.' . $finance->type)</td>
                             <td>
                                 <a href="{{ route('users.show', $finance->post->user) }}">
                                     {{ $finance->post->user->name }}

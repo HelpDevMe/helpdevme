@@ -11,5 +11,4 @@ Route::prefix('/{question}')->group(function () {
     Route::get('/', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);
     
     Route::get('/finalize', 'QuestionController@finalize');
-
 });

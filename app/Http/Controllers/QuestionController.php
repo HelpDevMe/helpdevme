@@ -119,6 +119,13 @@ class QuestionController extends Controller
         $who = auth()->id() == $question->user_id ? 'user_ended' : 'freelancer_ended';
         $question[$who] = 1;
         $question->save();
+
+        if ($question->user_ended == 1 && $question->freelancer_ended == 1)
+        {
+            // Ambas as partes finalizaram
+            return redirect()->action('FinanceController@transfer', ['question' => $question]);
+        }
+
         return back();
     }
 }

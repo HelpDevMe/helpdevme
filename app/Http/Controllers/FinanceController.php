@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Finance;
+use App\Question;
+use App\Post;
 use Illuminate\Http\Request;
 
 class FinanceController extends Controller
@@ -24,7 +26,7 @@ class FinanceController extends Controller
      */
     public function index()
     {
-        $finances = Finance::all();
+        $finances = auth()->user()->finances;
 
         return view('finances.index', compact('finances'));
     }
@@ -93,5 +95,18 @@ class FinanceController extends Controller
     public function destroy(Finance $finance)
     {
         //
+    }
+
+    public function transfer(Question $question)
+    {
+        $post = $question->posts->where('status', Post::status['payment'])->first();
+
+        $finance = new Finance;
+        $finance->user_id = auth()->id();
+        $finance->post_id = $post->id;
+        $finance->type = Finance::types['received'];
+        $finance->save();
+
+        return redirect()->route('finances.index');
     }
 }

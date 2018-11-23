@@ -190,7 +190,7 @@ class PaymentController extends Controller
         if ($result->getState() == 'approved')
         {
             $finance = new Finance;
-            $finance->description = 'Pagamento';
+            $finance->user_id = auth()->id();
             $finance->post_id = $post->id;
             $finance->save();
 
