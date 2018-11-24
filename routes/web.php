@@ -21,6 +21,8 @@ Route::resource('users', 'UserController');
 
 Route::resource('payments', 'PaymentController');
 
+Route::resource('tags', 'TagController');
+
 Route::get('activities/client', 'ActivityController@client')->name('activities.client');
 Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer');
 
@@ -35,11 +37,3 @@ Route::prefix('payments/paypal')->group(function () {
         Route::get('/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
     });
 });
-
-Route::resource('questions', 'QuestionController', ['except' => [
-    'index', 'show'
-]]);
-
-Route::get('/', 'QuestionController@index')->name('home');
-
-Route::get('/{question}', ['as' => 'questions.show', 'uses' => 'QuestionController@show']);

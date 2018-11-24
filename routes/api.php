@@ -16,3 +16,5 @@ use Illuminate\Http\Request;
 Route::resource('posts', 'Api\PostController');
 
 Route::resource('tags', 'Api\TagController');
+
+Route::resource('questions', 'Api\QuestionController');

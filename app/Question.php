@@ -6,16 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    const ANALYZING = 0;
-    const WARRANTY = 1;
-    const PAYMENT = 2;
+    const status = [
+        'analyzing' => 0,
+        'warranty' => 1,
+        'payment' => 2
+    ];
 
     protected $fillable = [
         'title',
         'slug',
         'body',
         'user_id',
-        'status'
+        'status',
+        'user_ended',
+        'freelancer_ended'
     ];
 
     public function getRouteKeyName()
@@ -35,7 +39,7 @@ class Question extends Model
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
     
     public function posts()
@@ -46,5 +50,10 @@ class Question extends Model
     public function comments()
     {
         return $this->posts->where('type', \App\Post::types['comment']);
+    }
+
+    public function votes()
+    {
+        return $this->hasMany('App\Vote');
     }
 }

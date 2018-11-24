@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Tag;
+use App\Question;
+use App\Vote;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TagController extends Controller
+class QuestionController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -16,7 +17,7 @@ class TagController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('auth:api');
     }
 
     /**
@@ -26,9 +27,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::all();
-
-        return response(['tags' => $tags]);
+        //
     }
 
     /**
@@ -49,10 +48,17 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        $tag = new Tag($request->all());
-        $tag->save();
+        $request->merge([
+            'slug' => str_slug($request->title),
+            'user_id' => auth()->id()
+        ]);
 
-        return response(['tag' => $tag]);
+        $question = Question::create($request->all());
+        
+        $question->tags()->attach($request->tags);
+        $question->save();
+        
+        return response(['question' => $question]);
     }
 
     /**
@@ -86,7 +92,19 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Vote::updateOrCreate(
+            [
+                'question_id' => $id,
+                'user_id' => auth()->id()
+            ],
+            [
+                'vote'=> $request->vote
+            ]
+        );
+
+        $votes = Vote::where('question_id', $id)->where('vote', 1)->count();
+
+        return response(['votes' => $votes]);
     }
 
     /**

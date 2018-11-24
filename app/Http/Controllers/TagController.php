@@ -14,7 +14,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::all();
+        return view('tags.index', compact('tags'));
     }
 
     /**
@@ -46,7 +47,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        return view('tags.show', compact('tag'));
     }
 
     /**

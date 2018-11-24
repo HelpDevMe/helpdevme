@@ -20,6 +20,8 @@ class CreateQuestionsTable extends Migration
             $table->text('body');
             $table->integer('user_id')->unsigned();
             $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('user_ended')->default(0);
+            $table->tinyInteger('freelancer_ended')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

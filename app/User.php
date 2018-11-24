@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->posts->where('type', \App\Post::types['comment']);
     }
+
+    public function finances()
+    {
+        return $this->hasMany('App\Finance');
+    }
 }

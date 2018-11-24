@@ -24,7 +24,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::where('status', Question::ANALYZING)->get();
+        $questions = Question::where('status', Question::status['analyzing'])->get();
 
         return view('questions.index', compact('questions'));
     }
@@ -106,5 +106,26 @@ class QuestionController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function finalize(Question $question)
+    {
+        $who = auth()->id() == $question->user_id ? 'user_ended' : 'freelancer_ended';
+        $question[$who] = 1;
+        $question->save();
+
+        if ($question->user_ended == 1 && $question->freelancer_ended == 1)
+        {
+            // Ambas as partes finalizaram
+            return redirect()->action('FinanceController@transfer', ['question' => $question]);
+        }
+
+        return back();
     }
 }

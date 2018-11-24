@@ -3,6 +3,6 @@
 use App\Question;
 
 return [
-    Question::ANALYZING => 'Analyzing Proposals',
-    Question::WARRANTY => 'Awaiting Warranty Payment'
+    Question::status['analyzing'] => 'Analyzing Proposals',
+    Question::status['warranty'] => 'Awaiting Warranty Payment'
 ];

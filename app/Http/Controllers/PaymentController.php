@@ -190,12 +190,12 @@ class PaymentController extends Controller
         if ($result->getState() == 'approved')
         {
             $finance = new Finance;
-            $finance->description = 'Pagamento';
+            $finance->user_id = auth()->id();
             $finance->post_id = $post->id;
             $finance->save();
 
             $question = $post->talk->question;
-            $question->status = Question::PAYMENT;
+            $question->status = Question::status['payment'];
             $question->update();
 
             $post->status = Post::status['payment'];
