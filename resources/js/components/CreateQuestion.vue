@@ -2,7 +2,6 @@
     <div class="card mb-5 shadow">
         <div class="card-body">
             <form method="post" action="/questions" role="form">
-                <input type="hidden" name="_token" :value="token.content">
                 <div class="form-group">
                     <input type="text" class="form-control" name="title" placeholder="Como podemos te ajudar?" required/>
                 </div>
