@@ -37,9 +37,8 @@
                             <h3 class="h5">
                                 <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                             </h3>
-                            <span class="badge badge-secondary">
-                                @lang('questions.status.' . $question->status)
-                            </span>
+                            @status(['status' => $question->status])
+                            @endstatus
                             <p>{{ $question->body }}</p>
                         </div>
                     </div>

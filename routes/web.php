@@ -19,21 +19,8 @@ Route::resource('talks', 'TalkController');
 
 Route::resource('users', 'UserController');
 
-Route::resource('payments', 'PaymentController');
-
 Route::resource('tags', 'TagController');
 
 Route::get('activities/client', 'ActivityController@client')->name('activities.client');
-Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer');
 
-Route::prefix('payments/paypal')->group(function () {
-    
-    Route::post('/', 'PaymentController@payWithPaypal')->name('payments.paypal');
-    
-    Route::prefix('/{post}')->group(function () {
-    
-        Route::get('/status', 'PaymentController@status')->name('payments.paypal.status');
-    
-        Route::get('/canceled', 'PaymentController@canceled')->name('payments.paypal.canceled');
-    });
-});
+Route::get('activities/freelancer', 'ActivityController@freelancer')->name('activities.freelancer');

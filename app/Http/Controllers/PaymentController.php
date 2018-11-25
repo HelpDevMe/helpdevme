@@ -120,38 +120,34 @@ class PaymentController extends Controller
         //
     }
 
-    public function payWithPaypal(Request $request)
+    protected function paypal($config)
     {
-        $id = $request->id;
-        $title = $request->title;
-        $budget = $request->budget;
-
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
 
         $item = new Item();
-        $item->setName($title)
+        $item->setName($config['item']['title'])
             ->setCurrency('BRL')
             ->setQuantity(1)
-            ->setDescription('Esta é a descrição do item')
-            ->setPrice($budget);
+            ->setDescription($config['item']['description'])
+            ->setPrice($config['item']['budget']);
 
         $itemList = new ItemList();
         $itemList->setItems([$item]);
 
         $amount = new Amount();
         $amount->setCurrency('BRL')
-            ->setTotal($budget);
+            ->setTotal($config['item']['budget']);
 
         $transaction = new Transaction();
         $transaction->setAmount($amount)
             ->setItemList($itemList)
-            ->setDescription('Comprando algo do meu site')
+            ->setDescription($config['transaction']['description'])
             ->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(route('payments.paypal.status', ['id' => $id]))
-            ->setCancelUrl(route('payments.paypal.canceled', ['id' => $id]));
+        $redirectUrls->setReturnUrl($config['redirects']['return'])
+            ->setCancelUrl($config['redirects']['cancel']);
 
         $payment = new Payment();
         $payment->setIntent('sale')
@@ -170,7 +166,89 @@ class PaymentController extends Controller
         return redirect($paymentLink);
     }
 
-    public function status(Request $request, $id)
+    public function pay(Request $request)
+    {
+        $config = [
+            'item' => [
+                'title' => $request->title,
+                'budget' => $request->budget,
+                'description' => 'Esta é a descrição do item'
+            ],
+            'transaction' => [
+                'description' => 'Pagamento na plataforma'
+            ],
+            'redirects' => [
+                'return' => route('payments.paypal.status', ['id' => $request->id]),
+                'cancel' => route('payments.paypal.canceled', ['id' => $request->id])
+            ]
+        ];
+
+        return $this->paypal($config);
+    }
+
+    public function fund(Request $request)
+    {
+        $finance = new Finance;
+        $finance->user_id = auth()->id();
+        $finance->receiver_id = auth()->id();
+        $finance->type = Finance::types['fund'];
+        $finance->budget = $request->budget;
+        $finance->confirmed = 0;
+        $finance->save();
+
+        $config = [
+            'item' => [
+                'title' => 'Créditos para minha conta',
+                'budget' => $request->budget,
+                'description' => 'Esta é a descrição do item'
+            ],
+            'transaction' => [
+                'description' => 'Pagamento na plataforma'
+            ],
+            'redirects' => [
+                'return' => route('payments.paypal.fund.status', ['id' => $finance->id]),
+                'cancel' => route('payments.paypal.fund.canceled', ['id' => $finance->id])
+            ]
+        ];
+
+        return $this->paypal($config);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id of finance row
+     * @return \Illuminate\Http\Response
+     */
+    public function statusFund(Request $request, $id)
+    {
+        if (empty($request->input('PayerID')) || empty($request->input('token')))
+        {
+            Finance::destroy($id);
+            return redirect()->route('finances.index')->with('error', 'Pagamento falhou :(');
+        }
+
+        $paymentId = $request->get('paymentId');
+        $payment = Payment::get($paymentId, $this->apiContext);
+        $execution = new PaymentExecution();
+        $execution->setPayerId($request->input('PayerID'));
+        $result = $payment->execute($execution, $this->apiContext);
+
+        if ($result->getState() == 'approved')
+        {
+            $finance = Finance::find($id);
+            $finance->confirmed = 1;
+            $finance->save();
+
+            return redirect()->route('finances.index')->with('success', 'Créditos adicionados com sucesso!');
+        }
+
+        Finance::destroy($id);
+        return redirect()->route('finances.index')->with('error', 'Pagamento falhou :(');
+    }
+
+    public function statusPay(Request $request, $id)
     {
         $post = Post::findOrFail($id);
 
@@ -178,7 +256,7 @@ class PaymentController extends Controller
 
         if (empty($request->input('PayerID')) || empty($request->input('token')))
         {
-            return redirect()->route('home')->with('error', 'Pagamento Falhou');
+            return redirect()->route('home')->with('error', 'Pagamento falhou :(');
         }
 
         $paymentId = $request->get('paymentId');
@@ -191,6 +269,8 @@ class PaymentController extends Controller
         {
             $finance = new Finance;
             $finance->user_id = auth()->id();
+            $finance->receiver_id = $post->user->id;
+            $finance->budget = $post->budget;
             $finance->post_id = $post->id;
             $finance->save();
 
@@ -214,11 +294,17 @@ class PaymentController extends Controller
             return redirect()->route('talks.show', $post->talk)->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
         }
 
-        return redirect()->route('home')->with('error', 'Payment failed');
+        return redirect()->route('home')->with('error', 'Pagamento falhou :(');
     }
     
-    public function canceled()
+    public function canceledPay(Request $request, $id)
     {
         return redirect()->route('home')->with('error', 'Pagamento Cancelado');
+    }
+    
+    public function canceledFund(Request $request, $id)
+    {
+        Finance::destroy($id);
+        return redirect()->route('finances.index')->with('error', 'Pagamento Cancelado');
     }
 }

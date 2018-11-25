@@ -6,12 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    const status = [
-        'analyzing' => 0,
-        'warranty' => 1,
-        'payment' => 2
-    ];
-
     protected $fillable = [
         'title',
         'slug',
@@ -20,6 +14,12 @@ class Question extends Model
         'status',
         'user_ended',
         'freelancer_ended'
+    ];
+    
+    const status = [
+        'analyzing' => 0,
+        'warranty' => 1,
+        'payment' => 2
     ];
 
     public function getRouteKeyName()

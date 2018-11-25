@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session()->get('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+    @endif
+    @foreach ($errors->all() as $error)
+        <div class="alert alert-danger">
+            {{ $error }}
+        </div>
+    @endforeach
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="display-4">Finanças</h1>
         <div class="text-right">
@@ -14,7 +24,7 @@
     <div class="row mt-3 mb-5">
         <div class="col text-right">
             <a href="#" class="btn btn-secondary">Opções de Saque</a>
-            <a href="#" class="btn btn-success">Adicionar Crédito</a>
+            <a href="{{ route('finances.fund') }}" class="btn btn-success">Adicionar Crédito</a>
         </div>
     </div>
     <div class="card">
@@ -35,19 +45,28 @@
                             <tr>
                                 <th scope="row">{{ $finance->created_at->format('d M Y') }}</th>
                                 <td>@lang('finances.types.' . $finance->type)</td>
-                                <td>
-                                    <a href="{{ route('users.show', $finance->post->user) }}">
-                                        {{ $finance->post->user->name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="{{ route('questions.show', $finance->post->talk->question) }}">
-                                        {{ $finance->post->talk->question->title }}
-                                    </a>
-                                </td>
+                                @if ($finance->post)
+                                    <td>
+                                        <a href="{{ route('users.show', $finance->post->user) }}">
+                                            {{ $finance->post->user->name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('questions.show', $finance->post->talk->question) }}">
+                                            {{ $finance->post->talk->question->title }}
+                                        </a>
+                                    </td>
+                                @else
+                                    <td>
+                                        <a href="{{ route('users.show', $finance->user) }}">
+                                            {{ $finance->user->name }}
+                                        </a>
+                                    </td>
+                                    <td></td>
+                                @endif
                                 <td class="text-right">
-                                    <span class="{{ $finance->type == App\Finance::types['received'] ? 'text-success' : 'text-danger' }}">
-                                        @budget(['budget' => $finance->post->budget])
+                                    <span class="{{ $finance->type == App\Finance::types['received'] || $finance->type == App\Finance::types['fund'] ? 'text-success' : 'text-danger' }}">
+                                        @budget(['budget' => $finance->budget])
                                         @endbudget
                                     </span>
                                 </td>

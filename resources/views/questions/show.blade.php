@@ -7,9 +7,8 @@
             <header>
                 <h1 class="display-4">{{ $question->title }}</h1>
             </header>
-            <span class="badge badge-secondary">
-                @lang('questions.status.' . $question->status)
-            </span>
+            @status(['status' => $question->status])
+            @endstatus
             <p class="lead">{{ $question->body }}</p>
             <div class="row">
                 <div class="col">

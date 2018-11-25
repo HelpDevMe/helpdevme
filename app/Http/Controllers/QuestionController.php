@@ -123,6 +123,8 @@ class QuestionController extends Controller
         if ($question->user_ended == 1 && $question->freelancer_ended == 1)
         {
             // Ambas as partes finalizaram
+            // Notificar em tempo real
+            // Atualizar status da pergunta
             return redirect()->action('FinanceController@transfer', ['question' => $question]);
         }
 

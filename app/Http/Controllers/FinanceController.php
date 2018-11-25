@@ -19,6 +19,26 @@ class FinanceController extends Controller
         $this->middleware('auth');
     }
 
+    protected function finances()
+    {
+        return Finance::where('confirmed', 1)
+            ->where(function($query) {
+                return $query->where('user_id', auth()->id())
+                    ->orWhere('receiver_id', auth()->id());
+            })
+            ->get();
+    }
+
+    protected function balance()
+    {
+        return $this->finances()->reduce(function ($balance, $finance) {
+            if ($finance->type == Finance::types['fund'] || $finance->type == Finance::types['received'])
+            {
+                return $balance + $finance->budget;
+            }
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,11 +46,9 @@ class FinanceController extends Controller
      */
     public function index()
     {
-        $finances = auth()->user()->finances;
+        $finances = $this->finances();
 
-        $balance = $finances->reduce(function ($balance, $finance) {
-            return $balance + $finance->post->budget;
-        });
+        $balance = $this->balance();
 
         return view('finances.index', compact('finances', 'balance'));
     }
@@ -107,10 +125,19 @@ class FinanceController extends Controller
 
         $finance = new Finance;
         $finance->user_id = auth()->id();
+        $finance->receiver_id = $post->user->id;
+        $finance->budget = $post->budget;
         $finance->post_id = $post->id;
         $finance->type = Finance::types['received'];
         $finance->save();
 
         return redirect()->route('finances.index');
+    }
+
+    public function fund()
+    {
+        $balance = $this->balance();
+
+        return view('finances.fund', compact('balance'));
     }
 }
