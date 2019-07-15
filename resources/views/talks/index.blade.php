@@ -8,8 +8,7 @@
             <a href="{{ route('talks.show', $talk) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="row align-items-center">
                     <div class="col-1">
-                        @avatar(['user' => $opposite])
-                        @endavatar
+                        <img class="img-fluid avatar" width="60" style="height: 60px;" src="{{ asset('storage/img/avatars/' . $opposite->avatar) }}" alt="{{ $opposite->name }}" title="{{ $opposite->name }}">
                     </div>
                     <div class="col">
                         <div class="d-flex w-100 justify-content-between">

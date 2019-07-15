@@ -42,14 +42,19 @@
                             <p>{{ $question->body }}</p>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col">
                             <p class="small">{{ count($question->comments()) }} resposta(s)</p>
                         </div>
                         <div class="col text-right">
                             <div class="small mb-3">
                                 <span>{{ $question->created_at->diffForHumans() }} por</span>
-                                <a href="{{ route('users.show', $question->user) }}">{{ $question->user->name }}</a>
+                                <a href="{{ route('users.show', $question->user) }}">
+                                    <div class="d-flex align-items-center justify-content-end py-2">
+                                        <span>{{ $question->user->name }}</span>
+                                        <img width="20" style="height: 20px;" class="img-fluid avatar ml-2" src="{{ asset('storage/img/avatars/' . $question->user->avatar) }}" alt="{{ $question->user->name }}" title="{{ $question->user->name }}">
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

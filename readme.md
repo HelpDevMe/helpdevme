@@ -1,7 +1,7 @@
 ## Steps to start app
 
-- `update composer`
-- `sudo npm install`
+- `composer update`
+- `npm install`
 - Create datatabase
 - Set .env file
     - DB_DATABASE

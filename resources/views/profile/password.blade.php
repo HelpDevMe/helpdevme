@@ -27,7 +27,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('profile.update', $user) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 

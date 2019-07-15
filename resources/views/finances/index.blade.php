@@ -15,7 +15,7 @@
         <h1 class="display-4">Finanças</h1>
         <div class="text-right">
             <h2 class="text-success">
-                @budget(['budget' => $balance])
+                @budget(['budget' => auth()->user()->amount])
                 @endbudget
             </h2>
             <span>Saldo Atual</span>
@@ -23,7 +23,7 @@
     </div>
     <div class="row mt-3 mb-5">
         <div class="col text-right">
-            <a href="#" class="btn btn-secondary">Opções de Saque</a>
+            {{-- <a href="#" class="btn btn-secondary">Opções de Saque</a> --}}
             <a href="{{ route('finances.fund') }}" class="btn btn-success">Adicionar Crédito</a>
         </div>
     </div>
@@ -41,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($finances as $finance)
+                        @foreach(auth()->user()->finances as $finance)
                             <tr>
                                 <th scope="row">{{ $finance->created_at->format('d M Y') }}</th>
                                 <td>@lang('finances.types.' . $finance->type)</td>

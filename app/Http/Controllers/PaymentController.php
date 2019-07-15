@@ -19,6 +19,7 @@ use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Api\PaymentExecution;
+use App\Http\Requests\MoneyValidationFormRequest;
 
 class PaymentController extends Controller
 {
@@ -41,37 +42,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -84,40 +54,6 @@ class PaymentController extends Controller
         $this->authorize('payment', $post);
 
         return view('payments.show', compact('post'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     protected function paypal($config)
@@ -186,16 +122,14 @@ class PaymentController extends Controller
         return $this->paypal($config);
     }
 
-    public function fund(Request $request)
+    public function fund(MoneyValidationFormRequest $request)
     {
-        $finance = new Finance;
-        $finance->user_id = auth()->id();
-        $finance->receiver_id = auth()->id();
-        $finance->type = Finance::types['fund'];
-        $finance->budget = $request->budget;
-        $finance->confirmed = 0;
-        $finance->save();
-
+        /**
+         * Atualiza o saldo final do usuário
+         * Salva e retorna o histórico de transações
+         */
+        $finance = auth()->user()->deposit($request->budget);
+        
         $config = [
             'item' => [
                 'title' => 'Créditos para minha conta',
@@ -211,16 +145,14 @@ class PaymentController extends Controller
             ]
         ];
 
-        return $this->paypal($config);
+        /**
+         * Vai até o PayPal e volta com o retorno de lá
+         */
+        $payment = $this->paypal($config);
+        
+        return $payment;
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id of finance row
-     * @return \Illuminate\Http\Response
-     */
+    
     public function statusFund(Request $request, $id)
     {
         if (empty($request->input('PayerID')) || empty($request->input('token')))

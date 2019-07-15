@@ -15,8 +15,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-2 col-lg-1">
-                        @avatar(['user' => $opposite])
-                        @endavatar
+                        <img class="img-fluid avatar" src="{{ asset('storage/img/avatars/' . $opposite->avatar) }}" alt="{{ $opposite->avatar }}" title="{{ $opposite->avatar }}">
                     </div>
                     <div class="col">
                         <div class="text-muted">{{ $post->body }}</div>

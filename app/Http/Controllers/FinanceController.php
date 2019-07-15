@@ -22,7 +22,7 @@ class FinanceController extends Controller
     protected function finances()
     {
         return Finance::where('confirmed', 1)
-            ->where(function($query) {
+            ->where(function ($query) {
                 return $query->where('user_id', auth()->id())
                     ->orWhere('receiver_id', auth()->id());
             })
@@ -32,8 +32,7 @@ class FinanceController extends Controller
     protected function balance()
     {
         return $this->finances()->reduce(function ($balance, $finance) {
-            if ($finance->type == Finance::types['fund'] || $finance->type == Finance::types['received'])
-            {
+            if ($finance->type == Finance::types['fund'] || $finance->type == Finance::types['received']) {
                 return $balance + $finance->budget;
             }
         });
@@ -46,11 +45,7 @@ class FinanceController extends Controller
      */
     public function index()
     {
-        $finances = $this->finances();
-
-        $balance = $this->balance();
-
-        return view('finances.index', compact('finances', 'balance'));
+        //
     }
 
     /**
@@ -132,12 +127,5 @@ class FinanceController extends Controller
         $finance->save();
 
         return redirect()->route('finances.index');
-    }
-
-    public function fund()
-    {
-        $balance = $this->balance();
-
-        return view('finances.fund', compact('balance'));
     }
 }
