@@ -59836,7 +59836,10 @@ var render = function() {
         [
           _c(
             "a",
-            { staticClass: "d-flex", attrs: { href: "/talks/" + talk.id } },
+            {
+              staticClass: "d-flex align-items-center",
+              attrs: { href: "/talks/" + talk.id }
+            },
             [
               _c("img", {
                 staticClass: "img-fluid avatar",
@@ -59850,7 +59853,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("div", { staticClass: "ml-2" }, [
-                _c("p", [
+                _c("div", [
                   _c("span", [_vm._v("Conversa com")]),
                   _vm._v(" "),
                   _c("span", [_vm._v(_vm._s(talk.opposite.name))])

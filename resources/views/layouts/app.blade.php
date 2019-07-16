@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- User ID -->
-    <meta name="user-id" content="{{ Auth::user()->id }}">
+    <meta name="user-id" content="{{ Auth::id() }}">
 
     <title>{{ config('app.name', 'HelpDev.me') }}</title>
 
@@ -106,7 +106,7 @@
                                 </svg>
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-right pt-0" aria-labelledby="navbarDropdownTalks">
+                            <div class="dropdown-menu dropdown-menu-right my-0 py-0" aria-labelledby="navbarDropdownTalks">
                                 <list-chat></list-chat>
                                 <a class="btn btn-link btn-block" href="{{ route('talks.index') }}">Ver Tudo</a>
                             </div>

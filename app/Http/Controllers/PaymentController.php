@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\Question;
 use App\Finance;
+use App\User;
 use Illuminate\Http\Request;
 use App\Events\PrivatePostSent;
 
@@ -50,7 +51,7 @@ class PaymentController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
-        
+
         $this->authorize('payment', $post);
 
         return view('payments.show', compact('post'));
@@ -104,90 +105,47 @@ class PaymentController extends Controller
 
     public function pay(Request $request)
     {
+        $post = Post::findOrFail($request->id);
+
+        /**
+         * Histórico de transação do pagador
+         */
+        $finance = new Finance;
+        $finance->user_id = auth()->id();
+        $finance->receiver_id = $post->talk->user_id;
+        $finance->type = Finance::types['payment'];
+        $finance->budget = number_format($request->budget, 2, '.', '');
+        $finance->post_id = $post->id;
+        $finance->confirmed = 0;
+        $finance->save();
+
         $config = [
             'item' => [
                 'title' => $request->title,
                 'budget' => $request->budget,
-                'description' => 'Esta é a descrição do item'
+                'description' => 'Pagamento para o desenvolvedor Fulano'
             ],
             'transaction' => [
-                'description' => 'Pagamento na plataforma'
+                'description' => 'Ele já pode começar a lhe dar suporte em seu bug!'
             ],
             'redirects' => [
-                'return' => route('payments.paypal.status', ['id' => $request->id]),
-                'cancel' => route('payments.paypal.canceled', ['id' => $request->id])
+                'return' => route('payments.paypal.status', ['id' => $finance->id]),
+                'cancel' => route('payments.paypal.canceled', ['id' => $finance->id])
             ]
         ];
 
         return $this->paypal($config);
     }
 
-    public function fund(MoneyValidationFormRequest $request)
-    {
-        /**
-         * Atualiza o saldo final do usuário
-         * Salva e retorna o histórico de transações
-         */
-        $finance = auth()->user()->deposit($request->budget);
-        
-        $config = [
-            'item' => [
-                'title' => 'Créditos para minha conta',
-                'budget' => $request->budget,
-                'description' => 'Esta é a descrição do item'
-            ],
-            'transaction' => [
-                'description' => 'Pagamento na plataforma'
-            ],
-            'redirects' => [
-                'return' => route('payments.paypal.fund.status', ['id' => $finance->id]),
-                'cancel' => route('payments.paypal.fund.canceled', ['id' => $finance->id])
-            ]
-        ];
-
-        /**
-         * Vai até o PayPal e volta com o retorno de lá
-         */
-        $payment = $this->paypal($config);
-        
-        return $payment;
-    }
-    
-    public function statusFund(Request $request, $id)
-    {
-        if (empty($request->input('PayerID')) || empty($request->input('token')))
-        {
-            Finance::destroy($id);
-            return redirect()->route('finances.index')->with('error', 'Pagamento falhou :(');
-        }
-
-        $paymentId = $request->get('paymentId');
-        $payment = Payment::get($paymentId, $this->apiContext);
-        $execution = new PaymentExecution();
-        $execution->setPayerId($request->input('PayerID'));
-        $result = $payment->execute($execution, $this->apiContext);
-
-        if ($result->getState() == 'approved')
-        {
-            $finance = Finance::find($id);
-            $finance->confirmed = 1;
-            $finance->save();
-
-            return redirect()->route('finances.index')->with('success', 'Créditos adicionados com sucesso!');
-        }
-
-        Finance::destroy($id);
-        return redirect()->route('finances.index')->with('error', 'Pagamento falhou :(');
-    }
-
     public function statusPay(Request $request, $id)
     {
-        $post = Post::findOrFail($id);
+        $finance = Finance::find($id);
+        $post = Post::findOrFail($finance->post->id);
 
         $this->authorize('status', $post);
 
-        if (empty($request->input('PayerID')) || empty($request->input('token')))
-        {
+        if (empty($request->input('PayerID')) || empty($request->input('token'))) {
+            Finance::destroy($id);
             return redirect()->route('home')->with('error', 'Pagamento falhou :(');
         }
 
@@ -197,14 +155,22 @@ class PaymentController extends Controller
         $execution->setPayerId($request->input('PayerID'));
         $result = $payment->execute($execution, $this->apiContext);
 
-        if ($result->getState() == 'approved')
-        {
-            $finance = new Finance;
-            $finance->user_id = auth()->id();
-            $finance->receiver_id = $post->user->id;
-            $finance->budget = $post->budget;
-            $finance->post_id = $post->id;
-            $finance->save();
+        if ($result->getState() == 'approved') {
+
+            $finance->confirmed = 1;
+            $finance->update();
+
+            /**
+             * Histórico de transação do recebedor
+             */
+            $financeReceiver = new Finance;
+            $financeReceiver->user_id = $post->talk->user_id;
+            $financeReceiver->receiver_id = auth()->id();
+            $financeReceiver->type = Finance::types['received'];
+            $financeReceiver->budget = number_format($finance->budget, 2, '.', '');
+            $financeReceiver->post_id = $post->id;
+            $financeReceiver->confirmed = 1;
+            $financeReceiver->save();
 
             $question = $post->talk->question;
             $question->status = Question::status['payment'];
@@ -226,14 +192,83 @@ class PaymentController extends Controller
             return redirect()->route('talks.show', $post->talk)->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
         }
 
+        Finance::destroy($id);
         return redirect()->route('home')->with('error', 'Pagamento falhou :(');
     }
-    
+
     public function canceledPay(Request $request, $id)
     {
         return redirect()->route('home')->with('error', 'Pagamento Cancelado');
     }
-    
+
+    /**
+     * Método para adicionar saldo a conta
+     */
+    public function fund(MoneyValidationFormRequest $request)
+    {
+        $finance = auth()->user()->finances()->create([
+            'user_id' => auth()->id(),
+            'receiver_id' => auth()->id(),
+            'type' => Finance::types['fund'],
+            'budget' => number_format($request->budget, 2, '.', ''),
+            'confirmed' => 0
+        ]);
+
+        $config = [
+            'item' => [
+                'title' => 'Recarga de saldo Help Dev',
+                'budget' => $request->budget,
+                'description' => 'Tendo saldo positivo na sua conta, você poderá solucionar seus bugs rapidinhos!'
+            ],
+            'transaction' => [
+                'description' => 'Recarga de saldo Help Dev'
+            ],
+            'redirects' => [
+                'return' => route('payments.paypal.fund.status', ['id' => $finance->id]),
+                'cancel' => route('payments.paypal.fund.canceled', ['id' => $finance->id])
+            ]
+        ];
+
+        /**
+         * Vai até o PayPal e volta com o retorno de lá
+         */
+        $payment = $this->paypal($config);
+
+        return $payment;
+    }
+
+    public function statusFund(Request $request, $id)
+    {
+        if (empty($request->input('PayerID')) || empty($request->input('token'))) {
+            Finance::destroy($id);
+            return redirect()->route('finances.index')->with('error', 'Pagamento falhou :(');
+        }
+
+        $paymentId = $request->get('paymentId');
+        $payment = Payment::get($paymentId, $this->apiContext);
+        $execution = new PaymentExecution();
+        $execution->setPayerId($request->input('PayerID'));
+        $result = $payment->execute($execution, $this->apiContext);
+
+        if ($result->getState() == 'approved') {
+            $finance = Finance::find($id);
+            $finance->confirmed = 1;
+            $finance->update();
+
+            /**
+             * Update amount column user with balance
+             */
+            $user = auth()->user();
+            $user->amount += $finance->budget;
+            $user->update();
+
+            return redirect()->route('finances.index')->with('success', 'Créditos adicionados com sucesso!');
+        }
+
+        Finance::destroy($id);
+        return redirect()->route('finances.index')->with('error', 'Pagamento falhou :(');
+    }
+
     public function canceledFund(Request $request, $id)
     {
         Finance::destroy($id);

@@ -26,6 +26,11 @@ class Finance extends Model
     {
         return $this->belongsTo('App\User');
     }
+    
+    public function receiver()
+    {
+        return $this->belongsTo('App\User', 'receiver_id');
+    }
 
     public function post()
     {

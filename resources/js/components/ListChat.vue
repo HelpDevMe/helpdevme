@@ -5,7 +5,7 @@
       v-for="talk in talks"
       :key="talk.id"
     >
-      <a :href="'/talks/' + talk.id" class="d-flex">
+      <a :href="'/talks/' + talk.id" class="d-flex align-items-center">
         <img
           class="img-fluid avatar"
           width="25"
@@ -15,10 +15,10 @@
           :title="talk.opposite.name"
         />
         <div class="ml-2">
-          <p>
+          <div>
             <span>Conversa com</span>
             <span>{{ talk.opposite.name }}</span>
-          </p>
+          </div>
           <small class="text-muted">{{ talk.created_at }}</small>
         </div>
       </a>

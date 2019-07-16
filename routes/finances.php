@@ -6,6 +6,4 @@ Route::get('finances/fund', function () {
 
 Route::get('finances/{question}', 'FinanceController@transfer');
 
-Route::get('finances', function () {
-    return view('finances.index');
-})->name('finances.index');
+Route::get('finances', 'FinanceController@index')->name('finances.index');
