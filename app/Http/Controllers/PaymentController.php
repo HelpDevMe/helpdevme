@@ -160,18 +160,6 @@ class PaymentController extends Controller
             $finance->confirmed = 1;
             $finance->update();
 
-            /**
-             * Histórico de transação do recebedor
-             */
-            $financeReceiver = new Finance;
-            $financeReceiver->user_id = $post->talk->user_id;
-            $financeReceiver->receiver_id = auth()->id();
-            $financeReceiver->type = Finance::types['received'];
-            $financeReceiver->budget = number_format($finance->budget, 2, '.', '');
-            $financeReceiver->post_id = $post->id;
-            $financeReceiver->confirmed = 1;
-            $financeReceiver->save();
-
             $question = $post->talk->question;
             $question->status = Question::status['payment'];
             $question->update();

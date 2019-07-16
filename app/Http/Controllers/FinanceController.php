@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Finance;
 use App\Question;
 use App\Post;
+use App\User;
 
 class FinanceController extends Controller
 {
@@ -29,14 +30,33 @@ class FinanceController extends Controller
 
     public function transfer(Question $question)
     {
-        $post = $question->posts->where('status', Post::status['payment'])->first();
+        // Atualizar status da pergunta
+        $question->status = Question::status['finalized'];
+        $question->update();
 
-        $finance = new Finance;
-        $finance->user_id = auth()->id();
-        $finance->budget = $post->budget;
-        $finance->post_id = $post->id;
-        $finance->type = Finance::types['received'];
-        $finance->save();
+        $post = $question->posts
+            ->where('type', Post::types['comment'])
+            ->where('status', Post::status['payment'])
+            ->first();
+
+        /**
+         * Histórico de transação do recebedor
+         */
+        $financeReceiver = new Finance;
+        $financeReceiver->user_id = $post->talk->user_id;
+        $financeReceiver->receiver_id = auth()->id();
+        $financeReceiver->type = Finance::types['received'];
+        $financeReceiver->budget = number_format($post->budget, 2, '.', '');
+        $financeReceiver->post_id = $post->id;
+        $financeReceiver->confirmed = 1;
+        $financeReceiver->save();
+
+        $receiver = User::find($post->talk->user_id);
+
+        $receiver->amount += $post->budget;
+        $receiver->update();
+
+        // Notificar em tempo real
 
         return redirect()->route('finances.index');
     }

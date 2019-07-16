@@ -19,7 +19,8 @@ class Question extends Model
     const status = [
         'analyzing' => 0,
         'warranty' => 1,
-        'payment' => 2
+        'payment' => 2,
+        'finalized' => 3
     ];
 
     public function getRouteKeyName()
