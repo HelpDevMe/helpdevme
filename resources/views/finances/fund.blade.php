@@ -5,21 +5,14 @@
         <h1>Adicionar crédito a minha conta</h1>
         <div class="card">
             <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-lg">
-                        <label>Crédito atual em sua conta</label>
-                        <h3 class="text-success m-0">
-                            @budget(['budget' => $balance])
-                            @endbudget
-                        </h3>
-                    </div>
-                    <div class="col-lg-4">
+                <div class="row">
+                    <div class="col">
                         <label for="budget">Valor a adicionar</label>
                         <div class="input-group input-group-lg">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">R$</span>
                             </div>
-                            <input type="number" class="form-control" id="budget" name="budget" autofocus required/>
+                            <input type="text" class="form-control" id="budget" name="budget" autofocus required/>
                         </div>
                     </div>
                 </div>

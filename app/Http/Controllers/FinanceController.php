@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Finance;
 use App\Question;
 use App\Post;
-use Illuminate\Http\Request;
+use App\User;
 
 class FinanceController extends Controller
 {
@@ -19,125 +19,45 @@ class FinanceController extends Controller
         $this->middleware('auth');
     }
 
-    protected function finances()
-    {
-        return Finance::where('confirmed', 1)
-            ->where(function($query) {
-                return $query->where('user_id', auth()->id())
-                    ->orWhere('receiver_id', auth()->id());
-            })
-            ->get();
-    }
-
-    protected function balance()
-    {
-        return $this->finances()->reduce(function ($balance, $finance) {
-            if ($finance->type == Finance::types['fund'] || $finance->type == Finance::types['received'])
-            {
-                return $balance + $finance->budget;
-            }
-        });
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $finances = $this->finances();
+        $finances = Finance::where('confirmed', 1)
+            ->where('user_id', auth()->id())
+            ->get();
 
-        $balance = $this->balance();
-
-        return view('finances.index', compact('finances', 'balance'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Finance  $finance
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Finance $finance)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Finance  $finance
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Finance $finance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Finance  $finance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Finance $finance)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Finance  $finance
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Finance $finance)
-    {
-        //
+        return view('finances.index', compact('finances'));
     }
 
     public function transfer(Question $question)
     {
-        $post = $question->posts->where('status', Post::status['payment'])->first();
+        // Atualizar status da pergunta
+        $question->status = Question::status['finalized'];
+        $question->update();
 
-        $finance = new Finance;
-        $finance->user_id = auth()->id();
-        $finance->receiver_id = $post->user->id;
-        $finance->budget = $post->budget;
-        $finance->post_id = $post->id;
-        $finance->type = Finance::types['received'];
-        $finance->save();
+        $post = $question->posts
+            ->where('type', Post::types['comment'])
+            ->where('status', Post::status['payment'])
+            ->first();
+
+        /**
+         * Histórico de transação do recebedor
+         */
+        $financeReceiver = new Finance;
+        $financeReceiver->user_id = $post->talk->user_id;
+        $financeReceiver->receiver_id = auth()->id();
+        $financeReceiver->type = Finance::types['received'];
+        $financeReceiver->budget = number_format($post->budget, 2, '.', '');
+        $financeReceiver->post_id = $post->id;
+        $financeReceiver->confirmed = 1;
+        $financeReceiver->save();
+
+        $receiver = User::find($post->talk->user_id);
+
+        $receiver->amount += $post->budget;
+        $receiver->update();
+
+        // Notificar em tempo real
 
         return redirect()->route('finances.index');
-    }
-
-    public function fund()
-    {
-        $balance = $this->balance();
-
-        return view('finances.fund', compact('balance'));
     }
 }

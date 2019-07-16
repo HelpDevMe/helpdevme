@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
 
-class ProfileController extends Controller
+use App\Talk;
+
+class TalkController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -15,9 +16,9 @@ class ProfileController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:api');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +26,12 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        $talks = Talk::where('user_id', auth()->id())
+            ->orWhere('receiver_id', auth()->id())
+            ->with(['user', 'receiver', 'question'])
+            ->get();
+
+        return response(['talks' => $talks]);
     }
 
     /**
@@ -80,38 +86,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
-
-        if($request->has('avatar'))
-        {
-            $avatarName = $user->id . '_avatar' . time() . '.' . $request->avatar->getClientOriginalExtension();
-            
-            $request->avatar->storeAs('img/avatars', $avatarName);
-
-            $user->avatar = $avatarName;
-        }
-
-        if($request->has('password'))
-        {
-            if(!Hash::check($request->current_password, $user->password)) {
-            
-                return back()->withErrors('Senha errada!');
-
-            } else {
-
-                Validator::make($request->all(), [
-                    'password' => 'required|confirmed',
-                ])->validate();
-
-                $request->merge([
-                    'password' => Hash::make($request->password)
-                ]);
-            }
-        }
-
-        $user->update($request->all());
-
-        return back()->with('success', 'Perfil Editado!');
+        //
     }
 
     /**
@@ -123,15 +98,5 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function profile()
-    {
-        return view('profile.infos');
-    }
-    
-    public function password()
-    {
-        return view('profile.password');
     }
 }

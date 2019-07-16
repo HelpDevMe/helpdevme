@@ -6,6 +6,7 @@ return [
     'status' => [
         Question::status['analyzing'] => 'Analizando propostas',
         Question::status['warranty'] => 'Aguardando pagamento de garantia',
-        Question::status['payment'] => 'Pagamento Realizado'
+        Question::status['payment'] => 'Pagamento Realizado',
+        Question::status['finalized'] => 'Finalizado'
     ]
 ];

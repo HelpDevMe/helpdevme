@@ -30,7 +30,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('profile.update', $user) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         <div class="form-group row">
@@ -38,8 +38,7 @@
                             <div class="col-md-6">
                                 <div class="row align-items-center">
                                     <div class="col-lg-2">
-                                        @avatar(['user' => $user])
-                                        @endavatar
+                                        <img class="img-fluid avatar" src="{{ asset('storage/img/avatars/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->avatar }}" title="{{ auth()->user()->avatar }}">
                                     </div>
                                     <div class="col">
                                         <input type="file" class="form-control-file" name="avatar" id="avatarFile">
