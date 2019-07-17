@@ -1,2 +1,2 @@
-heroku buildpacks:add heroku/nodejs
-heroku buildpacks:add heroku/php
+https://github.com/heroku/heroku-buildpack-nodejs.git
+https://github.com/heroku/heroku-buildpack-php.git

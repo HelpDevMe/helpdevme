@@ -164,20 +164,26 @@ class PaymentController extends Controller
             $question->status = Question::status['payment'];
             $question->update();
 
+            /**
+             * Passa a mensagem para status 
+             */
             $post->status = Post::status['payment'];
             $post->update();
 
             $alert = new Post;
             $alert->talk_id = $post->talk->id;
             $alert->user_id = auth()->id();
+            $alert->question_id = $question->id;
             $alert->body = 'Pagamento Efetuado';
             $alert->type = Post::types['alert'];
             $alert->status = Post::status['payment'];
+            $alert->question = $post->question;
             $alert->save();
 
             broadcast(new PrivatePostSent($alert));
 
-            return redirect()->route('talks.show', $post->talk)->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
+            return redirect()->route('talks.show', $post->talk)
+                ->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
         }
 
         Finance::destroy($id);

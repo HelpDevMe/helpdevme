@@ -71,7 +71,8 @@ class PostController extends Controller
             ],
             [
                 'body'=> $request->body,
-                'budget'=> $request->budget
+                'budget'=> $request->budget,
+                'question_id' => $request->question_id
             ]
         );
 
@@ -152,6 +153,7 @@ class PostController extends Controller
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
+        $alert->question_id = $question->id;
         $alert->body = 'Proposta Aceita';
         $alert->type = Post::types['alert'];
         $alert->status = Post::status['accept'];
@@ -182,6 +184,7 @@ class PostController extends Controller
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
+        $alert->question_id = $question->id;
         $alert->body = 'Proposta Recusada';
         $alert->type = Post::types['alert'];
         $alert->status = Post::status['refused'];

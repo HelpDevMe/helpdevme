@@ -1,0 +1,11 @@
+.avatar {
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.nav-link {
+    .avatar {
+        width: 25px;
+        height: 25px;
+    }
+}

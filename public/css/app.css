@@ -11668,6 +11668,10 @@ a.text-dark:focus {
   height: 25px;
 }
 
+#navbarDropdownTalks .list-group .list-group-item a:hover small {
+  text-decoration: none;
+}
+
 textarea {
   resize: none;
 }

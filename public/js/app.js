@@ -14301,7 +14301,7 @@ window.Vue = __webpack_require__(38);
 
 Vue.prototype.$userId = document.querySelector("meta[name='user-id']").getAttribute("content");
 
-Vue.component("PrivateChat", __webpack_require__(42));
+Vue.component("PrivateChat", __webpack_require__(64));
 Vue.component("ListChat", __webpack_require__(45));
 
 Vue.component("CreateQuestion", __webpack_require__(48));
@@ -59158,563 +59158,9 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(2)
-/* script */
-var __vue_script__ = __webpack_require__(43)
-/* template */
-var __vue_template__ = __webpack_require__(44)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/PrivateChat.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-237378e0", Component.options)
-  } else {
-    hotAPI.reload("data-v-237378e0", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["user", "talk", "opposite", "posts"],
-
-  data: function data() {
-    return {
-      channel: "privatechat." + this.talk.user_id + "." + this.talk.receiver_id,
-      body: null,
-      formActive: true,
-      typing: false,
-      iFinished: this.talk.question.user_id == this.user.id && this.talk.question.user_ended == 1 || this.talk.question.user_id != this.user.id && this.talk.question.freelancer_ended == 1,
-      onlineFriends: [],
-      allPosts: []
-    };
-  },
-
-
-  methods: {
-    formatPrice: function formatPrice(value) {
-      var val = (value / 1).toFixed(2).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    },
-    onTyping: function onTyping() {
-      Echo.private(this.channel + ".private").whisper("typing");
-    },
-    sendMessage: function sendMessage() {
-      var _this = this;
-
-      axios.post("/api/posts", {
-        body: this.body,
-        talk_id: this.talk.id
-      }).then(function (response) {
-        _this.body = null;
-        _this.allPosts.push(response.data.post);
-      });
-    },
-    fetchMessages: function fetchMessages() {
-      this.allPosts = this.posts;
-      this.talkStatus(this.talk);
-    },
-    talkStatus: function talkStatus(talk) {
-      this.formActive = talk.status == 1 ? false : true;
-    }
-  },
-
-  created: function created() {
-    var _this2 = this;
-
-    this.fetchMessages();
-
-    Echo.join(this.channel + ".join").here(function (users) {
-      _this2.onlineFriends = users;
-    }).joining(function (user) {
-      _this2.onlineFriends.push(user);
-    }).leaving(function (user) {
-      _this2.onlineFriends.splice(_this2.onlineFriends.indexOf(user), 1);
-    });
-
-    Echo.private(this.channel + ".private").listen("PrivatePostSent", function (response) {
-      _this2.talkStatus(response.post.talk);
-      _this2.allPosts.push(response.post);
-    }).listenForWhisper("typing", function (e) {
-      _this2.typing = true;
-
-      setTimeout(function () {
-        _this2.typing = false;
-      }, 1000);
-    });
-  }
-});
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("section", [
-    _c("p", { staticClass: "lead" }, [
-      _c("span", [_vm._v("Conversa com")]),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "badge badge-secondary",
-          attrs: { href: "/users/" + _vm.opposite.id }
-        },
-        [
-          _c(
-            "span",
-            {
-              class: _vm.onlineFriends.find(function(user) {
-                return user.id === _vm.opposite.id
-              })
-                ? "text-success"
-                : ""
-            },
-            [_vm._v("•")]
-          ),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.opposite.name))])
-        ]
-      )
-    ]),
-    _vm._v(" "),
-    !_vm.iFinished && _vm.talk.question.status == 2
-      ? _c("div", { staticClass: "form-group" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-warning",
-              attrs: { href: "/" + _vm.talk.question.slug + "/finalize" }
-            },
-            [_vm._v("Finalizar Questão")]
-          )
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.iFinished
-      ? _c("div", [
-          _c("div", { staticClass: "card text-white bg-warning mb-3" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("h5", { staticClass: "card-title" }, [
-                _vm._v("Você finalizou essa questão!")
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _vm._v(
-                  "Esperamos que tudo esteja bem e " +
-                    _vm._s(_vm.opposite.name) +
-                    " também finalize. Caso contrário ambos poderão solicitiar o processo de arbitragem."
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _vm._m(0)
-          ])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col" }, [
-            _c("div", { attrs: { id: "privateMessageBox" } }, [
-              _c(
-                "div",
-                { staticClass: "d-flex flex-column p-3" },
-                _vm._l(_vm.allPosts, function(post, index) {
-                  return _c("div", { key: index, staticClass: "h5" }, [
-                    post.type == 2 && post.status == 1
-                      ? _c("div", { staticClass: "text-center" }, [
-                          _c(
-                            "span",
-                            {
-                              staticClass:
-                                "badge badge-pill py-2 px-5 badge-danger"
-                            },
-                            [_vm._v(_vm._s(post.body))]
-                          )
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    post.type == 2 && post.status == 2
-                      ? _c("div", { staticClass: "text-center" }, [
-                          _c(
-                            "span",
-                            {
-                              staticClass:
-                                "badge badge-pill py-2 px-5 badge-info"
-                            },
-                            [_vm._v(_vm._s(post.body))]
-                          )
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    post.type == 2 && post.status == 3
-                      ? _c("div", { staticClass: "text-center" }, [
-                          _c(
-                            "span",
-                            {
-                              staticClass:
-                                "badge badge-pill py-2 px-5 badge-success"
-                            },
-                            [_vm._v(_vm._s(post.body))]
-                          )
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    post.type != 2 && post.budget
-                      ? _c("div", { staticClass: "card bg-light mb-5" }, [
-                          _c("div", { staticClass: "card-body" }, [
-                            _c("p", { staticClass: "card-text" }, [
-                              _vm._v(
-                                "\n                               " +
-                                  _vm._s(post.body) +
-                                  "\n                               "
-                              ),
-                              _c("span", { staticClass: "text-success" }, [
-                                _vm._v(
-                                  "R$ " + _vm._s(_vm.formatPrice(post.budget))
-                                )
-                              ])
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _vm.user.id == _vm.talk.receiver_id &&
-                          post.status != 3
-                            ? _c("div", { staticClass: "card-footer" }, [
-                                post.status == 0 || post.status == 1
-                                  ? _c(
-                                      "a",
-                                      {
-                                        staticClass: "btn btn-success",
-                                        attrs: {
-                                          href: "/posts/accept/" + post.id
-                                        }
-                                      },
-                                      [_vm._v("Aceitar")]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                post.status == 2
-                                  ? _c(
-                                      "a",
-                                      {
-                                        staticClass: "btn btn-success",
-                                        attrs: { href: "/payments/" + post.id }
-                                      },
-                                      [_vm._v("Pagar")]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                post.status != 1
-                                  ? _c(
-                                      "a",
-                                      {
-                                        staticClass:
-                                          "btn btn-link btn-sm text-secondary",
-                                        attrs: {
-                                          href: "/posts/refused/" + post.id
-                                        }
-                                      },
-                                      [_vm._v("Recusar")]
-                                    )
-                                  : _vm._e()
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    post.type != 2 && !post.budget
-                      ? _c(
-                          "div",
-                          {
-                            class:
-                              _vm.user.id == post.user_id ? "text-right" : ""
-                          },
-                          [
-                            _vm.user.id != post.user_id
-                              ? _c("img", {
-                                  staticClass: "img-fluid",
-                                  attrs: {
-                                    width: "25",
-                                    src:
-                                      "/storage/img/avatars/" +
-                                      _vm.opposite.avatar,
-                                    alt: _vm.opposite.name,
-                                    title: _vm.opposite.name
-                                  }
-                                })
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _c(
-                              "span",
-                              {
-                                staticClass: "badge badge-pill py-2 px-3",
-                                class:
-                                  _vm.user.id !== post.user_id
-                                    ? "badge-secondary"
-                                    : "badge-primary"
-                              },
-                              [_vm._v(_vm._s(post.body))]
-                            )
-                          ]
-                        )
-                      : _vm._e()
-                  ])
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _vm.typing
-                ? _c("p", [
-                    _vm._v(_vm._s(_vm.opposite.name) + " está digitando")
-                  ])
-                : _vm._e()
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _vm.formActive
-        ? _c("div", { staticClass: "card-footer" }, [
-            _c(
-              "form",
-              {
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.sendMessage($event)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.body,
-                        expression: "body"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      placeholder: "Digite uma mensagem...",
-                      required: ""
-                    },
-                    domProps: { value: _vm.body },
-                    on: {
-                      keydown: [
-                        _vm.onTyping,
-                        function($event) {
-                          if (
-                            !$event.type.indexOf("key") &&
-                            _vm._k(
-                              $event.keyCode,
-                              "enter",
-                              13,
-                              $event.key,
-                              "Enter"
-                            )
-                          ) {
-                            return null
-                          }
-                          return _vm.sendMessage($event)
-                        }
-                      ],
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.body = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(1)
-                ])
-              ]
-            )
-          ])
-        : _vm._e()
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-sm btn-outline-light",
-          attrs: { type: "button" }
-        },
-        [_vm._v("Solicitar Arbitragem")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-sm btn-success", attrs: { type: "button" } },
-        [_vm._v("Continuar Trabalhando")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Enviar")]
-      )
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-237378e0", module.exports)
-  }
-}
-
-/***/ }),
+/* 42 */,
+/* 43 */,
+/* 44 */,
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -59740,7 +59186,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/js/components/ListChat.vue"
+Component.options.__file = "resources/js/components/chat/list.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -59749,9 +59195,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9f1458fe", Component.options)
+    hotAPI.createRecord("data-v-00b2868c", Component.options)
   } else {
-    hotAPI.reload("data-v-9f1458fe", Component.options)
+    hotAPI.reload("data-v-00b2868c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -59877,7 +59323,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-9f1458fe", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-00b2868c", module.exports)
   }
 }
 
@@ -60696,6 +60142,1259 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(100)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(65)
+/* template */
+var __vue_template__ = __webpack_require__(102)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-ef947e4c"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/index.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ef947e4c", Component.options)
+  } else {
+    hotAPI.reload("data-v-ef947e4c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+Vue.component("alert-finalize", __webpack_require__(82));
+Vue.component("form-chat", __webpack_require__(76));
+Vue.component("alerts", __webpack_require__(79));
+Vue.component("header-chat", __webpack_require__(85));
+Vue.component("message", __webpack_require__(88));
+Vue.component("btn-finalize", __webpack_require__(91));
+Vue.component("proposal", __webpack_require__(94));
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["user", "talk", "opposite", "posts"],
+
+  data: function data() {
+    return {
+      timeOut: undefined,
+      formActive: true,
+      typing: false,
+      allPosts: [],
+      channel: "privatechat." + this.talk.user_id + "." + this.talk.receiver_id,
+      iFinished: this.talk.question.user_id == this.user.id && this.talk.question.user_ended == 1 || this.talk.question.user_id != this.user.id && this.talk.question.freelancer_ended == 1
+    };
+  },
+
+
+  methods: {
+    onTyping: function onTyping() {
+      var privateChannel = Echo.private(this.channel + ".private");
+
+      setTimeout(function () {
+        privateChannel.whisper("typing", {
+          typing: true
+        });
+      }, 300);
+    },
+    talkStatus: function talkStatus(talk) {
+      this.formActive = talk.status == 1 ? false : true;
+    },
+    onSubmitForm: function onSubmitForm(post) {
+      this.allPosts.push(post);
+    }
+  },
+
+  created: function created() {
+    var _this = this;
+
+    this.allPosts = this.posts;
+    this.talkStatus(this.talk);
+
+    Echo.private(this.channel + ".private").listen("PrivatePostSent", function (response) {
+      var post = response.post;
+
+      console.log("PrivatePostSent", post.talk.question);
+      _this.talkStatus(post.talk);
+      _this.allPosts.push(post);
+      // this.talk.question.status
+    }).listenForWhisper("typing", function (e) {
+      _this.typing = e.typing;
+
+      clearTimeout(_this.timeOut);
+
+      _this.timeOut = setTimeout(function () {
+        _this.typing = false;
+      }, 900);
+    });
+  }
+});
+
+/***/ }),
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(77)
+/* template */
+var __vue_template__ = __webpack_require__(78)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_form.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4c0ee5aa", Component.options)
+  } else {
+    hotAPI.reload("data-v-4c0ee5aa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["formActive", "channel", "talk"],
+  data: function data() {
+    return {
+      body: null
+    };
+  },
+
+  methods: {
+    onTyping: function onTyping() {
+      if (!this.body) return;
+
+      this.$emit("onTyping");
+    },
+    sendMessage: function sendMessage() {
+      var _this = this;
+
+      if (!this.body) return;
+
+      axios.post("/api/posts", {
+        body: this.body,
+        talk_id: this.talk.id,
+        question_id: this.talk.question.id
+      }).then(function (response) {
+        _this.body = null;
+        _this.$emit("submit", response.data.post);
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.formActive
+    ? _c("div", { staticClass: "card-footer" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.sendMessage($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "input-group" }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.body,
+                    expression: "body"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { placeholder: "Digite uma mensagem...", required: "" },
+                domProps: { value: _vm.body },
+                on: {
+                  keydown: [
+                    _vm.onTyping,
+                    function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.sendMessage($event)
+                    }
+                  ],
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.body = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          ]
+        )
+      ])
+    : _vm._e()
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Enviar")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4c0ee5aa", module.exports)
+  }
+}
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(80)
+/* template */
+var __vue_template__ = __webpack_require__(81)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_alerts.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-15f36c84", Component.options)
+  } else {
+    hotAPI.reload("data-v-15f36c84", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ["post"]
+});
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.post.type == 2 && _vm.post.status == 1
+      ? _c("div", { staticClass: "text-center" }, [
+          _c(
+            "span",
+            { staticClass: "badge badge-pill py-2 px-5 badge-danger" },
+            [_vm._v(_vm._s(_vm.post.body))]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.post.type == 2 && _vm.post.status == 2
+      ? _c("div", { staticClass: "text-center" }, [
+          _c("span", { staticClass: "badge badge-pill py-2 px-5 badge-info" }, [
+            _vm._v(_vm._s(_vm.post.body))
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.post.type == 2 && _vm.post.status == 3
+      ? _c("div", { staticClass: "text-center" }, [
+          _c(
+            "span",
+            { staticClass: "badge badge-pill py-2 px-5 badge-success" },
+            [_vm._v(_vm._s(_vm.post.body))]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.post.type == 3 && _vm.post.status == 3
+      ? _c("div", { staticClass: "text-center" }, [
+          _c(
+            "span",
+            { staticClass: "badge badge-pill py-2 px-5 badge-danger" },
+            [_vm._v(_vm._s(_vm.post.body))]
+          )
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-15f36c84", module.exports)
+  }
+}
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(83)
+/* template */
+var __vue_template__ = __webpack_require__(84)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_finalize.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2307a005", Component.options)
+  } else {
+    hotAPI.reload("data-v-2307a005", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["iFinished"]
+});
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.iFinished
+    ? _c("div", [
+        _c("div", { staticClass: "card text-white bg-warning mb-3" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("h5", { staticClass: "card-title" }, [
+              _vm._v("Você finalizou essa questão!")
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "card-text" }, [
+              _vm._v(
+                "Esperamos que tudo esteja bem e " +
+                  _vm._s(_vm.opposite.name) +
+                  " também finalize. Caso contrário ambos poderão solicitiar o processo de arbitragem."
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ])
+    : _vm._e()
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-sm btn-outline-light",
+          attrs: { type: "button" }
+        },
+        [_vm._v("Solicitar Arbitragem")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-sm btn-success", attrs: { type: "button" } },
+        [_vm._v("Continuar Trabalhando")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2307a005", module.exports)
+  }
+}
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(86)
+/* template */
+var __vue_template__ = __webpack_require__(87)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_header.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1132c298", Component.options)
+  } else {
+    hotAPI.reload("data-v-1132c298", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["opposite", "user", "channel"],
+  data: function data() {
+    return {
+      onlineFriends: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    Echo.join(this.channel + ".join").here(function (users) {
+      _this.onlineFriends = users;
+    }).joining(function (user) {
+      _this.onlineFriends.push(user);
+    }).leaving(function (user) {
+      _this.onlineFriends.splice(_this.onlineFriends.indexOf(user), 1);
+    });
+  }
+});
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("p", { staticClass: "lead" }, [
+    _c("span", [_vm._v("Conversa com")]),
+    _vm._v(" "),
+    _c(
+      "a",
+      {
+        staticClass: "badge badge-secondary",
+        attrs: { href: "/users/" + _vm.opposite.id }
+      },
+      [
+        _c(
+          "span",
+          {
+            class: _vm.onlineFriends.find(function(user) {
+              return user.id === _vm.opposite.id
+            })
+              ? "text-success"
+              : ""
+          },
+          [_vm._v("•")]
+        ),
+        _vm._v(" "),
+        _c("span", [_vm._v(_vm._s(_vm.opposite.name))])
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1132c298", module.exports)
+  }
+}
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(89)
+/* template */
+var __vue_template__ = __webpack_require__(90)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_post.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2a4869f2", Component.options)
+  } else {
+    hotAPI.reload("data-v-2a4869f2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["user", "post", "opposite"]
+});
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.post.type != 2 && !_vm.post.budget
+    ? _c(
+        "div",
+        { class: _vm.user.id == _vm.post.user_id ? "text-right" : "" },
+        [
+          _vm.user.id != _vm.post.user_id
+            ? _c("img", {
+                staticClass: "img-fluid",
+                attrs: {
+                  width: "25",
+                  src: "/storage/img/avatars/" + _vm.opposite.avatar,
+                  alt: _vm.opposite.name,
+                  title: _vm.opposite.name
+                }
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass: "badge badge-pill py-2 px-3",
+              class:
+                _vm.user.id !== _vm.post.user_id
+                  ? "badge-secondary"
+                  : "badge-primary"
+            },
+            [_vm._v(_vm._s(_vm.post.body))]
+          )
+        ]
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2a4869f2", module.exports)
+  }
+}
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(92)
+/* template */
+var __vue_template__ = __webpack_require__(93)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_btnFinalize.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e84ddcfa", Component.options)
+  } else {
+    hotAPI.reload("data-v-e84ddcfa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["iFinished", "talk"]
+});
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return !_vm.iFinished && _vm.talk.question.status == 2
+    ? _c("div", { staticClass: "form-group" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-warning",
+            attrs: { href: "/" + _vm.talk.question.slug + "/finalize" }
+          },
+          [_vm._v("Finalizar Questão")]
+        )
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e84ddcfa", module.exports)
+  }
+}
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(95)
+/* template */
+var __vue_template__ = __webpack_require__(96)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/chat/private/_proposal.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6ea9a4d9", Component.options)
+  } else {
+    hotAPI.reload("data-v-6ea9a4d9", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["post", "user", "talk"]
+});
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.post.type != 2 && _vm.post.budget
+    ? _c("div", { staticClass: "card bg-light mb-5" }, [
+        _c("div", { staticClass: "card-body" }, [
+          _c("p", { staticClass: "card-text" }, [
+            _vm._v("\n      " + _vm._s(_vm.post.body) + "\n      "),
+            _c("span", { staticClass: "text-success" }, [
+              _vm._v("R$ " + _vm._s(_vm.post.budget))
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _vm.user.id == _vm.talk.receiver_id && _vm.post.status != 3
+          ? _c("div", { staticClass: "card-footer" }, [
+              _vm.post.status == 0 || _vm.post.status == 1
+                ? _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { href: "/posts/accept/" + _vm.post.id }
+                    },
+                    [_vm._v("Aceitar")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.post.status == 2
+                ? _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { href: "/payments/" + _vm.post.id }
+                    },
+                    [_vm._v("Pagar")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.post.status != 1
+                ? _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-link btn-sm text-secondary",
+                      attrs: { href: "/posts/refused/" + _vm.post.id }
+                    },
+                    [_vm._v("Recusar")]
+                  )
+                : _vm._e()
+            ])
+          : _vm._e()
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6ea9a4d9", module.exports)
+  }
+}
+
+/***/ }),
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(101);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(52)("c3d84c4e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ef947e4c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ef947e4c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(51)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.typing[data-v-ef947e4c]:after {\n  overflow: hidden;\n  display: inline-block;\n  vertical-align: bottom;\n  -webkit-animation: ellipsis-data-v-ef947e4c steps(4, end) 900ms infinite;\n  animation: ellipsis-data-v-ef947e4c steps(4, end) 900ms infinite;\n  content: \"\\2026\"; /* ascii code for the ellipsis character */\n  width: 0px;\n}\n@keyframes ellipsis-data-v-ef947e4c {\nto {\n    width: 1.25em;\n}\n}\n@-webkit-keyframes ellipsis-data-v-ef947e4c {\nto {\n    width: 1.25em;\n}\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "section",
+    [
+      _c("header-chat", {
+        attrs: { user: _vm.user, opposite: _vm.opposite, channel: _vm.channel }
+      }),
+      _vm._v(" "),
+      _c("btn-finalize", {
+        attrs: { talk: _vm.talk, iFinished: _vm.iFinished }
+      }),
+      _vm._v(" "),
+      _c("alert-finalize", { attrs: { iFinished: _vm.iFinished } }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card card-body", attrs: { id: "privateMessageBox" } },
+        [
+          _vm._l(_vm.allPosts, function(post, index) {
+            return _c(
+              "div",
+              { key: index, staticClass: "d-flex flex-column p-3" },
+              [
+                _c("alerts", { attrs: { post: post } }),
+                _vm._v(" "),
+                _c("proposal", {
+                  attrs: { post: post, user: _vm.user, talk: _vm.talk }
+                }),
+                _vm._v(" "),
+                _c("message", {
+                  attrs: { post: post, user: _vm.user, opposite: _vm.opposite }
+                })
+              ],
+              1
+            )
+          }),
+          _vm._v(" "),
+          _vm.typing
+            ? _c("small", { staticClass: "typing text-center text-muted" }, [
+                _c("span", [_vm._v("digitando")])
+              ])
+            : _vm._e()
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("form-chat", {
+        attrs: {
+          talk: _vm.talk,
+          channel: _vm.channel,
+          formActive: _vm.formActive
+        },
+        on: { submit: _vm.onSubmitForm, onTyping: _vm.onTyping }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ef947e4c", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

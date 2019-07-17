@@ -12,7 +12,8 @@ class Post extends Model
         'status',
         'type',
         'talk_id',
-        'user_id'
+        'user_id',
+        'question_id'
     ];
 
     const status = [
@@ -25,14 +26,20 @@ class Post extends Model
     const types = [
         'message' => 0,
         'comment' => 1,
-        'alert' => 2
+        'alert' => 2,
+        'finalized' => 3
     ];
 
     public function talk()
     {
         return $this->belongsTo('App\Talk');
     }
-    
+
+    public function question()
+    {
+        return $this->belongsTo('App\Question');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User');

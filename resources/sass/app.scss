@@ -4,17 +4,8 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.avatar {
-    border-radius: 100%;
-    object-fit: cover;
-}
-
-.nav-link {
-    .avatar {
-        width: 25px;
-        height: 25px;
-    }
-}
+@import 'avatar';
+@import 'navbar';
 
 textarea {
     resize: none;
@@ -22,7 +13,7 @@ textarea {
 
 input {
     &[type='number'] {
-        -moz-appearance:textfield;
+        -moz-appearance: textfield;
     }
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
