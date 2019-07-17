@@ -1,11 +1,12 @@
 <template>
   <div class="list-group">
-    <div
+    <a
       class="list-group-item list-group-item-action flex-column align-items-start"
       v-for="talk in talks"
       :key="talk.id"
+      :href="'/talks/' + talk.id"
     >
-      <a :href="'/talks/' + talk.id" class="d-flex align-items-center">
+      <div class="d-flex align-items-center">
         <img
           class="img-fluid avatar"
           width="25"
@@ -14,15 +15,12 @@
           :alt="talk.opposite.name"
           :title="talk.opposite.name"
         />
-        <div class="ml-2">
-          <div>
-            <span>Conversa com</span>
-            <span>{{ talk.opposite.name }}</span>
-          </div>
+        <div class="ml-3 text-truncate">
+          <h6 class="mb-1">Conversa com {{ talk.opposite.name }}</h6>
           <small class="text-muted">{{ talk.created_at }}</small>
         </div>
-      </a>
-    </div>
+      </div>
+    </a>
   </div>
 </template>
 

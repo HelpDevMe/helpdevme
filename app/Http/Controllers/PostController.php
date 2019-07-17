@@ -51,7 +51,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {
         $request->validate([
             'body' => 'required'
         ]);
@@ -64,17 +64,13 @@ class PostController extends Controller
 
         $this->authorize('store-comment', $talk);
 
-        Post::updateOrCreate(
-            [
-                'talk_id' => $talk->id,
-                'user_id' => auth()->id()
-            ],
-            [
-                'body'=> $request->body,
-                'budget'=> $request->budget,
-                'question_id' => $request->question_id
-            ]
-        );
+        Post::create([
+            'talk_id' => $talk->id,
+            'user_id' => auth()->id(),
+            'body' => $request->body,
+            'budget' => $request->budget,
+            'question_id' => $request->question_id
+        ]);
 
         return back()->with('success', 'Mensagem enviada!');
     }
@@ -88,7 +84,7 @@ class PostController extends Controller
     public function show($id)
     {
         $question = Question::findOrFail($id);
-        
+
         return view('posts.show', compact('question'));
     }
 
@@ -176,7 +172,7 @@ class PostController extends Controller
 
         $post->status = Post::status['refused'];
         $post->update();
-        
+
         $talk = $post->talk;
         $talk->status = Talk::status['inactive'];
         $talk->update();

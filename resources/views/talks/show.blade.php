@@ -7,6 +7,6 @@
             {{ session()->get('success') }}
         </div>
     @endif
-    <h1 class="display-4 mb-5">{{ $talk->question->title }}</h1>
+    <h1>{{ $talk->question->title }}</h1>
     <private-chat :user="{{ auth()->user() }}" :talk="{{ $talk }}" :posts="{{ $talk->posts }}" :opposite="{{ $opposite }}"></private-chat>
 @endsection
