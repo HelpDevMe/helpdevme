@@ -57,7 +57,17 @@ class FinanceController extends Controller
         $receiver->update();
 
         // Notificar em tempo real
+        $alert = new Post;
+        $alert->talk_id = $post->talk->id;
+        $alert->user_id = auth()->id();
+        $alert->question_id = $question->id;
+        $alert->body = 'Finalizado';
+        $alert->type = Post::types['alert'];
+        $alert->status = Post::status['finalized'];
+        $alert->save();
 
-        return redirect()->route('finances.index');
+        broadcast(new PrivatePostSent($alert));
+
+        return redirect()->route('talks.show', $post->talk)->with('success', 'Questão Finalizada!');
     }
 }

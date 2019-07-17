@@ -1,0 +1,11 @@
+#navbarDropdownTalks {
+    .list-group {
+        .list-group-item {
+            a:hover {
+                small {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}

@@ -18,11 +18,11 @@ Vue.prototype.$userId = document
     .querySelector("meta[name='user-id']")
     .getAttribute("content");
     
-Vue.component("PrivateChat", require("./components/PrivateChat.vue"));
-Vue.component("ListChat", require("./components/ListChat.vue"));
+Vue.component("PrivateChat", require("./components/chat/private"));
+Vue.component("ListChat", require("./components/chat/list"));
 
-Vue.component("CreateQuestion", require("./components/question/create.vue"));
-Vue.component("VotesQuestion", require("./components/question/votes.vue"));
+Vue.component("CreateQuestion", require("./components/question/create"));
+Vue.component("VotesQuestion", require("./components/question/votes"));
 
 const app = new Vue({
     el: "#app"

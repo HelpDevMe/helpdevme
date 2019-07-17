@@ -136,6 +136,9 @@
                             <a class="nav-link" href="{{ route('about') }}">Sobre</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('home') }}">@lang('layouts.navbar.questions')</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}">@lang('layouts.navbar.users')</a>
                         </li>
                         <li class="nav-item">
