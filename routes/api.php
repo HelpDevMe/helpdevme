@@ -20,3 +20,5 @@ Route::resource('tags', 'Api\TagController');
 Route::resource('questions', 'Api\QuestionController');
 
 Route::resource('talks', 'Api\TalkController');
+
+Route::get('user', 'Api\UserController@current');

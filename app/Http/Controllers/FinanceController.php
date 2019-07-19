@@ -70,4 +70,9 @@ class FinanceController extends Controller
 
         return redirect()->route('talks.show', $post->talk)->with('success', 'Questão Finalizada!');
     }
+
+    public function fund()
+    {
+        return view('finances.fund');
+    }
 }

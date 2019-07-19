@@ -6,7 +6,7 @@
 
     <ul class="nav nav-pills mb-5">
         <li class="nav-item">
-            <a class="nav-link active" href="{{ route('profile.index') }}">Informações Pessoais</a>
+            <a class="nav-link active" href="{{ route('profile.infos') }}">Informações Pessoais</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('profile.password') }}">Senha</a>
@@ -73,7 +73,7 @@
                                 @endif
                             </div>
                         </div>
-        
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

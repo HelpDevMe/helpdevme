@@ -18,6 +18,6 @@
 
 <script>
 export default {
-  props: ["iFinished"]
+  props: ["iFinished", "opposite"]
 };
 </script>

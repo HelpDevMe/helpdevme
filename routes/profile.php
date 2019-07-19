@@ -1,13 +1,9 @@
 <?php
 
 Route::prefix('profile')->group(function () {
-    Route::get('/', function () {
-        return view('profile.infos');
-    })->name('profile.index');
+    Route::get('/', 'ProfileController@infos')->name('profile.infos');
 
-    Route::get('/password', function () {
-        return view('profile.password');
-    })->name('profile.password');
+    Route::get('/password', 'ProfileController@password')->name('profile.password');
 
     Route::match(['put', 'patch'], '/{id}', 'ProfileController@update')->name('profile.update');
 });

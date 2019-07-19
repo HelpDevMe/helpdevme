@@ -139,7 +139,7 @@ class PaymentController extends Controller
 
     public function statusPay(Request $request, $id)
     {
-        $finance = Finance::find($id);
+        $finance = Finance::findOrFail($id);
         $post = Post::findOrFail($finance->post->id);
 
         $this->authorize('status', $post);
@@ -165,7 +165,7 @@ class PaymentController extends Controller
             $question->update();
 
             /**
-             * Passa a mensagem para status 
+             * Passa a mensagem para status
              */
             $post->status = Post::status['payment'];
             $post->update();
@@ -173,14 +173,12 @@ class PaymentController extends Controller
             $alert = new Post;
             $alert->talk_id = $post->talk->id;
             $alert->user_id = auth()->id();
-            $alert->question_id = $question->id;
             $alert->body = 'Pagamento Efetuado';
             $alert->type = Post::types['alert'];
             $alert->status = Post::status['payment'];
-            $alert->question = $post->question;
             $alert->save();
 
-            broadcast(new PrivatePostSent($alert));
+            broadcast(new PrivatePostSent($alert, $question));
 
             return redirect()->route('talks.show', $post->talk)
                 ->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');

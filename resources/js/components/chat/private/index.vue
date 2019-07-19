@@ -2,7 +2,7 @@
   <section>
     <header-chat :user="user" :opposite="opposite" :channel="channel"></header-chat>
     <btn-finalize :talk="talk" :iFinished="iFinished"></btn-finalize>
-    <alert-finalize :iFinished="iFinished"></alert-finalize>
+    <alert-finalize :iFinished="iFinished" :opposite="opposite"></alert-finalize>
     <div id="privateMessageBox" class="card card-body">
       <div class="d-flex flex-column p-3" v-for="(post, index) in allPosts" :key="index">
         <alerts :post="post"></alerts>
@@ -74,11 +74,15 @@ export default {
 
     Echo.private(this.channel + ".private")
       .listen("PrivatePostSent", response => {
-        const { post } = response;
-        console.log("PrivatePostSent", post.talk.question);
+        const { post, question } = response;
+
         this.talkStatus(post.talk);
         this.allPosts.push(post);
-        // this.talk.question.status
+
+        /**
+         * Atualiza status da questão para aparecer o botão de finalizar
+         */
+        this.talk.question.status = question.status;
       })
       .listenForWhisper("typing", e => {
         this.typing = e.typing;

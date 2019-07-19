@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- User ID -->
-    <meta name="user-id" content="{{ Auth::id() }}">
+    <meta name="user" content="{{ Auth::user() }}">
 
     <title>{{ config('app.name', 'HelpDev.me') }}</title>
 
@@ -59,7 +59,7 @@
 
                                 <p class="text-muted px-4">Olá, <b>{{ Auth::user()->name }}</b>!</p>
 
-                                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                <a class="dropdown-item" href="{{ route('profile.infos') }}">
                                     @lang('layouts.navbar.profile')
                                 </a>
 
