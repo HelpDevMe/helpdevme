@@ -14,23 +14,16 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('PrivateChat', require('./components/chat/private'));
+Vue.prototype.$userId = document
+    .querySelector("meta[name='user-id']")
+    .getAttribute('content');
+
+Vue.component('PrivateChat', require('./components/chat'));
 Vue.component('ListChat', require('./components/chat/list'));
 
 Vue.component('CreateQuestion', require('./components/question/create'));
 Vue.component('VotesQuestion', require('./components/question/votes'));
 
-import store from './store';
-import * as mutations from './store/mutation-types';
-import * as actions from './store/action-types';
-
-if (window.user) {
-    store.commit(mutations.LOGGED_USER, window.user);
-} else {
-    store.dispatch(actions.LOGGED_USER);
-}
-
 const app = new Vue({
-    el: '#app',
-    store
+    el: '#app'
 });

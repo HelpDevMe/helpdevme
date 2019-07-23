@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- User ID -->
-    <meta name="user" content="{{ Auth::user() }}">
+    <meta name="user-id" content="{{ Auth::id() }}">
 
     <title>{{ config('app.name', 'HelpDev.me') }}</title>
 

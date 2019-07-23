@@ -23,7 +23,7 @@
 
 <script>
     import Multiselect from 'vue-multiselect';
-    
+
     export default {
         components: {
             Multiselect
@@ -45,7 +45,7 @@
                     })
                     .then(response => {
                         let tag = response.data.tag;
-                        
+
                         this.options.push(tag);
                         this.tags.push(tag);
                     });
@@ -66,6 +66,9 @@
                     })
                     .then(response => {
                         console.log('addQuestion response', response);
+                    })
+                    .catch(error => {
+                        alert(error);
                     });
             }
         },

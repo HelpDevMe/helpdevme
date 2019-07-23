@@ -1,7 +1,12 @@
 @foreach ($talk->posts as $post)
     @if($post->type === App\Post::types['comment'])
         <div class="py-3 border-top">
-            <a href="{{ route('users.show', $talk->user) }}">{{ $talk->user->name }}</a>
+            <a href="{{ route('users.show', $talk->user) }}">
+                <img class="img-fluid avatar mr-1"
+                    src="{{ asset('storage/img/avatars/' . auth()->user()->avatar) }}"
+                    alt="{{ auth()->user()->avatar }}" width="20" style="height: 20px;">
+                <span>{{ $talk->user->name }}</span>
+            </a>
             <span>{{ $post->body }}</span>
             @if ($post->budget)
                 <span class="badge badge-success">
