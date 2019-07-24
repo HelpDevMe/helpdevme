@@ -117,7 +117,7 @@
                                 href="#"
                                 title="@lang('layouts.navbar.posts')"
                             >
-                                <i class="fas fa-comments fa-lg"></i>
+                                <i class="fas fa-comments fa-2x"></i>
                             </a>
                             <div
                                 class="dropdown-menu dropdown-menu-right my-0 py-0"

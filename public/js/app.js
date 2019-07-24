@@ -59340,6 +59340,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user", "talk", "opposite", "posts"],
@@ -59531,6 +59538,19 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
+                    post.type == 2 && post.status == 4
+                      ? _c("div", { staticClass: "text-center" }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "badge badge-pill py-2 px-5 badge-warning"
+                            },
+                            [_vm._v(_vm._s(post.body))]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
                     post.type != 2 && post.budget
                       ? _c("div", { staticClass: "card bg-light mb-5" }, [
                           _c("div", { staticClass: "card-body" }, [
@@ -59602,17 +59622,23 @@ var render = function() {
                           },
                           [
                             _vm.user.id != post.user_id
-                              ? _c("img", {
-                                  staticClass: "img-fluid",
-                                  attrs: {
-                                    width: "25",
-                                    src:
-                                      "/storage/img/avatars/" +
-                                      _vm.opposite.avatar,
-                                    alt: _vm.opposite.name,
-                                    title: _vm.opposite.name
-                                  }
-                                })
+                              ? _c("span", [
+                                  _vm.opposite.avatar
+                                    ? _c("img", {
+                                        staticClass: "img-fluid",
+                                        attrs: {
+                                          width: "25",
+                                          src:
+                                            "/storage/img/avatars/" +
+                                            _vm.opposite.avatar,
+                                          alt: _vm.opposite.name,
+                                          title: _vm.opposite.name
+                                        }
+                                      })
+                                    : _c("i", {
+                                        staticClass: "fas fa-user-circle fa-lg"
+                                      })
+                                ])
                               : _vm._e(),
                             _vm._v(" "),
                             _c(

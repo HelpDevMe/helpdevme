@@ -45,6 +45,10 @@
                   <div v-if="post.type==2 && post.status==3" class="text-center">
                     <span class="badge badge-pill py-2 px-5 badge-success">{{ post.body }}</span>
                   </div>
+                  <!-- Questão Finalizada -->
+                  <div v-if="post.type==2 && post.status==4" class="text-center">
+                    <span class="badge badge-pill py-2 px-5 badge-warning">{{ post.body }}</span>
+                  </div>
                   <!-- Proposta -->
                   <div v-if="post.type!=2 && post.budget" class="card bg-light mb-5">
                     <div class="card-body">
@@ -81,14 +85,17 @@
                     v-if="post.type!=2 && !post.budget"
                     :class="user.id==post.user_id ? 'text-right' : ''"
                   >
-                    <img
-                      v-if="user.id!=post.user_id"
-                      width="25"
-                      class="img-fluid"
-                      :src="'/storage/img/avatars/' + opposite.avatar"
-                      v-bind:alt="opposite.name"
-                      v-bind:title="opposite.name"
-                    />
+                    <span v-if="user.id!=post.user_id">
+                        <img
+                        v-if="opposite.avatar"
+                        width="25"
+                        class="img-fluid"
+                        :src="'/storage/img/avatars/' + opposite.avatar"
+                        v-bind:alt="opposite.name"
+                        v-bind:title="opposite.name"
+                        />
+                        <i v-else class="fas fa-user-circle fa-lg"></i>
+                    </span>
                     <span
                       class="badge badge-pill py-2 px-3"
                       :class="(user.id!==post.user_id)?'badge-secondary':'badge-primary'"

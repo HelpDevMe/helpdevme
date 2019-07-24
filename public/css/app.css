@@ -17517,8 +17517,8 @@ readers do not read off random characters that represent icons */
 }
 
 .nav-link .avatar {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
 }
 
 nav {

@@ -19,14 +19,14 @@ class Post extends Model
         'analyzing' => 0,
         'refused' => 1,
         'accept' => 2,
-        'payment' => 3
+        'payment' => 3,
+        'finalized' => 4
     ];
 
     const types = [
         'message' => 0,
         'comment' => 1,
-        'alert' => 2,
-        'finalized' => 3
+        'alert' => 2
     ];
 
     public function talk()

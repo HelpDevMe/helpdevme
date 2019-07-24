@@ -7,6 +7,8 @@ use App\Question;
 use App\Post;
 use App\User;
 
+use App\Events\PrivatePostSent;
+
 class FinanceController extends Controller
 {
     /**
@@ -60,7 +62,6 @@ class FinanceController extends Controller
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
-        $alert->question_id = $question->id;
         $alert->body = 'Finalizado';
         $alert->type = Post::types['alert'];
         $alert->status = Post::status['finalized'];
