@@ -15,8 +15,7 @@
     <h1 class="display-4">Finanças</h1>
     <div class="text-right">
         <h2 class="text-success">
-            @budget(['budget' => auth()->user()->amount])
-            @endbudget
+            @include('name', ['budget' => auth()->user()->amount])
         </h2>
         <span>Saldo Atual</span>
     </div>
@@ -71,8 +70,7 @@
                         <td class="text-right">
                             <span
                                 class="{{ $finance->type == App\Finance::types['received'] || $finance->type == App\Finance::types['fund'] ? 'text-success' : 'text-danger' }}">
-                                @budget(['budget' => $finance->budget])
-                                @endbudget
+                                @include('shared.questions.budget', ['budget' => $finance->budget])
                             </span>
                         </td>
                     </tr>

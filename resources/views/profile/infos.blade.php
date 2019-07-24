@@ -38,7 +38,7 @@
                             <div class="col-md-6">
                                 <div class="row align-items-center">
                                     <div class="col-lg-2">
-                                        @include('components.avatar', ['user' => auth()->user()])
+                                        @include('shared.avatar', ['user' => auth()->user()])
                                     </div>
                                     <div class="col">
                                         <input type="file" class="form-control-file" name="avatar" id="avatarFile">

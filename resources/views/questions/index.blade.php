@@ -37,8 +37,7 @@
                             <h3 class="h5">
                                 <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                             </h3>
-                            @status(['status' => $question->status])
-                            @endstatus
+                            @include('shared.questions.status', ['status' => $question->status])
                             <p>{{ $question->body }}</p>
                         </div>
                     </div>
@@ -52,7 +51,7 @@
                                 <a href="{{ route('users.show', $question->user) }}">
                                     <div class="d-flex align-items-center justify-content-end py-2">
                                         <span class="mr-2">{{ $question->user->name }}</span>
-                                        @include('components.avatar', ['user' => $question->user])
+                                        @include('shared.avatar', ['user' => $question->user])
                                     </div>
                                 </a>
                             </div>
@@ -68,16 +67,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="d-flex flex-column">
-                                @foreach($question->talks as $talk)
-                                    @comment(['talk' => $talk])
-                                    @endcomment
-                                @endforeach
+                                @each('shared.comments.show', $question->talks, 'talk')
                             </div>
                         </div>
                     </div>
                 </div>
-                @formComment(['question' => $question])
-                @endformComment
+                @includeWhen($question->status == 0, 'shared.comments.create', ['question' => $question])
             </div>
         @endforeach
     </div>

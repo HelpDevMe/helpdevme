@@ -7,8 +7,7 @@
             <header>
                 <h1 class="display-4">{{ $question->title }}</h1>
             </header>
-            @status(['status' => $question->status])
-            @endstatus
+            @include('shared.questions.status', ['status' => $question->status])
             <p class="lead">{{ $question->body }}</p>
             <div class="row">
                 <div class="col">
@@ -33,15 +32,11 @@
                     <div class="row">
                         <div class="col">
                             <div class="d-flex flex-column">
-                                @foreach($question->talks as $talk)
-                                    @comment(['talk' => $talk])
-                                    @endcomment
-                                @endforeach
+                                @each('shared.comments.show', $question->talks, 'talk')
                             </div>
                         </div>
                     </div>
-                    @formComment(['question' => $question])
-                    @endformComment
+                    @includeWhen($question->status == 0, 'shared.comments.create', ['question' => $question])
                 </div>
             </div>
         </article>

@@ -12,6 +12,6 @@
     }
 @endphp
 
-<span class="badge {{ $class }}">
+<h4 class="badge {{ $class }}">
     @lang('questions.status.' . $status)
-</span>
+</h4>

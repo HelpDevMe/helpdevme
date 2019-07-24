@@ -72,7 +72,7 @@
                                 aria-expanded="false"
                                 data-placement="bottom"
                             >
-                                @include('components.avatar', ['user' => auth()->user()])
+                                @include('shared.avatar', ['user' => auth()->user()])
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 

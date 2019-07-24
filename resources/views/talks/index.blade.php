@@ -8,7 +8,7 @@
             <a href="{{ route('talks.show', $talk) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="row align-items-center">
                     <div class="col-1">
-                        @include('components.avatar', ['user' => $opposite])
+                        @include('shared.avatar', ['user' => $opposite])
                     </div>
                     <div class="col">
                         <div class="d-flex w-100 justify-content-between">

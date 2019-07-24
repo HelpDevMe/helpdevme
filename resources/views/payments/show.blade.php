@@ -13,8 +13,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5>Total</h5>
             <span>
-                @budget(['budget' => $post->budget])
-                @endbudget
+                @include('shared.questions.budget', ['budget' => $post->budget])
             </span>
         </div>
     </div>
@@ -38,8 +37,7 @@
                     </form>
                 </div>
                 <h5 class="text-success">
-                    @budget(['budget' => $post->budget])
-                    @endbudget
+                    @include('shared.questions.budget', ['budget' => $post->budget])
                 </h5>
             </div>
         </div>
@@ -69,8 +67,7 @@
                     </form>
                 </div>
                 <h5 class="text-success">
-                    @budget(['budget' => $post->budget])
-                    @endbudget
+                        @include('shared.questions.budget', ['budget' => $post->budget])
                 </h5>
             </div>
         </div>

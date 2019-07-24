@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-2 col-lg-1">
-                        @include('components.avatar', ['user' => $opposite])
+                        @include('shared.avatar', ['user' => $opposite])
                     </div>
                     <div class="col">
                         <div class="text-muted">{{ $post->body }}</div>
