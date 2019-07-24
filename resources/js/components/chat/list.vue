@@ -11,10 +11,12 @@
           class="img-fluid avatar"
           width="25"
           style="height: 25px;"
+          v-if="talk.opposite.avatar"
           :src="'/storage/img/avatars/' + talk.opposite.avatar"
           :alt="talk.opposite.name"
           :title="talk.opposite.name"
         />
+        <i v-else class="fas fa-user-circle fa-2x"></i>
         <div class="ml-3 text-truncate">
           <h6 class="mb-1">Conversa com {{ talk.opposite.name }}</h6>
           <small class="text-muted">{{ talk.created_at }}</small>

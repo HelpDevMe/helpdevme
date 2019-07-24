@@ -12,7 +12,9 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) {
+    console.error(e);
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -53,4 +55,8 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     encrypted: true
+});
+
+$(function () {
+    $('[data-tooltip="tooltip"]').tooltip();
 });

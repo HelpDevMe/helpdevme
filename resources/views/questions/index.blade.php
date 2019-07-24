@@ -27,7 +27,7 @@
 <div class="row">
     <div class="col">
         @foreach($questions as $question)
-            <div class="card mb-4">
+            <div class="card mb-4 question">
                 <div class="card-body">
                     <div class="row">
                         <div class="col flex-grow-0">
@@ -51,8 +51,8 @@
                                 <span>{{ $question->created_at->diffForHumans() }} por</span>
                                 <a href="{{ route('users.show', $question->user) }}">
                                     <div class="d-flex align-items-center justify-content-end py-2">
-                                        <span>{{ $question->user->name }}</span>
-                                        <img width="20" style="height: 20px;" class="img-fluid avatar ml-2" src="{{ asset('storage/img/avatars/' . $question->user->avatar) }}" alt="{{ $question->user->name }}" title="{{ $question->user->name }}">
+                                        <span class="mr-2">{{ $question->user->name }}</span>
+                                        @include('components.avatar', ['user' => $question->user])
                                     </div>
                                 </a>
                             </div>

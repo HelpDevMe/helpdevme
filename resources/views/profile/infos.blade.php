@@ -38,7 +38,7 @@
                             <div class="col-md-6">
                                 <div class="row align-items-center">
                                     <div class="col-lg-2">
-                                        <img class="img-fluid avatar" src="{{ asset('storage/img/avatars/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->avatar }}" title="{{ auth()->user()->avatar }}">
+                                        @include('components.avatar', ['user' => auth()->user()])
                                     </div>
                                     <div class="col">
                                         <input type="file" class="form-control-file" name="avatar" id="avatarFile">
