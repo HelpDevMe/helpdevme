@@ -11672,6 +11672,10 @@ a.text-dark:focus {
   text-decoration: none;
 }
 
+body {
+  padding-top: 58.44px;
+}
+
 textarea {
   resize: none;
 }

@@ -7,6 +7,10 @@
 @import 'avatar';
 @import 'navbar';
 
+body {
+    padding-top: $nav-height;
+}
+
 textarea {
     resize: none;
 }

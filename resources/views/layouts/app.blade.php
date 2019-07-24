@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-100">
 
 <head>
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
     <!-- User ID -->
     <meta name="user-id" content="{{ Auth::id() }}">
 
-    <title>{{ config('app.name', 'HelpDev.me') }}</title>
+    <title>{{ config('app.name', 'Help Dev') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -20,12 +20,57 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="bg-light">
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white sticky-top shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ route('home') }}">
-                    {{ config('app.name', 'HelpDev.me') }}
+<body class="bg-light h-100">
+    <div id="app" class="d-flex flex-column justify-content-between h-100">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ route('index') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32.228"
+                        height="32.228" viewBox="0 0 32.228 32.228">
+                        <defs>
+                            <clipPath id="a">
+                                <rect width="32.228" height="32.228" transform="translate(93)" fill="#fff"
+                                    stroke="#707070" stroke-width="1" />
+                            </clipPath>
+                        </defs>
+                        <g transform="translate(-93)" clip-path="url(#a)">
+                            <g transform="translate(94.194)">
+                                <path
+                                    d="M18.624,0A14.937,14.937,0,0,0,3.7,14.92a.6.6,0,0,0,1.194,0,2.984,2.984,0,1,1,5.968,0,.6.6,0,0,0,1.194,0,2.984,2.984,0,1,1,5.968,0,.6.6,0,1,0,1.194,0,2.984,2.984,0,1,1,5.968,0,.6.6,0,0,0,1.194,0,2.984,2.984,0,1,1,5.968,0,.6.6,0,0,0,1.194,0A14.936,14.936,0,0,0,18.624,0Z"
+                                    transform="translate(-3.704)" fill="#e7e5ef" />
+                                <path
+                                    d="M32.708,13.253a4.18,4.18,0,0,0-3.581,2.028,4.176,4.176,0,0,0-7.162,0,4.176,4.176,0,0,0-7.162,0,4.173,4.173,0,0,0-6.17-1.127,13.729,13.729,0,0,1,26.663,0A4.156,4.156,0,0,0,32.708,13.253Z"
+                                    transform="translate(-7.045 -2.51)" fill="#314e55" />
+                                <path d="M48.622,83.57a2.089,2.089,0,1,0-2.089,2.089A2.091,2.091,0,0,0,48.622,83.57Z"
+                                    transform="translate(-31.315 -55.222)" fill="#e7e5ef" />
+                                <path d="M.9,0A.9.9,0,1,1,0,.9.9.9,0,0,1,.9,0Z" transform="translate(14.323 27.453)"
+                                    fill="#314e55" />
+                                <g transform="translate(1.194 15.729)">
+                                    <path
+                                        d="M56.266,89.064l-2.387,2.387a.6.6,0,1,0,.844.844l2.387-2.387a.6.6,0,1,0-.844-.844Z"
+                                        transform="translate(-38.783 -75.971)" fill="#e7e5ef" />
+                                    <path d="M38.056,89.064a.6.6,0,0,0-.844.844L39.6,92.295a.6.6,0,1,0,.844-.844Z"
+                                        transform="translate(-27.488 -75.971)" fill="#e7e5ef" />
+                                    <path
+                                        d="M18.28,60.9a.6.6,0,0,0,.41-1.03L8.414,50.164a.6.6,0,1,0-.82.867l10.275,9.71A.6.6,0,0,0,18.28,60.9Z"
+                                        transform="translate(-7.407 -49.616)" fill="#e7e5ef" />
+                                    <path
+                                        d="M68.785,50.164l-10.276,9.71a.6.6,0,1,0,.82.867l10.276-9.71a.6.6,0,1,0-.82-.867Z"
+                                        transform="translate(-41.914 -49.616)" fill="#e7e5ef" />
+                                    <path
+                                        d="M27.353,48.905a.6.6,0,0,0-.168.827l5.72,8.651a.6.6,0,0,0,1-.659l-5.72-8.651A.6.6,0,0,0,27.353,48.905Z"
+                                        transform="translate(-20.743 -48.806)" fill="#e7e5ef" />
+                                    <path
+                                        d="M53.374,58.651a.6.6,0,0,0,.5-.268l5.72-8.651a.6.6,0,0,0-1-.659l-5.72,8.651a.6.6,0,0,0,.5.926Z"
+                                        transform="translate(-38.156 -48.806)" fill="#e7e5ef" />
+                                    <path
+                                        d="M48.745,59.191a.6.6,0,0,0,.6-.6V52.176a.6.6,0,1,0-1.194,0v6.419A.6.6,0,0,0,48.745,59.191Z"
+                                        transform="translate(-35.018 -50.685)" fill="#e7e5ef" />
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                    <span class="ml-1">{{ config('app.name', 'HelpDev.me') }}</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -34,6 +79,18 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('questions.index') }}">@lang('layouts.navbar.questions')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}">@lang('layouts.navbar.users')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('tags.index') }}">@lang('layouts.navbar.tags')</a>
+                        </li>
+                    </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -106,7 +163,8 @@
                                 </svg>
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-right my-0 py-0" aria-labelledby="navbarDropdownTalks">
+                            <div class="dropdown-menu dropdown-menu-right my-0 py-0"
+                                aria-labelledby="navbarDropdownTalks">
                                 <list-chat></list-chat>
                                 <a class="btn btn-link btn-block" href="{{ route('talks.index') }}">Ver Tudo</a>
                             </div>
@@ -123,28 +181,11 @@
                 </div>
             </section>
         </main>
-        <footer class="navbar navbar-expand-md navbar-dark bg-dark">
+        <footer>
             <div class="container">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedFooter"
-                    aria-controls="navbarSupportedFooter" aria-expanded="false"
-                    aria-label="@lang('layouts.navbar.toggle_navigation')">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedFooter">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('about') }}">Sobre</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">@lang('layouts.navbar.questions')</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('users.index') }}">@lang('layouts.navbar.users')</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('tags.index') }}">@lang('layouts.navbar.tags')</a>
-                        </li>
-                    </ul>
+                <div class="d-flex w-100 border-top py-3 justify-content-center align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="33.772" height="33.772" viewBox="0 0 33.772 33.772"><defs><clipPath id="a"><rect width="33.772" height="33.772" transform="translate(93)" fill="#fff" stroke="#707070" stroke-width="1"/></clipPath></defs><g transform="translate(-93)" clip-path="url(#a)"><g transform="translate(94.251)"><path d="M19.339,0A15.653,15.653,0,0,0,3.7,15.635a.625.625,0,1,0,1.251,0,3.127,3.127,0,1,1,6.254,0,.625.625,0,1,0,1.251,0,3.127,3.127,0,1,1,6.254,0,.625.625,0,1,0,1.251,0,3.127,3.127,0,0,1,6.254,0,.625.625,0,0,0,1.251,0,3.127,3.127,0,1,1,6.254,0,.625.625,0,0,0,1.251,0A15.652,15.652,0,0,0,19.339,0Z" transform="translate(-3.704)" fill="#314e55"/><path d="M33.861,13.71a4.38,4.38,0,0,0-3.752,2.125,4.376,4.376,0,0,0-7.5,0,4.376,4.376,0,0,0-7.5,0,4.374,4.374,0,0,0-6.465-1.181,14.387,14.387,0,0,1,27.941,0A4.355,4.355,0,0,0,33.861,13.71Z" transform="translate(-6.969 -2.453)" fill="#e7e5ef"/><path d="M48.822,83.67a2.189,2.189,0,1,0-2.189,2.189A2.192,2.192,0,0,0,48.822,83.67Z" transform="translate(-30.685 -53.963)" fill="#314e55"/><circle cx="0.938" cy="0.938" r="0.938" transform="translate(15.01 28.769)" fill="#e7e5ef"/><g transform="translate(1.251 16.483)"><path d="M56.389,89.072l-2.5,2.5a.625.625,0,1,0,.884.884l2.5-2.5a.625.625,0,0,0-.884-.884Z" transform="translate(-38.068 -75.352)" fill="#314e55"/><path d="M38.1,89.072a.625.625,0,0,0-.884.884l2.5,2.5a.625.625,0,1,0,.884-.884Z" transform="translate(-27.031 -75.352)" fill="#314e55"/><path d="M18.8,61.427a.625.625,0,0,0,.43-1.08L8.462,50.172a.625.625,0,1,0-.859.909L18.371,61.256A.624.624,0,0,0,18.8,61.427Z" transform="translate(-7.407 -49.597)" fill="#314e55"/><path d="M69.286,50.172,58.518,60.347a.625.625,0,1,0,.859.909L70.146,51.08a.625.625,0,1,0-.859-.909Z" transform="translate(-41.127 -49.597)" fill="#314e55"/><path d="M27.365,48.91a.625.625,0,0,0-.177.867l5.995,9.066a.625.625,0,0,0,1.043-.69l-5.995-9.066A.625.625,0,0,0,27.365,48.91Z" transform="translate(-20.439 -48.806)" fill="#314e55"/><path d="M53.4,59.123a.624.624,0,0,0,.522-.28l5.995-9.066a.625.625,0,0,0-1.043-.69l-5.995,9.066a.626.626,0,0,0,.521.971Z" transform="translate(-37.455 -48.806)" fill="#314e55"/><path d="M48.774,59.556a.625.625,0,0,0,.625-.625V52.2a.625.625,0,1,0-1.251,0v6.726A.625.625,0,0,0,48.774,59.556Z" transform="translate(-34.389 -50.642)" fill="#314e55"/></g></g></g></svg>
+                    <span class="ml-3">© 2019 Help Dev</span>
                 </div>
             </div>
         </footer>

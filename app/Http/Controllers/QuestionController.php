@@ -61,7 +61,7 @@ class QuestionController extends Controller
 
         Question::create($request->all());
 
-        return redirect()->route('home')
+        return redirect()->route('questions.index')
             ->with('success', 'Pergunta criada!');
     }
 

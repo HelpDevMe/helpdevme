@@ -146,7 +146,7 @@ class PaymentController extends Controller
 
         if (empty($request->input('PayerID')) || empty($request->input('token'))) {
             Finance::destroy($id);
-            return redirect()->route('home')->with('error', 'Pagamento falhou :(');
+            return redirect()->route('questions.index')->with('error', 'Pagamento falhou :(');
         }
 
         $paymentId = $request->get('paymentId');
@@ -185,12 +185,12 @@ class PaymentController extends Controller
         }
 
         Finance::destroy($id);
-        return redirect()->route('home')->with('error', 'Pagamento falhou :(');
+        return redirect()->route('questions.index')->with('error', 'Pagamento falhou :(');
     }
 
     public function canceledPay(Request $request, $id)
     {
-        return redirect()->route('home')->with('error', 'Pagamento Cancelado');
+        return redirect()->route('questions.index')->with('error', 'Pagamento Cancelado');
     }
 
     /**

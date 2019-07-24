@@ -5,7 +5,7 @@
     <div class="col">
         <article>
             <header>
-                <h1>Sobre</h1>
+                <h1>Help Dev</h1>
             </header>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus sapien vitae dui venenatis, vitae vehicula mi commodo. Etiam iaculis dignissim ante ac fermentum. Duis molestie laoreet sapien. Nam eget gravida felis, in mollis leo. Nam et odio id ligula scelerisque dapibus eu id justo. Nunc sollicitudin sit amet nunc vitae interdum. Cras non bibendum libero. Donec vestibulum, mi nec porta vulputate, quam erat volutpat enim, non semper arcu metus in nisl. Nam cursus pretium porta.</p>
             <p>Nunc aliquam nisi eget elementum tristique. Praesent vel nunc ante. Morbi quis elementum lectus, ac ultrices enim. Nunc facilisis mi dui, sed lacinia arcu placerat sed. Nam condimentum urna et augue sagittis pulvinar et non est. Etiam eu felis vitae neque pharetra aliquet. Duis sollicitudin nunc vitae leo aliquam fringilla. Donec nisl nulla, faucibus ut maximus sit amet, consequat nec ligula. Ut vel ipsum mi. Proin eget ornare elit, eu dignissim dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mollis, magna a accumsan lacinia, purus odio euismod lectus, eu vulputate nisl ligula blandit lectus. Praesent felis magna, pellentesque pulvinar elementum sed, iaculis at ex.</p>
