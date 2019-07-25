@@ -8,10 +8,11 @@
       </a>
     </p>
     <!-- Finalização da Questão -->
-    <div class="form-group" v-if="!iFinished && talk.question.status == 2">
+    <div class="form-group" v-if="!finished && talk.question.status == 2">
       <a :href="'/' + talk.question.slug + '/finalize'" class="btn btn-warning">Finalizar Questão</a>
     </div>
-    <div v-if="iFinished">
+    {{ finished }}
+    <div v-if="finished">
       <div class="card text-white bg-warning mb-3">
         <div class="card-body">
           <h5 class="card-title">Você finalizou essa questão!</h5>
@@ -86,15 +87,15 @@
                     :class="user.id==post.user_id ? 'text-right' : ''"
                   >
                     <span v-if="user.id!=post.user_id">
-                        <img
+                      <img
                         v-if="opposite.avatar"
                         width="25"
                         class="img-fluid"
                         :src="'/storage/img/avatars/' + opposite.avatar"
                         v-bind:alt="opposite.name"
                         v-bind:title="opposite.name"
-                        />
-                        <i v-else class="fas fa-user-circle fa-lg"></i>
+                      />
+                      <i v-else class="fas fa-user-circle fa-lg"></i>
                     </span>
                     <span
                       class="badge badge-pill py-2 px-3"
@@ -131,78 +132,84 @@
 
 <script>
 export default {
-  props: ["user", "talk", "opposite", "posts"],
+	props: ['user', 'talk', 'opposite', 'posts'],
 
-  data() {
-    return {
-      channel: `privatechat.${this.talk.user_id}.${this.talk.receiver_id}`,
-      body: null,
-      formActive: true,
-      typing: false,
-      iFinished:
-        (this.talk.question.user_id == this.user.id &&
-          this.talk.question.user_ended == 1) ||
-        (this.talk.question.user_id != this.user.id &&
-          this.talk.question.freelancer_ended == 1),
-      onlineFriends: [],
-      allPosts: []
-    };
-  },
+	data() {
+		return {
+			channel: `privatechat.${this.talk.user_id}.${this.talk.receiver_id}`,
+			body: null,
+			formActive: true,
+			typing: false,
+			onlineFriends: [],
+			allPosts: []
+		};
+	},
 
-  methods: {
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    },
-    onTyping() {
-      Echo.private(this.channel + ".private").whisper("typing");
-    },
-    sendMessage() {
-      axios
-        .post("/api/posts", {
-          body: this.body,
-          talk_id: this.talk.id
-        })
-        .then(response => {
-          this.body = null;
-          this.allPosts.push(response.data.post);
-        });
-    },
-    fetchMessages() {
-      this.allPosts = this.posts;
-      this.talkStatus(this.talk);
-    },
-    talkStatus(talk) {
-      this.formActive = talk.status == 1 ? false : true;
-    }
-  },
+	computed: {
+		finished: function() {
+			const { question } = this.talk;
 
-  created() {
-    this.fetchMessages();
+			return (
+				(question.user_id == this.user.id && question.user_ended == 1) ||
+				(question.user_id != this.user.id && question.freelancer_ended == 1)
+			);
+		}
+	},
 
-    Echo.join(this.channel + ".join")
-      .here(users => {
-        this.onlineFriends = users;
-      })
-      .joining(user => {
-        this.onlineFriends.push(user);
-      })
-      .leaving(user => {
-        this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
-      });
+	methods: {
+		formatPrice(value) {
+			let val = (value / 1).toFixed(2).replace('.', ',');
+			return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+		},
+		onTyping() {
+			Echo.private(this.channel + '.private').whisper('typing');
+		},
+		sendMessage() {
+			axios
+				.post('/api/posts', {
+					body: this.body,
+					talk_id: this.talk.id
+				})
+				.then(response => {
+					this.body = null;
+					this.allPosts.push(response.data.post);
+				});
+		},
+		fetchMessages() {
+			this.allPosts = this.posts;
+			this.talkStatus(this.talk);
+		},
+		talkStatus(talk) {
+			this.formActive = talk.status == 1 ? false : true;
+		}
+	},
 
-    Echo.private(this.channel + ".private")
-      .listen("PrivatePostSent", response => {
-        this.talkStatus(response.post.talk);
-        this.allPosts.push(response.post);
-      })
-      .listenForWhisper("typing", e => {
-        this.typing = true;
+	created() {
+		this.fetchMessages();
 
-        setTimeout(() => {
-          this.typing = false;
-        }, 1000);
-      });
-  }
+		Echo.join(this.channel + '.join')
+			.here(users => {
+				this.onlineFriends = users;
+			})
+			.joining(user => {
+				this.onlineFriends.push(user);
+			})
+			.leaving(user => {
+				this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
+			});
+
+		Echo.private(this.channel + '.private')
+			.listen('PrivatePostSent', response => {
+				this.talkStatus(response.post.talk);
+				this.allPosts.push(response.post);
+			})
+			.listenForWhisper('typing', e => {
+				this.typing = true;
+
+				setTimeout(() => {
+					this.typing = false;
+				}, 1000);
+			});
+	}
 };
 </script>

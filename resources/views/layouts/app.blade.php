@@ -66,11 +66,10 @@
                                 title="Minha Conta"
                                 href="#"
                                 role="button"
+                                v-b-tooltip.hover
                                 data-toggle="dropdown"
-                                data-tooltip="tooltip"
                                 aria-haspopup="true"
                                 aria-expanded="false"
-                                data-placement="bottom"
                             >
                                 @include('shared.avatar', ['user' => auth()->user()])
                             </a>
@@ -109,8 +108,7 @@
                             <a id="navbarDropdownTalks"
                                 role="button"
                                 data-toggle="dropdown"
-                                data-tooltip="tooltip"
-                                data-placement="bottom"
+                                v-b-tooltip.hover
                                 aria-haspopup="true"
                                 aria-expanded="false"
                                 class="nav-link dropdown-toggle"

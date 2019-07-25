@@ -14,9 +14,13 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import BootstrapVue from 'bootstrap-vue';
+
+Vue.use(BootstrapVue);
+
 Vue.prototype.$userId = document
-    .querySelector("meta[name='user-id']")
-    .getAttribute('content');
+	.querySelector("meta[name='user-id']")
+	.getAttribute('content');
 
 Vue.component('PrivateChat', require('./components/chat'));
 Vue.component('ListChat', require('./components/chat/list'));
@@ -24,6 +28,8 @@ Vue.component('ListChat', require('./components/chat/list'));
 Vue.component('CreateQuestion', require('./components/question/create'));
 Vue.component('VotesQuestion', require('./components/question/votes'));
 
+Vue.component('ListNewQuestions', require('./components/question/list'));
+
 const app = new Vue({
-    el: '#app'
+	el: '#app'
 });

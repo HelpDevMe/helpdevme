@@ -26,6 +26,7 @@
 </div>
 <div class="row">
     <div class="col">
+        <list-new-questions></list-new-questions>
         @foreach($questions as $question)
             <div class="card mb-4 question">
                 <div class="card-body">

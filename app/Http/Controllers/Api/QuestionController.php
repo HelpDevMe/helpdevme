@@ -8,6 +8,8 @@ use App\Vote;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Events\NewQuestionsEvent;
+
 class QuestionController extends Controller
 {
     /**
@@ -54,10 +56,12 @@ class QuestionController extends Controller
         ]);
 
         $question = Question::create($request->all());
-        
+
         $question->tags()->attach($request->tags);
         $question->save();
-        
+
+        broadcast(new NewQuestionsEvent($question));
+
         return response(['question' => $question]);
     }
 

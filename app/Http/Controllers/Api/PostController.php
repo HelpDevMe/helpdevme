@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Post;
-use App\Talk;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Events\PrivatePostSent;
 
 class PostController extends Controller
-{   
+{
     /**
      * Create a new controller instance.
      *

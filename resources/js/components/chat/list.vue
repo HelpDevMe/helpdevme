@@ -28,19 +28,19 @@
 
 <script>
 export default {
-  data() {
-    return {
-      talks: []
-    };
-  },
-  mounted() {
-    axios.get("/api/talks").then(res => {
-      this.talks = res.data.talks.map(talk => {
-        talk.opposite =
-          this.$userId == talk.user.id ? talk.receiver : talk.user;
-        return talk;
-      });
-    });
-  }
+	data() {
+		return {
+			talks: []
+		};
+	},
+	mounted() {
+		axios.get('/api/talks').then(res => {
+			this.talks = res.data.talks.map(talk => {
+				talk.opposite =
+					this.$userId == talk.user.id ? talk.receiver : talk.user;
+				return talk;
+			});
+		});
+	}
 };
 </script>
