@@ -1,42 +1,57 @@
 <template>
   <div class="card mb-5 shadow">
     <div class="card-body">
-      <form @submit.prevent="addQuestion">
-        <div class="form-group">
-          <input
-            type="text"
-            class="form-control"
-            name="title"
-            v-model="title"
-            placeholder="Como podemos te ajudar?"
-            required
-          />
+      <div class="row">
+        <div class="col-lg-1">
+          <img src alt />
         </div>
-        <div class="form-group">
-          <textarea name="body" class="form-control" v-model="body" placeholder="Pergunta" required></textarea>
+        <div class="col">
+          <form @submit.prevent="addQuestion">
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                name="title"
+                v-model="title"
+                placeholder="Como podemos te ajudar?"
+                @keydown="onTyping"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <textarea
+                @keydown="onTyping"
+                name="body"
+                class="form-control"
+                v-model="body"
+                placeholder="Pergunta"
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <multiselect
+                v-model="tags"
+                tag-placeholder="Adicione isto como nova tag"
+                placeholder="Pesquise ou adicione uma tag"
+                label="title"
+                track-by="id"
+                :options="options"
+                :multiple="true"
+                :taggable="true"
+                @tag="addTag"
+              ></multiselect>
+            </div>
+            <div class="form-row justify-content-end">
+              <div class="col-lg-3">
+                <button type="submit" class="btn btn-success btn-block">
+                  <span v-if="!loading">Enviar</span>
+                  <span v-else class="ellipsis"></span>
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <multiselect
-            v-model="tags"
-            tag-placeholder="Adicione isto como nova tag"
-            placeholder="Pesquise ou adicione uma tag"
-            label="title"
-            track-by="id"
-            :options="options"
-            :multiple="true"
-            :taggable="true"
-            @tag="addTag"
-          ></multiselect>
-        </div>
-        <div class="form-row justify-content-end">
-          <div class="col-lg-3">
-            <button type="submit" class="btn btn-success btn-block">
-                <span v-if="!loading">Enviar</span>
-                <span v-else class="ellipsis"></span>
-            </button>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -58,6 +73,15 @@ export default {
 		};
 	},
 	methods: {
+		onTyping() {
+			const privateChannel = Echo.private('newquestions');
+
+			setTimeout(() => {
+				privateChannel.whisper('typing', {
+					typing: true
+				});
+			}, 300);
+		},
 		resetForm() {
 			this.title = undefined;
 			this.body = undefined;

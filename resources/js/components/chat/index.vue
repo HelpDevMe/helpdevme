@@ -104,7 +104,7 @@
                   </div>
                 </div>
               </div>
-              <p v-if="typing">{{ opposite.name }} está digitando</p>
+              <small v-if="typing" class="text-muted ellipsis">{{ opposite.name }} está digitando</small>
             </div>
           </div>
         </div>
@@ -138,6 +138,7 @@ export default {
 		return {
 			channel: `privatechat.${this.talk.user_id}.${this.talk.receiver_id}`,
 			body: null,
+			timeOut: undefined,
 			formActive: true,
 			typing: false,
 			onlineFriends: [],
@@ -162,7 +163,13 @@ export default {
 			return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 		},
 		onTyping() {
-			Echo.private(this.channel + '.private').whisper('typing');
+			const privateChannel = Echo.private(this.channel + '.private');
+
+			setTimeout(() => {
+				privateChannel.whisper('typing', {
+					typing: true
+				});
+			}, 300);
 		},
 		sendMessage() {
 			axios
@@ -204,11 +211,13 @@ export default {
 				this.allPosts.push(response.post);
 			})
 			.listenForWhisper('typing', e => {
-				this.typing = true;
+				this.typing = e.typing;
 
-				setTimeout(() => {
+				clearTimeout(this.timeOut);
+
+				this.timeOut = setTimeout(() => {
 					this.typing = false;
-				}, 1000);
+				}, 900);
 			});
 	}
 };
