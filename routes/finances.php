@@ -1,7 +1,8 @@
 <?php
 
-Route::get('finances/fund', 'FinanceController@fund')->name('finances.fund');
+Route::prefix('/finances')->group(function () {
 
-Route::get('finances/{question}', 'FinanceController@transfer');
+    Route::get('/fund', 'FinanceController@fund')->name('finances.fund');
 
-Route::get('finances', 'FinanceController@index')->name('finances.index');
+    Route::get('/', 'FinanceController@index')->name('finances.index');
+});

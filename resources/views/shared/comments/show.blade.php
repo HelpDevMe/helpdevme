@@ -8,7 +8,7 @@
             <span>{{ $post->body }}</span>
             @if ($post->budget)
                 <span class="badge badge-success">
-                    @include('shared.questions.budget', ['budget' => $post->budget])
+                    @include('shared.budget', ['budget' => $post->budget])
                 </span>
             @endif
             @if (Auth::check() && $post->budget && Auth::user()->can('view', $talk->question))
@@ -30,7 +30,7 @@
                                             <div class="font-weight-bold">{{ $talk->user->name }}</div>
                                             <div>{{ $post->body }}</div>
                                             <div class="text-success">
-                                                @include('shared.questions.budget', ['budget' => $post->budget])
+                                                @include('shared.budget', ['budget' => $post->budget])
                                             </div>
                                         </div>
                                         <div class="modal-footer">
