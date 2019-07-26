@@ -15,7 +15,7 @@ class Question extends Model
         'user_ended',
         'freelancer_ended'
     ];
-    
+
     const status = [
         'analyzing' => 0,
         'warranty' => 1,
@@ -32,7 +32,7 @@ class Question extends Model
     {
         return $this->belongsTo('App\User');
     }
-    
+
     public function talks()
     {
         return $this->hasMany('App\Talk');
@@ -42,7 +42,7 @@ class Question extends Model
     {
         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
-    
+
     public function posts()
     {
         return $this->hasManyThrough('App\Post', 'App\Talk');
@@ -50,7 +50,10 @@ class Question extends Model
 
     public function comments()
     {
-        return $this->posts->where('type', \App\Post::types['comment']);
+        $posts = $this->posts->where('type', \App\Post::types['comment']);
+        $posts->loadMissing('user');
+
+        return $posts;
     }
 
     public function votes()

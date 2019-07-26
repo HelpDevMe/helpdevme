@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 
 Route::resource('posts', 'Api\PostController');
 
+Route::post('comments', 'Api\CommentController@store');
+Route::get('comments/{question}', 'Api\CommentController@byQuestion');
+
 Route::resource('tags', 'Api\TagController');
 
 Route::resource('questions', 'Api\QuestionController');

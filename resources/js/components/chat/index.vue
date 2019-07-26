@@ -121,7 +121,9 @@
               required
             ></textarea>
             <div class="input-group-append">
-              <button type="submit" class="btn btn-primary">Enviar</button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+              </button>
             </div>
           </div>
         </form>
@@ -136,7 +138,7 @@ export default {
 
 	data() {
 		return {
-			channel: `privatechat.${this.talk.user_id}.${this.talk.receiver_id}`,
+			channel: `privatechat.${this.talk.id}`,
 			body: null,
 			timeOut: undefined,
 			formActive: true,
@@ -174,8 +176,11 @@ export default {
 		sendMessage() {
 			axios
 				.post('/api/posts', {
+					type: 0, // message
 					body: this.body,
-					talk_id: this.talk.id
+					talk_id: this.talk.id,
+					question_id: this.talk.question.id,
+					receiver_id: this.talk.question.user_id
 				})
 				.then(response => {
 					this.body = null;
@@ -205,7 +210,7 @@ export default {
 				this.onlineFriends.splice(this.onlineFriends.indexOf(user), 1);
 			});
 
-		Echo.private(this.channel + '.private')
+		Echo.private(`${this.channel}.private`)
 			.listen('PrivatePostSent', response => {
 				this.talkStatus(response.post.talk);
 				this.allPosts.push(response.post);

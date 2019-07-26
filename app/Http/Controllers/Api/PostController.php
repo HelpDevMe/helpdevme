@@ -6,6 +6,7 @@ use App\Post;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 use App\Events\PrivatePostSent;
 
 class PostController extends Controller
@@ -48,12 +49,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge([
-            'type' => Post::types['message'],
-            'user_id' => auth()->id()
+        $request->validate([
+            'body' => 'required'
         ]);
 
-        $post = new Post($request->all());
+        $post = new Post;
+        $post->talk_id = $request->talk_id;
+        $post->user_id = auth()->id();
+        $post->body = $request->body;
+        $post->type = $request->type;
+        $post->budget = $request->budget;
 
         $this->authorize('message', $post);
 

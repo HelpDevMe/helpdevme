@@ -1,11 +1,12 @@
 <template>
   <section>
-    <p v-if="typing" class="text-muted ellipsis">Alguém está digitando</p>
+    <p v-if="typing" class="text-muted ellipsis">Alguém está digitando uma pergunta</p>
     <Item v-for="(question, index) in questions" :question="question" :key="index" />
   </section>
 </template>
 <script>
 import Item from './item';
+
 export default {
 	data() {
 		return {

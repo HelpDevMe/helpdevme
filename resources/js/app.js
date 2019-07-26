@@ -30,6 +30,8 @@ Vue.component('VotesQuestion', require('./components/question/votes'));
 
 Vue.component('ListNewQuestions', require('./components/question/list'));
 
+Vue.component('Comments', require('./components/comments'));
+
 const app = new Vue({
 	el: '#app'
 });
