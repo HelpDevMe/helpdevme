@@ -51,7 +51,7 @@ class Question extends Model
     public function comments()
     {
         $posts = $this->posts->where('type', \App\Post::types['comment']);
-        $posts->loadMissing('user');
+        $posts->loadMissing('user', 'talk');
 
         return $posts;
     }

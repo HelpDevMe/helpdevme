@@ -12,7 +12,7 @@
 */
 
 Broadcast::channel('comments.{question_id}.private', function () {
-    return auth()->check();
+    return true;
 });
 
 Broadcast::channel('privatechat.{talk_id}.join', function ($user) {

@@ -10,9 +10,9 @@
             @include('shared.questions.status', ['status' => $question->status])
             <p class="lead">{{ $question->body }}</p>
             <div class="row">
-                <div class="col">
+                {{-- <div class="col">
                     <p class="small">{{ count($question->comments()) }} resposta(s)</p>
-                </div>
+                </div> --}}
                 <div class="col text-right">
                     <div class="small mb-3">
                         <span>{{ $question->created_at->diffForHumans() }} por</span>
@@ -27,7 +27,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col">
                     <div class="row">
                         <div class="col">
@@ -36,9 +36,9 @@
                             </div>
                         </div>
                     </div>
-                    @includeWhen($question->status == 0, 'shared.comments.create', ['question' => $question])
                 </div>
-            </div>
+            </div> --}}
+            <c-comments :question="{{ $question }}"></c-comments>
         </article>
     </div>
 </div>

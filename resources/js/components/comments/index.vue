@@ -1,8 +1,8 @@
 <template>
   <section>
     <p class="small">{{ comments.length }} resposta(s)</p>
-    <List :question="question" :comments="comments" />
-    <Create v-if="$userId != question.user_id" @create="createComment" :question="question" />
+    <List v-if="$userId" :question="question" :comments="comments" />
+    <Create v-if="canComment" @create="createComment" :question="question" />
   </section>
 </template>
 <script>
@@ -23,6 +23,11 @@ export default {
 	methods: {
 		createComment: function(comment) {
 			this.comments.push(comment);
+		}
+	},
+	computed: {
+		canComment: function() {
+			return (this.$userId != this.question.user_id) && this.question.status == 0;
 		}
 	},
 	mounted() {

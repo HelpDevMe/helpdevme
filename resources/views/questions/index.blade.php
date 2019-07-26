@@ -63,7 +63,7 @@
                         @endforeach
                     </div>
                 </div>
-                <comments :question="{{ $question }}"></comments>
+                <c-comments :question="{{ $question }}"></c-comments>
                 {{-- <div class="row">
                     <div class="col">
                         <div class="d-flex flex-column">
@@ -72,7 +72,6 @@
                     </div>
                 </div> --}}
             </div>
-            {{-- @includeWhen($question->status == 0, 'shared.comments.create', ['question' => $question]) --}}
         </div>
         @endforeach
     </div>

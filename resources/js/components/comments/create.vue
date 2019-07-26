@@ -1,51 +1,48 @@
 <template>
-  <div class="card-footer">
-    <form @submit.prevent="addComments">
-      <div class="form-row">
-        <div class="col-lg">
-          <input
-            name="body"
-            placeholder="Escreva uma mensagem..."
-            v-model="body"
-            class="form-control"
-            @keydown="onTyping"
-            required
-          />
-        </div>
-        <div class="col-lg-2">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">R$</span>
-            </div>
-            <input
-              type="number"
-              class="form-control"
-              v-model="budget"
-              name="budget"
-              @keydown="onTyping"
-              placeholder="Orçamento"
-            />
-          </div>
-        </div>
-        <div class="col flex-grow-0">
-          <button type="submit" class="btn btn-primary btn-block">
-            <i v-if="!loading" class="fas fa-paper-plane"></i>
-            <span v-else class="ellipsis"></span>
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
+  <form @submit.prevent="addComments">
+    <b-input-group>
+      <b-form-input
+        @keydown="onTyping"
+        placeholder="Escreva uma mensagem..."
+        v-model="body"
+        required
+      ></b-form-input>
+
+      <b-input-group-append>
+        <b-dropdown variant="outline-primary" v-b-tooltip.hover title="Adicionar Orçamento" right slot="append">
+          <template slot="button-content">
+            <i class="fas fa-hand-holding-usd"></i>
+          </template>
+          <b-dropdown-form>
+            <b-form-group label="Orçamento" label-for="dropdown-form-budget" @submit.stop.prevent>
+              <b-input-group prepend="R$">
+                <b-form-input
+                  id="dropdown-form-budget"
+                  v-model="budget"
+                  @keydown="onTyping"
+                  placeholder="2,50"
+                ></b-form-input>
+              </b-input-group>
+            </b-form-group>
+          </b-dropdown-form>
+        </b-dropdown>
+        <b-button variant="primary" type="submit" v-b-tooltip.hover title="Enviar">
+          <i v-if="!loading" class="fas fa-paper-plane"></i>
+          <span v-else class="ellipsis"></span>
+        </b-button>
+      </b-input-group-append>
+    </b-input-group>
+  </form>
 </template>
 <script>
 export default {
 	props: ['question'],
 	data() {
 		return {
-            channel: `comments.${this.question.id}`,
+			channel: `comments.${this.question.id}`,
 			loading: false,
 			body: undefined,
-			budget: undefined,
+			budget: undefined
 		};
 	},
 	methods: {
@@ -74,12 +71,12 @@ export default {
 					receiver_id: this.question.user_id
 				})
 				.then(response => {
-                    const { post } = response.data;
+					const { post } = response.data;
 
 					this.loading = false;
-                    this.resetForm();
+					this.resetForm();
 
-                    this.$emit('create', post);
+					this.$emit('create', post);
 
 					this.$bvToast.toast('Comentário enviado!', {
 						title: 'Sucesso!',
