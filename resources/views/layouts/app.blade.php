@@ -35,7 +35,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav text-center">
                         <li class="nav-item">
                             <a class="nav-link"
                                 href="{{ route('questions.index') }}">@lang('layouts.navbar.questions')</a>
@@ -48,7 +48,7 @@
                         </li>
                     </ul>
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto text-center">
                         <!-- Authentication Links -->
                         @guest
                         <li class="nav-item">
@@ -62,7 +62,7 @@
                         @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown"
-                                class="nav-link dropdown-toggle"
+                                class="nav-link dropdown-toggle d-flex justify-content-center"
                                 title="Minha Conta"
                                 href="#"
                                 role="button"
@@ -72,10 +72,11 @@
                                 aria-expanded="false"
                             >
                                 @include('shared.avatar', ['user' => auth()->user()])
+                                <span class="pl-3 d-md-none d-block">{{ Auth::user()->name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                                <p class="text-muted px-4">Olá, <b>{{ Auth::user()->name }}</b>!</p>
+                                <p class="text-muted px-4 d-md-block d-none">Olá, <b>{{ Auth::user()->name }}</b>!</p>
 
                                 <a class="dropdown-item" href="{{ route('profile.infos') }}">
                                     @lang('layouts.navbar.profile')
@@ -111,11 +112,12 @@
                                 v-b-tooltip.hover
                                 aria-haspopup="true"
                                 aria-expanded="false"
-                                class="nav-link dropdown-toggle"
+                                class="nav-link dropdown-toggle d-flex justify-content-center"
                                 href="#"
                                 title="@lang('layouts.navbar.posts')"
                             >
                                 <i class="fas fa-comments fa-2x"></i>
+                                <span class="pl-3 d-md-none d-block">Conversas</span>
                             </a>
                             <div
                                 class="dropdown-menu dropdown-menu-right my-0 py-0"

@@ -176,7 +176,7 @@ class PaymentController extends Controller
             $alert->status = Post::status['payment'];
             $alert->save();
 
-            broadcast(new PrivatePostSent($alert, $question));
+            broadcast(new PrivatePostSent($alert));
 
             return redirect()->route('talks.show', $post->talk)
                 ->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
@@ -313,7 +313,7 @@ class PaymentController extends Controller
             $alert->status = Post::status['payment'];
             $alert->save();
 
-            broadcast(new PrivatePostSent($alert, $question));
+            broadcast(new PrivatePostSent($alert));
 
             return redirect()->route('talks.show', $post->talk)
                 ->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');

@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Post;
+
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;

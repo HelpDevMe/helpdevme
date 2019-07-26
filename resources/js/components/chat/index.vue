@@ -189,7 +189,8 @@ export default {
 		},
 		fetchMessages() {
 			this.allPosts = this.posts;
-			this.talkStatus(this.talk);
+            this.talkStatus(this.talk);
+            console.log('fetchMessages', this.talk);
 		},
 		talkStatus(talk) {
 			this.formActive = talk.status == 1 ? false : true;
@@ -212,8 +213,12 @@ export default {
 
 		Echo.private(`${this.channel}.private`)
 			.listen('PrivatePostSent', response => {
-				this.talkStatus(response.post.talk);
-				this.allPosts.push(response.post);
+				const { post } = response;
+
+				console.log('PrivatePostSent', post);
+
+				this.talkStatus(post.talk);
+				this.allPosts.push(post);
 			})
 			.listenForWhisper('typing', e => {
 				this.typing = e.typing;

@@ -85206,6 +85206,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		fetchMessages: function fetchMessages() {
 			this.allPosts = this.posts;
 			this.talkStatus(this.talk);
+			console.log('fetchMessages', this.talk);
 		},
 		talkStatus: function talkStatus(talk) {
 			this.formActive = talk.status == 1 ? false : true;
@@ -85226,8 +85227,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		});
 
 		Echo.private(this.channel + '.private').listen('PrivatePostSent', function (response) {
-			_this2.talkStatus(response.post.talk);
-			_this2.allPosts.push(response.post);
+			var post = response.post;
+
+
+			console.log('PrivatePostSent', post);
+
+			_this2.talkStatus(post.talk);
+			_this2.allPosts.push(post);
 		}).listenForWhisper('typing', function (e) {
 			_this2.typing = e.typing;
 
@@ -86315,6 +86321,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}, 300);
 		},
 		resetForm: function resetForm() {
+			this.focus = false;
+
 			this.title = undefined;
 			this.body = undefined;
 			this.tags = [];
@@ -86909,6 +86917,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['question']
@@ -86945,6 +86958,15 @@ var render = function() {
           _vm._v(" "),
           _c("p", [_vm._v(_vm._s(_vm.question.body))])
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col" },
+          [_c("c-comments", { attrs: { question: _vm.question } })],
+          1
+        )
       ])
     ])
   ])
@@ -87580,6 +87602,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['comment', 'question']
@@ -87593,167 +87617,196 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.comment.type == 1
-    ? _c("div", { staticClass: "py-3 border-top comment" }, [
-        _c("a", { attrs: { href: "/users/" + _vm.comment.user_id } }, [
-          _c("span", { staticClass: "mr-2" }, [
-            _vm.comment.user.avatar
-              ? _c("img", {
-                  staticClass: "img-fluid avatar",
-                  attrs: {
-                    width: "25",
-                    src: "/storage/img/avatars/" + _vm.comment.user.avatar,
-                    alt: _vm.comment.user.name,
-                    title: _vm.comment.user.name
-                  }
-                })
-              : _c("i", { staticClass: "fas fa-user-circle fa-2x" })
+  return _c("div", [
+    _vm.comment.type == 1
+      ? _c("div", { staticClass: "py-3 border-top comment" }, [
+          _c("a", { attrs: { href: "/users/" + _vm.comment.user_id } }, [
+            _c("span", { staticClass: "mr-2" }, [
+              _vm.comment.user.avatar
+                ? _c("img", {
+                    staticClass: "img-fluid avatar",
+                    attrs: {
+                      width: "25",
+                      src: "/storage/img/avatars/" + _vm.comment.user.avatar,
+                      alt: _vm.comment.user.name,
+                      title: _vm.comment.user.name
+                    }
+                  })
+                : _c("i", { staticClass: "fas fa-user-circle fa-2x" })
+            ]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.comment.user.name))])
           ]),
           _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.comment.user.name))])
-        ]),
-        _vm._v(" "),
-        _c("span", [_vm._v(_vm._s(_vm.comment.body))]),
-        _vm._v(" "),
-        _vm.comment.budget
-          ? _c("span", { staticClass: "badge badge-success" }, [
-              _vm._v(_vm._s(_vm.comment.budget))
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.$userId == _vm.question.user_id
-          ? _c("div", { staticClass: "d-flex pt-3" }, [
-              _vm.comment.budget && _vm.$userId == _vm.comment.talk.receiver_id
-                ? _c("div", [
-                    _vm.question.status == 0
-                      ? _c("div", [
-                          _c(
-                            "button",
-                            {
-                              directives: [
-                                {
-                                  name: "b-modal",
-                                  rawName: "v-b-modal",
-                                  value: "#confirmModal" + _vm.comment.id,
-                                  expression: "`#confirmModal${ comment.id }`"
+          _c("span", [_vm._v(_vm._s(_vm.comment.body))]),
+          _vm._v(" "),
+          _vm.comment.budget
+            ? _c("span", { staticClass: "badge badge-success" }, [
+                _vm._v(_vm._s(_vm.comment.budget))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.$userId == _vm.question.user_id
+            ? _c("div", { staticClass: "d-flex pt-3" }, [
+                _vm.comment.budget &&
+                _vm.$userId == _vm.comment.talk.receiver_id
+                  ? _c("div", [
+                      _vm.question.status == 0
+                        ? _c("div", [
+                            _c(
+                              "button",
+                              {
+                                directives: [
+                                  {
+                                    name: "b-modal",
+                                    rawName: "v-b-modal",
+                                    value: "#confirmModal" + _vm.comment.id,
+                                    expression: "`#confirmModal${ comment.id }`"
+                                  }
+                                ],
+                                staticClass: "btn btn-sm btn-success",
+                                attrs: {
+                                  type: "button",
+                                  "data-toggle": "modal"
                                 }
-                              ],
-                              staticClass: "btn btn-sm btn-success",
-                              attrs: { type: "button", "data-toggle": "modal" }
-                            },
-                            [_vm._v("Aceitar")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
+                              },
+                              [_vm._v("Aceitar")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "modal fade",
+                                attrs: {
+                                  id: "confirmModal" + _vm.comment.id,
+                                  tabindex: "-1",
+                                  role: "dialog",
+                                  ariaLabelledby:
+                                    "confirmModal" + _vm.comment.id,
+                                  "aria-hidden": "true"
+                                }
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "modal-dialog",
+                                    attrs: { role: "document" }
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "modal-content" },
+                                      [
+                                        _c(
+                                          "div",
+                                          { staticClass: "modal-header" },
+                                          [
+                                            _c(
+                                              "h5",
+                                              {
+                                                staticClass: "modal-title",
+                                                attrs: {
+                                                  id:
+                                                    "confirmModalLabel" +
+                                                    _vm.comment.id
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                    Você está prestes a aceitar uma\n                    proposta para sua pergunta\n                  "
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _vm._m(0)
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "modal-body" },
+                                          [
+                                            _c("div", [
+                                              _vm._v(_vm._s(_vm.comment.body))
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "text-success" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(_vm.comment.budget)
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "modal-footer" },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "btn btn-secondary",
+                                                attrs: {
+                                                  type: "button",
+                                                  "data-dismiss": "modal"
+                                                }
+                                              },
+                                              [_vm._v("Cancelar")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "a",
+                                              {
+                                                staticClass: "btn btn-success",
+                                                attrs: {
+                                                  href:
+                                                    "/posts/accept" +
+                                                    _vm.comment.id
+                                                }
+                                              },
+                                              [_vm._v("Aceitar")]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          ])
+                        : _vm.question.status == 1
+                        ? _c(
+                            "a",
                             {
-                              staticClass: "modal fade",
-                              attrs: {
-                                id: "confirmModal" + _vm.comment.id,
-                                tabindex: "-1",
-                                role: "dialog",
-                                ariaLabelledby: "confirmModal" + _vm.comment.id,
-                                "aria-hidden": "true"
-                              }
+                              staticClass: "btn btn-success",
+                              attrs: { href: "/payments/" + _vm.comment.id }
                             },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass: "modal-dialog",
-                                  attrs: { role: "document" }
-                                },
-                                [
-                                  _c("div", { staticClass: "modal-content" }, [
-                                    _c("div", { staticClass: "modal-header" }, [
-                                      _c(
-                                        "h5",
-                                        {
-                                          staticClass: "modal-title",
-                                          attrs: {
-                                            id:
-                                              "confirmModalLabel" +
-                                              _vm.comment.id
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                  Você está prestes a aceitar uma\n                  proposta para sua pergunta\n                "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _vm._m(0)
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "modal-body" }, [
-                                      _c("div", [
-                                        _vm._v(_vm._s(_vm.comment.body))
-                                      ]),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        { staticClass: "text-success" },
-                                        [_vm._v(_vm._s(_vm.comment.budget))]
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "modal-footer" }, [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass: "btn btn-secondary",
-                                          attrs: {
-                                            type: "button",
-                                            "data-dismiss": "modal"
-                                          }
-                                        },
-                                        [_vm._v("Cancelar")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "a",
-                                        {
-                                          staticClass: "btn btn-success",
-                                          attrs: {
-                                            href:
-                                              "/posts/accept" + _vm.comment.id
-                                          }
-                                        },
-                                        [_vm._v("Aceitar")]
-                                      )
-                                    ])
-                                  ])
-                                ]
-                              )
-                            ]
+                            [_vm._v("Pagar")]
                           )
-                        ])
-                      : _vm.question.status == 1
-                      ? _c(
-                          "a",
-                          {
-                            staticClass: "btn btn-success",
-                            attrs: { href: "/payments/" + _vm.comment.id }
-                          },
-                          [_vm._v("Pagar")]
-                        )
-                      : _vm._e()
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn btn-sm text-secondary",
-                  attrs: { href: "/talks/" + _vm.comment.talk_id }
-                },
-                [_vm._v("Conversar")]
-              )
-            ])
-          : _vm._e()
-      ])
-    : _vm._e()
+                        : _vm._e()
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-sm text-secondary",
+                    attrs: { href: "/talks/" + _vm.comment.talk_id }
+                  },
+                  [_vm._v("Conversar")]
+                )
+              ])
+            : _vm._e()
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = [
   function() {

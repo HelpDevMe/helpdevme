@@ -12,6 +12,11 @@
           <p>{{ question.body }}</p>
         </div>
       </div>
+      <div class="row">
+        <div class="col">
+          <c-comments :question="question" />
+        </div>
+      </div>
     </div>
   </div>
 </template>

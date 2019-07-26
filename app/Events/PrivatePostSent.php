@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Post;
-use App\Question;
+
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -15,17 +15,16 @@ class PrivatePostSent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $post;
-    public $question;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Post $post, Question $question = null)
+    public function __construct(Post $post)
     {
         $this->post = $post;
-        $this->question = $question;
+        $this->post->talk = $post->talk;
     }
 
     /**
