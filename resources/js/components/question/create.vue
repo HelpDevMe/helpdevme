@@ -107,7 +107,7 @@ export default {
 			}, 300);
 		},
 		resetForm() {
-            this.focus = false;
+			this.focus = false;
 
 			this.title = undefined;
 			this.body = undefined;

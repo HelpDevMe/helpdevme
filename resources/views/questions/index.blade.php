@@ -63,14 +63,7 @@
                         @endforeach
                     </div>
                 </div>
-                <c-comments :question="{{ $question }}"></c-comments>
-                {{-- <div class="row">
-                    <div class="col">
-                        <div class="d-flex flex-column">
-                            @each('shared.comments.show', $question->talks, 'talk')
-                        </div>
-                    </div>
-                </div> --}}
+                <c-comments :question="{{ $question }}" :comments="{{ $question->comments() }}"></c-comments>
             </div>
         </div>
         @endforeach

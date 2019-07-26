@@ -11,12 +11,18 @@
 |
 */
 
-Broadcast::channel('comments.{question_id}.private', function () {
-    return true;
-});
-
+/**
+ * Presence
+ */
 Broadcast::channel('privatechat.{talk_id}.join', function ($user) {
     return auth()->check() ? $user : false;
+});
+
+/**
+ * Private
+ */
+Broadcast::channel('comments.{question_id}.private', function () {
+    return true;
 });
 
 Broadcast::channel('privatechat.{talk_id}.private', function () {

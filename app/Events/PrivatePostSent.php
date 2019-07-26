@@ -23,8 +23,7 @@ class PrivatePostSent implements ShouldBroadcast
      */
     public function __construct(Post $post)
     {
-        $this->post = $post;
-        $this->post->talk = $post->talk;
+        $this->post = $post->load('talk');
     }
 
     /**

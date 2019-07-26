@@ -17,9 +17,12 @@
           :title="talk.opposite.name"
         />
         <i v-else class="fas fa-user-circle fa-2x"></i>
-        <div class="ml-3 text-truncate">
-          <h6 class="mb-1">Conversa com {{ talk.opposite.name }}</h6>
-          <small class="text-muted">{{ talk.created_at }}</small>
+        <div class="ml-3 text-truncate flex-grow-1">
+          <h5 class="mb-1">Conversa com {{ talk.opposite.name }}</h5>
+          <div class="d-flex justify-content-between">
+            <small>Em: <b>{{ talk.question.title }}</b></small>
+            <small class="text-muted pl-3">{{ talk.created_at }}</small>
+          </div>
         </div>
       </div>
     </a>

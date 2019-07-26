@@ -14,6 +14,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import store from './store';
 import BootstrapVue from 'bootstrap-vue';
 
 Vue.use(BootstrapVue);
@@ -33,5 +34,6 @@ Vue.component('ListNewQuestions', require('./components/question/list'));
 Vue.component('CComments', require('./components/comments'));
 
 const app = new Vue({
+    store,
 	el: '#app'
 });

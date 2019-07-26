@@ -58,11 +58,4 @@ class CommentController extends Controller
 
         return response(['post' => $post]);
     }
-
-    public function byQuestion($id)
-    {
-        $question = Question::findOrFail($id);
-
-        return response(['comments' => $question->comments()]);
-    }
 }

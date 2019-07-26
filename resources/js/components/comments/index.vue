@@ -1,7 +1,7 @@
 <template>
   <section>
-    <p class="small">{{ comments.length }} resposta(s)</p>
-    <List v-if="$userId" :question="question" :comments="comments" />
+    <p class="small">{{ commentsItems.length }} resposta(s)</p>
+    <List v-if="$userId" :question="question" :comments="commentsItems" />
     <Create v-if="canComment" @create="createComment" :question="question" />
   </section>
 </template>
@@ -10,10 +10,10 @@ import List from './list';
 import Create from './create';
 
 export default {
-	props: ['question'],
+	props: ['question', 'comments'],
 	data() {
 		return {
-			comments: []
+			commentsItems: []
 		};
 	},
 	components: {
@@ -22,7 +22,7 @@ export default {
 	},
 	methods: {
 		createComment: function(comment) {
-			this.comments.push(comment);
+			this.commentsItems.push(comment);
 		}
 	},
 	computed: {
@@ -31,9 +31,7 @@ export default {
 		}
 	},
 	mounted() {
-		axios.get(`/api/comments/${this.question.id}`).then(res => {
-			this.comments = res.data.comments;
-		});
+        this.commentsItems = this.comments;
 	}
 };
 </script>

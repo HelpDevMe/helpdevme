@@ -22,7 +22,7 @@
 
 <body class="bg-light h-100">
     <div id="app" class="d-flex flex-column justify-content-between h-100">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top shadow-sm">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ route('index') }}">
                     @svg('logo-helpdev')
