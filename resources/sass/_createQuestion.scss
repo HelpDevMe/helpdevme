@@ -1,16 +1,16 @@
 .create-question {
 	.create-question-form {
-		.close {
-			visibility: hidden;
+		.card-header {
+			display: none;
 		}
 		.placeholder {
-            display: block;
-            cursor: auto;
-        }
-        .avatar {
-            width: 55px;
-            height: 55px;
-        }
+			display: block;
+			cursor: auto;
+		}
+		.avatar {
+			width: 55px;
+			height: 55px;
+		}
 		form {
 			display: none;
 		}
@@ -27,8 +27,8 @@
 	&.active {
 		.create-question-form {
 			z-index: $zindex-modal;
-			.close {
-				visibility: visible;
+			.card-header {
+				display: initial;
 			}
 			.placeholder {
 				display: none;

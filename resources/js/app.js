@@ -16,8 +16,18 @@ window.Vue = require('vue');
 
 import store from './store';
 import BootstrapVue from 'bootstrap-vue';
+import VueCurrencyFilter from 'vue-currency-filter';
 
 Vue.use(BootstrapVue);
+
+Vue.use(VueCurrencyFilter, {
+	symbol: 'R$',
+	thousandsSeparator: '.',
+	fractionCount: 2,
+	fractionSeparator: ',',
+	symbolPosition: 'front',
+	symbolSpacing: true
+});
 
 Vue.prototype.$userId = document
 	.querySelector("meta[name='user-id']")
@@ -34,6 +44,6 @@ Vue.component('ListNewQuestions', require('./components/question/list'));
 Vue.component('CComments', require('./components/comments'));
 
 const app = new Vue({
-    store,
+	store,
 	el: '#app'
 });

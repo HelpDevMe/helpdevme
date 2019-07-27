@@ -27,11 +27,11 @@ export default {
 	},
 	computed: {
 		canComment: function() {
-			return (this.$userId != this.question.user_id) && this.question.status == 0;
+			return this.$userId != this.question.user_id && this.question.status == 0;
 		}
 	},
 	mounted() {
-        this.commentsItems = this.comments;
+		this.commentsItems = this.comments || [];
 	}
 };
 </script>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Talk;
 use App\Post;
-use App\Question;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -20,7 +19,7 @@ class CommentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['byQuestion']]);
+        $this->middleware('auth:api');
     }
 
     /**

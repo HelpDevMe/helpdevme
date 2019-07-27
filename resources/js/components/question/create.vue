@@ -26,7 +26,7 @@
               class="placeholder text-muted py-3"
               @click="focus = true"
             >Qual sua dúvida sobre programação?</div>
-            <form @submit.prevent="addQuestion">
+            <form @submit.prevent="onSubmit">
               <div class="form-group">
                 <input
                   type="text"
@@ -130,7 +130,7 @@ export default {
 				this.options = response.data.tags;
 			});
 		},
-		addQuestion() {
+		onSubmit() {
 			this.loading = true;
 
 			axios

@@ -29,7 +29,10 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::with(['talks', 'posts'])
+            ->get();
+
+        return response(['questions' => $questions]);
     }
 
     /**
@@ -50,14 +53,18 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge([
-            'slug' => str_slug($request->title),
-            'user_id' => auth()->id()
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required'
         ]);
 
-        $question = Question::create($request->all());
-
+        $question = new Question;
+        $question->title = $request->title;
+        $question->slug = str_slug($request->title);
+        $question->body = $request->body;
+        $question->user_id = auth()->id();
         $question->tags()->attach($request->tags);
+
         $question->save();
 
         broadcast(new NewQuestionsEvent($question));
@@ -102,7 +109,7 @@ class QuestionController extends Controller
                 'user_id' => auth()->id()
             ],
             [
-                'vote'=> $request->vote
+                'vote' => $request->vote
             ]
         );
 
