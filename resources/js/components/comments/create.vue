@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="addComments">
+  <form @submit.prevent="onSubmit">
     <b-input-group>
       <b-form-input
         @keydown="onTyping"
@@ -9,7 +9,13 @@
       ></b-form-input>
 
       <b-input-group-append>
-        <b-dropdown variant="outline-primary" v-b-tooltip.hover title="Adicionar Orçamento" right slot="append">
+        <b-dropdown
+          variant="outline-primary"
+          v-b-tooltip.hover
+          title="Adicionar Orçamento"
+          right
+          slot="append"
+        >
           <template slot="button-content">
             <i class="fas fa-hand-holding-usd"></i>
           </template>
@@ -35,11 +41,12 @@
   </form>
 </template>
 <script>
+import { mapActions } from 'vuex';
+
 export default {
 	props: ['question'],
 	data() {
 		return {
-			channel: `comments.${this.question.id}`,
 			loading: false,
 			body: undefined,
 			budget: undefined
@@ -47,7 +54,9 @@ export default {
 	},
 	methods: {
 		onTyping() {
-			const privateChannel = Echo.private(this.channel + '.private');
+			const privateChannel = Echo.private(
+				`comments.${this.question.id}.private`
+			);
 
 			setTimeout(() => {
 				privateChannel.whisper('typing', {
@@ -59,24 +68,19 @@ export default {
 			this.body = undefined;
 			this.budget = undefined;
 		},
-		addComments() {
+		onSubmit() {
 			this.loading = true;
 
-			axios
-				.post('/api/comments', {
-					type: 1, // comment
-					body: this.body,
-					budget: this.budget,
-					question_id: this.question.id,
-					receiver_id: this.question.user_id
-				})
+			this.addComment({
+				type: 1, // comment
+				body: this.body,
+				budget: this.budget,
+				question_id: this.question.id,
+				receiver_id: this.question.user_id
+			})
 				.then(response => {
-					const { post } = response.data;
-
 					this.loading = false;
 					this.resetForm();
-
-					this.$emit('create', post);
 
 					this.$bvToast.toast('Comentário enviado!', {
 						title: 'Sucesso!',
@@ -93,7 +97,8 @@ export default {
 						solid: true
 					});
 				});
-		}
+		},
+		...mapActions('questions', ['addComment'])
 	}
 };
 </script>

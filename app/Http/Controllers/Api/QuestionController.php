@@ -29,7 +29,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::with(['talks', 'posts'])
+        $questions = Question::with(['talks', 'comments'])
             ->get();
 
         return response(['questions' => $questions]);
@@ -67,7 +67,9 @@ class QuestionController extends Controller
 
         $question->save();
 
-        broadcast(new NewQuestionsEvent($question));
+        $question->load('comments');
+
+        broadcast(new NewQuestionsEvent($question))->toOthers();
 
         return response(['question' => $question]);
     }

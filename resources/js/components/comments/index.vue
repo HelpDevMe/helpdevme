@@ -1,37 +1,30 @@
 <template>
   <section>
-    <p class="small">{{ commentsItems.length }} resposta(s)</p>
-    <List v-if="$userId" :question="question" :comments="commentsItems" />
-    <Create v-if="canComment" @create="createComment" :question="question" />
+    <p class="small">{{ comments.length }} resposta(s)</p>
+    <List v-if="$userId" :question="question" :comments="comments" />
+    <Create v-if="canComment" :question="question" />
   </section>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 import List from './list';
 import Create from './create';
 
 export default {
-	props: ['question', 'comments'],
-	data() {
-		return {
-			commentsItems: []
-		};
-	},
+	props: ['question'],
 	components: {
 		List,
 		Create
 	},
-	methods: {
-		createComment: function(comment) {
-			this.commentsItems.push(comment);
-		}
-	},
 	computed: {
+		...mapGetters('questions', ['getComments']),
 		canComment: function() {
 			return this.$userId != this.question.user_id && this.question.status == 0;
+		},
+		comments: function() {
+			return this.getComments(this.question.id) || [];
 		}
-	},
-	mounted() {
-		this.commentsItems = this.comments || [];
 	}
 };
 </script>

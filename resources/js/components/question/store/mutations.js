@@ -1,12 +1,34 @@
-const SET_LIST = (state, obj) => {
-	state.list = obj.list;
-};
+/**
+ * PRIVATE
+ */
+const question = ({ list, news }, question_id) =>
+	[...list, ...news].find(question => question.id == question_id);
 
-const ADD_QUESTION = (state, obj) => {
-	state.news.push(obj);
+/**
+ * Questions
+ */
+const ADD_QUESTION = ({ news }, response) =>
+	news.unshift(response.data.question);
+
+const SET_QUESTIONS = (state, questions) => (state.list = questions);
+
+const SET_QUESTION = ({ news }, question) => news.unshift(question);
+
+/**
+ * Comments
+ */
+const ADD_COMMENT = (state, comment) =>
+	question(state, comment.data.post.talk.question_id).comments.push(post);
+
+const SET_COMMENT = (state, comment) => {
+	console.log('SET_COMMENT', question(state, comment.talk.question_id));
+	question(state, comment.talk.question_id).comments.push(comment);
 };
 
 export default {
-	SET_LIST,
-	ADD_QUESTION
+	ADD_QUESTION,
+	SET_QUESTIONS,
+	SET_QUESTION,
+	ADD_COMMENT,
+	SET_COMMENT
 };

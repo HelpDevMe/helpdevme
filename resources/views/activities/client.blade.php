@@ -23,7 +23,7 @@
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <p class="small">{{ count($question->comments()) }} resposta(s)</p>
+                        <p class="small">{{ count($question->comments) }} resposta(s)</p>
                     </div>
                     <div class="col text-right">
                         <div class="small">{{ $question->created_at->diffForHumans() }}</div>

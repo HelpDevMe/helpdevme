@@ -24,7 +24,7 @@
                     @endforeach
                 </div>
             </div>
-            <c-comments :question="{{ $question }}" :comments="{{ $question->comments() }}"></c-comments>
+            <c-comments :question="{{ $question }}"></c-comments>
         </article>
     </div>
 </div>

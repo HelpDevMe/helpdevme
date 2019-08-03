@@ -12,7 +12,7 @@
                 </a>
                 <div class="row card-text text-muted">
                     <div class="col">
-                        <small>{{ count($question->comments()) }} resposta(s)</small>
+                        <small>{{ count($question->comments) }} resposta(s)</small>
                     </div>
                     <div class="col text-right">
                         <div class="small">

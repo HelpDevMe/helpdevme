@@ -10,13 +10,14 @@
   </section>
 </template>
 <script>
+import { mapActions } from 'vuex';
+
 import Item from './item';
 
 export default {
 	props: ['question', 'comments'],
 	data() {
 		return {
-			channel: `comments.${this.question.id}`,
 			timeOut: undefined,
 			typing: false
 		};
@@ -24,13 +25,12 @@ export default {
 	components: {
 		Item
 	},
+	methods: {
+		...mapActions('questions', ['setComment'])
+	},
 	created() {
-		Echo.private(`${this.channel}.private`)
-			.listen('PrivateCommentSent', response => {
-				const { post } = response;
-
-				this.comments.push(post);
-			})
+		Echo.private(`comments.${this.question.id}.private`)
+			.listen('PrivateCommentSent', response => this.setComment(response.post))
 			.listenForWhisper('typing', e => {
 				this.typing = e.typing;
 

@@ -40,7 +40,7 @@
                             <a href="{{ route('questions.show', $question) }}">{{ $question->title }}</a>
                         </h3>
                         @include('shared.questions.status', ['status' => $question->status])
-                        <p>{{ $question->body }}</p>
+                        <p>{{ html_entity_decode($question->body) }}</p>
                     </div>
                 </div>
                 <div class="row align-items-center">
@@ -63,7 +63,7 @@
                         @endforeach
                     </div>
                 </div>
-                <c-comments :question="{{ $question }}" :comments="{{ $question->comments() }}"></c-comments>
+                <c-comments :question="{{ $question }}"></c-comments>
             </div>
         </div>
         @endforeach

@@ -17,6 +17,9 @@ window.Vue = require('vue');
 import store from './store';
 import BootstrapVue from 'bootstrap-vue';
 import VueCurrencyFilter from 'vue-currency-filter';
+import Vue2Editor from 'vue2-editor';
+
+Vue.use(Vue2Editor);
 
 Vue.use(BootstrapVue);
 

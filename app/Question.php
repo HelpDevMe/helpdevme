@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Post;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
@@ -50,10 +52,9 @@ class Question extends Model
 
     public function comments()
     {
-        $posts = $this->posts->where('type', \App\Post::types['comment']);
-        $posts->loadMissing('user', 'talk');
-
-        return $posts;
+        return $this->hasManyThrough('App\Post', 'App\Talk')
+            ->with(['user', 'talk'])
+            ->where('type', Post::types['comment']);
     }
 
     public function votes()

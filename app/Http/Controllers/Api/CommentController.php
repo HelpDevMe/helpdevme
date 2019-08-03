@@ -31,7 +31,10 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'body' => 'required'
+            'body' => 'required',
+            'type' => 'required',
+            'receiver_id' => 'required',
+            'question_id' => 'required'
         ]);
 
         $talk = Talk::firstOrCreate([
@@ -52,6 +55,8 @@ class CommentController extends Controller
         $this->authorize('message', $post);
 
         $post->save();
+
+        $post->load('talk');
 
         broadcast(new PrivateCommentSent($post))->toOthers();
 

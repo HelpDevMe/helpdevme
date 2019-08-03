@@ -1,15 +1,36 @@
 <template>
-  <section class="create-question" :class="{ active: focus }">
-    <div class="create-question-form card mb-5">
-      <div class="card-header">
-        <div class="d-flex justify-content-between align-items-center">
-          <span>Criar Pergunta</span>
-          <a href="javascript:void(0)" class="close" @click="focus = false" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </a>
+  <section class="create-question">
+    <b-button
+      @click="$bvModal.show('modal-create-question')"
+      variant="link"
+      class="btn-block card card-body card mb-5"
+    >
+      <div class="d-flex">
+        <div class="pr-3">
+          <img
+            v-if="user.avatar"
+            class="img-fluid avatar"
+            :src="'/storage/img/avatars/' + user.avatar"
+            v-bind:alt="user.name"
+            v-bind:title="user.name"
+          />
+          <i v-else class="fas fa-user-circle fa-4x"></i>
+        </div>
+        <div class="flex-grow-1">
+          <div class="placeholder text-muted py-3">Qual sua dúvida sobre programação?</div>
         </div>
       </div>
-      <div class="card-body">
+    </b-button>
+
+    <b-modal id="modal-create-question" size="lg">
+      <template slot="modal-header" slot-scope="{ close }">
+        <span>Criar Pergunta</span>
+        <a href="javascript:void(0)" class="close" @click="close()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </template>
+
+      <template slot="default">
         <div class="d-flex">
           <div class="pr-3">
             <img
@@ -22,10 +43,6 @@
             <i v-else class="fas fa-user-circle fa-4x"></i>
           </div>
           <div class="flex-grow-1">
-            <div
-              class="placeholder text-muted py-3"
-              @click="focus = true"
-            >Qual sua dúvida sobre programação?</div>
             <form @submit.prevent="onSubmit">
               <div class="form-group">
                 <input
@@ -39,14 +56,15 @@
                 />
               </div>
               <div class="form-group">
-                <textarea
+                <!-- <textarea
                   @keydown="onTyping"
                   name="body"
                   class="form-control"
                   v-model="body"
                   placeholder="Pergunta"
                   required
-                ></textarea>
+                ></textarea> -->
+                <vue-editor v-model="body" />
               </div>
               <div class="form-group">
                 <multiselect
@@ -63,28 +81,34 @@
               </div>
               <div class="form-row justify-content-end">
                 <div class="col-lg-3">
-                  <button type="submit" class="btn btn-success btn-block">
-                    <span v-if="!loading">Enviar</span>
-                    <span v-else class="ellipsis"></span>
-                  </button>
+                  <button type="submit" class="d-none" id="submit-modal-create-question"></button>
                 </div>
               </div>
             </form>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="create-question-backdrop" @click="focus = false"></div>
+      </template>
+
+      <template slot="modal-footer">
+        <label for="submit-modal-create-question" class="btn btn-success px-5">
+          <span v-if="!loading">Enviar</span>
+          <span v-else class="ellipsis"></span>
+        </label>
+      </template>
+    </b-modal>
   </section>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Multiselect from 'vue-multiselect';
+import { VueEditor } from 'vue2-editor';
 
 export default {
 	props: ['user'],
 	components: {
-		Multiselect
+        Multiselect,
+        VueEditor
 	},
 	data() {
 		return {
@@ -97,6 +121,7 @@ export default {
 		};
 	},
 	methods: {
+		...mapActions('questions', ['addQuestion']),
 		onTyping() {
 			const privateChannel = Echo.private('newquestions');
 
@@ -133,12 +158,11 @@ export default {
 		onSubmit() {
 			this.loading = true;
 
-			axios
-				.post('/api/questions', {
-					title: this.title,
-					body: this.body,
-					tags: this.tags.map(tag => tag.id)
-				})
+			this.addQuestion({
+				title: this.title,
+				body: this.body,
+				tags: this.tags.map(tag => tag.id)
+			})
 				.then(() => {
 					this.loading = false;
 					this.resetForm();
@@ -152,11 +176,14 @@ export default {
 				.catch(() => {
 					this.loading = false;
 
-					this.$bvToast.toast('Tente novamente de uma forma diferente!', {
-						title: 'Algo deu errado!',
-						variant: 'danger',
-						solid: true
-					});
+					this.$bvToast.toast(
+						'Tente novamente de uma forma diferente!',
+						{
+							title: 'Algo deu errado!',
+							variant: 'danger',
+							solid: true
+						}
+					);
 				});
 		}
 	},
