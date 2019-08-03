@@ -30,5 +30,5 @@ Broadcast::channel('privatechat.{talk_id}.private', function () {
 });
 
 Broadcast::channel('newquestions', function () {
-    return auth()->check();
+    return true;
 });

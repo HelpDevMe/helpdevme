@@ -17,13 +17,11 @@ const SET_QUESTION = ({ news }, question) => news.unshift(question);
 /**
  * Comments
  */
-const ADD_COMMENT = (state, comment) =>
-	question(state, comment.data.post.talk.question_id).comments.push(post);
+const ADD_COMMENT = (state, { data }) =>
+	question(state, data.post.talk.question_id).comments.push(data.post);
 
-const SET_COMMENT = (state, comment) => {
-	console.log('SET_COMMENT', question(state, comment.talk.question_id));
+const SET_COMMENT = (state, comment) =>
 	question(state, comment.talk.question_id).comments.push(comment);
-};
 
 export default {
 	ADD_QUESTION,

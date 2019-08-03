@@ -96354,13 +96354,13 @@ var SET_QUESTION = function SET_QUESTION(_ref3, question) {
 /**
  * Comments
  */
-var ADD_COMMENT = function ADD_COMMENT(state, comment) {
-	return question(state, comment.data.post.talk.question_id).comments.push(post);
+var ADD_COMMENT = function ADD_COMMENT(state, _ref4) {
+	var data = _ref4.data;
+	return question(state, data.post.talk.question_id).comments.push(data.post);
 };
 
 var SET_COMMENT = function SET_COMMENT(state, comment) {
-	console.log('SET_COMMENT', question(state, comment.talk.question_id));
-	question(state, comment.talk.question_id).comments.push(comment);
+	return question(state, comment.talk.question_id).comments.push(comment);
 };
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -104395,7 +104395,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 					variant: 'success',
 					solid: true
 				});
-			}).catch(function () {
+			}).catch(function (error) {
 				_this.loading = false;
 
 				_this.$bvToast.toast('Tente novamente de uma forma diferente!', {
@@ -104570,11 +104570,7 @@ var render = function() {
         _vm._v(_vm._s(_vm.comments.length) + " resposta(s)")
       ]),
       _vm._v(" "),
-      _vm.$userId
-        ? _c("List", {
-            attrs: { question: _vm.question, comments: _vm.comments }
-          })
-        : _vm._e(),
+      _c("List", { attrs: { question: _vm.question, comments: _vm.comments } }),
       _vm._v(" "),
       _vm.canComment
         ? _c("Create", { attrs: { question: _vm.question } })

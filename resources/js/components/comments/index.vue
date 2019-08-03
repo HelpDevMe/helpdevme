@@ -1,7 +1,7 @@
 <template>
   <section>
     <p class="small">{{ comments.length }} resposta(s)</p>
-    <List v-if="$userId" :question="question" :comments="comments" />
+    <List :question="question" :comments="comments" />
     <Create v-if="canComment" :question="question" />
   </section>
 </template>

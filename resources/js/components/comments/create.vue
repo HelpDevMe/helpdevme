@@ -88,7 +88,7 @@ export default {
 						solid: true
 					});
 				})
-				.catch(() => {
+				.catch(error => {
 					this.loading = false;
 
 					this.$bvToast.toast('Tente novamente de uma forma diferente!', {

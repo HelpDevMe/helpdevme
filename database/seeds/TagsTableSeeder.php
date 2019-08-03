@@ -18,6 +18,12 @@ class TagsTableSeeder extends Seeder
                     'title' => 'VueJs',
                 ],
                 [
+                    'title' => 'HTML',
+                ],
+                [
+                    'title' => 'CSS',
+                ],
+                [
                     'title' => 'React',
                 ],
                 [
