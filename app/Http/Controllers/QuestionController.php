@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Post;
+use App\Finance;
+use App\User;
+
+use App\Events\PrivatePostSent;
+
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -61,7 +67,7 @@ class QuestionController extends Controller
 
         Question::create($request->all());
 
-        return redirect()->route('home')
+        return redirect()->route('questions.index')
             ->with('success', 'Pergunta criada!');
     }
 
@@ -122,9 +128,47 @@ class QuestionController extends Controller
         $question[$who] = 1;
         $question->save();
 
+        // Ambas as partes finalizaram
         if ($question->user_ended == 1 && $question->freelancer_ended == 1) {
-            // Ambas as partes finalizaram
-            return redirect()->action('FinanceController@transfer', ['question' => $question]);
+
+            // Atualizar status da pergunta
+            $question->status = Question::status['finalized'];
+            $question->update();
+
+            $post = $question->posts
+                ->where('type', Post::types['comment'])
+                ->where('status', Post::status['payment'])
+                ->first();
+
+            /**
+             * Histórico de transação do recebedor
+             */
+            $financeReceiver = new Finance;
+            $financeReceiver->user_id = $post->talk->user_id;
+            $financeReceiver->receiver_id = auth()->id();
+            $financeReceiver->type = Finance::types['received'];
+            $financeReceiver->budget = number_format($post->budget, 2, '.', '');
+            $financeReceiver->post_id = $post->id;
+            $financeReceiver->confirmed = 1;
+            $financeReceiver->save();
+
+            $receiver = User::find($post->talk->user_id);
+
+            $receiver->amount += $post->budget;
+            $receiver->update();
+
+            // Notificar em tempo real
+            $alert = new Post;
+            $alert->talk_id = $post->talk->id;
+            $alert->user_id = auth()->id();
+            $alert->body = 'Finalizado';
+            $alert->type = Post::types['alert'];
+            $alert->status = Post::status['finalized'];
+            $alert->save();
+
+            broadcast(new PrivatePostSent($alert));
+
+            return redirect()->route('talks.show', $post->talk)->with('success', 'Questão Finalizada!');
         }
 
         return back();

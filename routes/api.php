@@ -15,8 +15,12 @@ use Illuminate\Http\Request;
 
 Route::resource('posts', 'Api\PostController');
 
+Route::resource('comments', 'Api\CommentController');
+
 Route::resource('tags', 'Api\TagController');
 
 Route::resource('questions', 'Api\QuestionController');
 
 Route::resource('talks', 'Api\TalkController');
+
+Route::get('user', 'Api\UserController@current');

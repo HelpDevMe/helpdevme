@@ -5,7 +5,7 @@
 @section('content')
     <ul class="nav nav-pills mb-5">
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('profile.index') }}">Informações Pessoais</a>
+            <a class="nav-link" href="{{ route('profile.infos') }}">Informações Pessoais</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" href="{{ route('profile.password') }}">Senha</a>

@@ -11,10 +11,24 @@
 |
 */
 
-Broadcast::channel('privatechat.{user_id}.{receiver_id}.join', function ($user, $user_id, $receiver_id) {
-    return auth()->check() && ((int)$user->id === (int)$user_id || $user->id === (int)$receiver_id) ? $user : false;
+/**
+ * Presence
+ */
+Broadcast::channel('privatechat.{talk_id}.join', function ($user) {
+    return auth()->check() ? $user : false;
 });
 
-Broadcast::channel('privatechat.{user_id}.{receiver_id}.private', function ($user, $user_id, $receiver_id) {
-    return auth()->check() && ((int)$user->id === (int)$user_id || $user->id === (int)$receiver_id);
+/**
+ * Private
+ */
+Broadcast::channel('comments.{question_id}.private', function () {
+    return true;
+});
+
+Broadcast::channel('privatechat.{talk_id}.private', function () {
+    return auth()->check();
+});
+
+Broadcast::channel('newquestions', function () {
+    return true;
 });

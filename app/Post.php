@@ -12,32 +12,26 @@ class Post extends Model
         'status',
         'type',
         'talk_id',
-        'user_id',
-        'question_id'
+        'user_id'
     ];
 
     const status = [
         'analyzing' => 0,
         'refused' => 1,
         'accept' => 2,
-        'payment' => 3
+        'payment' => 3,
+        'finalized' => 4
     ];
 
     const types = [
         'message' => 0,
         'comment' => 1,
-        'alert' => 2,
-        'finalized' => 3
+        'alert' => 2
     ];
 
     public function talk()
     {
         return $this->belongsTo('App\Talk');
-    }
-
-    public function question()
-    {
-        return $this->belongsTo('App\Question');
     }
 
     public function user()

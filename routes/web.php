@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-Route::view('/about', 'about')->name('about');
+Route::view('/', 'site')->name('index');
 
 Route::resource('talks', 'TalkController');
 

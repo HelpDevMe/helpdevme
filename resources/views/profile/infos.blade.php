@@ -6,7 +6,7 @@
 
     <ul class="nav nav-pills mb-5">
         <li class="nav-item">
-            <a class="nav-link active" href="{{ route('profile.index') }}">Informações Pessoais</a>
+            <a class="nav-link active" href="{{ route('profile.infos') }}">Informações Pessoais</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('profile.password') }}">Senha</a>
@@ -38,7 +38,7 @@
                             <div class="col-md-6">
                                 <div class="row align-items-center">
                                     <div class="col-lg-2">
-                                        <img class="img-fluid avatar" src="{{ asset('storage/img/avatars/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->avatar }}" title="{{ auth()->user()->avatar }}">
+                                        @include('shared.avatar', ['user' => auth()->user()])
                                     </div>
                                     <div class="col">
                                         <input type="file" class="form-control-file" name="avatar" id="avatarFile">
@@ -73,7 +73,7 @@
                                 @endif
                             </div>
                         </div>
-        
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

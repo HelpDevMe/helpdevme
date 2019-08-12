@@ -35,19 +35,19 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
         $this->mapProfileRoutes();
-        
+
         $this->mapFinancesRoutes();
-        
+
         $this->mapPostRoutes();
 
         $this->mapWebRoutes();
-        
+
         $this->mapPaymentsRoutes();
 
         $this->mapQuestionsRoutes();
+
+        $this->mapApiRoutes();
     }
 
     /**
@@ -60,8 +60,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -74,43 +74,44 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+            ->as('api.')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
-    
+
     protected function mapProfileRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/profile.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/profile.php'));
     }
-    
+
     protected function mapPostRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/post.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/post.php'));
     }
-    
+
     protected function mapFinancesRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/finances.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/finances.php'));
     }
-    
+
     protected function mapQuestionsRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/questions.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/questions.php'));
     }
-    
+
     protected function mapPaymentsRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/payments.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/payments.php'));
     }
 }

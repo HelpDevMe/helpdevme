@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\Question;
 use App\Finance;
-use App\User;
 use Illuminate\Http\Request;
 use App\Events\PrivatePostSent;
 
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Api\Amount;
-use PayPal\Api\Details;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
@@ -139,14 +137,14 @@ class PaymentController extends Controller
 
     public function statusPay(Request $request, $id)
     {
-        $finance = Finance::find($id);
+        $finance = Finance::findOrFail($id);
         $post = Post::findOrFail($finance->post->id);
 
         $this->authorize('status', $post);
 
         if (empty($request->input('PayerID')) || empty($request->input('token'))) {
             Finance::destroy($id);
-            return redirect()->route('home')->with('error', 'Pagamento falhou :(');
+            return redirect()->route('questions.index')->with('error', 'Pagamento falhou :(');
         }
 
         $paymentId = $request->get('paymentId');
@@ -165,7 +163,7 @@ class PaymentController extends Controller
             $question->update();
 
             /**
-             * Passa a mensagem para status 
+             * Passa a mensagem para status
              */
             $post->status = Post::status['payment'];
             $post->update();
@@ -173,11 +171,9 @@ class PaymentController extends Controller
             $alert = new Post;
             $alert->talk_id = $post->talk->id;
             $alert->user_id = auth()->id();
-            $alert->question_id = $question->id;
             $alert->body = 'Pagamento Efetuado';
             $alert->type = Post::types['alert'];
             $alert->status = Post::status['payment'];
-            $alert->question = $post->question;
             $alert->save();
 
             broadcast(new PrivatePostSent($alert));
@@ -187,12 +183,12 @@ class PaymentController extends Controller
         }
 
         Finance::destroy($id);
-        return redirect()->route('home')->with('error', 'Pagamento falhou :(');
+        return redirect()->route('questions.index')->with('error', 'Pagamento falhou :(');
     }
 
     public function canceledPay(Request $request, $id)
     {
-        return redirect()->route('home')->with('error', 'Pagamento Cancelado');
+        return redirect()->route('questions.index')->with('error', 'Pagamento Cancelado');
     }
 
     /**
@@ -267,5 +263,64 @@ class PaymentController extends Controller
     {
         Finance::destroy($id);
         return redirect()->route('finances.index')->with('error', 'Pagamento Cancelado');
+    }
+
+    /**
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function transfer(Request $request)
+    {
+        $post = Post::findOrFail($request->id);
+        $user = auth()->user();
+        $question = $post->talk->question;
+
+        if ($user->amount >= $post->budget) {
+
+            /**
+             * Mudar o status da pergunta
+             */
+            $question->status = Question::status['payment'];
+            $question->update();
+
+            /**
+             * Retirar valor do ajudado
+             */
+            $user->amount -= $post->budget;
+            $user->update();
+
+            /**
+             * Histórico de transação do pagador
+             */
+            $finance = new Finance;
+            $finance->user_id = $user->id;
+            $finance->receiver_id = $post->talk->user_id;
+            $finance->type = Finance::types['deduction'];
+            $finance->budget = number_format($post->budget, 2, '.', '');
+            $finance->post_id = $post->id;
+            $finance->confirmed = 1;
+            $finance->save();
+
+            $post->status = Post::status['payment'];
+            $post->update();
+
+            $alert = new Post;
+            $alert->talk_id = $post->talk->id;
+            $alert->user_id = $user->id;
+            $alert->body = 'Pagamento Efetuado';
+            $alert->type = Post::types['alert'];
+            $alert->status = Post::status['payment'];
+            $alert->save();
+
+            broadcast(new PrivatePostSent($alert));
+
+            return redirect()->route('talks.show', $post->talk)
+                ->with('success', 'Pagamento Feito! Trabalhem na sua pergunta ;)');
+        } else {
+            // Usuário não possui saldo suficiente
+        }
+
+        return redirect()->route('finances.index')->with('success', 'Pagamento efetuado com sucesso!');
     }
 }

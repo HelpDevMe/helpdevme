@@ -1,9 +1,12 @@
-#navbarDropdownTalks {
-    .list-group {
-        .list-group-item {
-            a:hover {
-                small {
-                    text-decoration: none;
+nav {
+    fill: currentColor;
+    #navbarDropdownTalks {
+        .list-group {
+            .list-group-item {
+                a:hover {
+                    small {
+                        text-decoration: none;
+                    }
                 }
             }
         }

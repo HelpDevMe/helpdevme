@@ -3,10 +3,9 @@
 namespace App\Events;
 
 use App\Post;
-use Illuminate\Broadcasting\Channel;
+
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -24,7 +23,7 @@ class PrivatePostSent implements ShouldBroadcast
      */
     public function __construct(Post $post)
     {
-        $this->post = $post;
+        $this->post = $post->load('talk');
     }
 
     /**
@@ -34,6 +33,6 @@ class PrivatePostSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('privatechat.' . $this->post->talk->user_id . '.' . $this->post->talk->receiver_id . '.private');
+        return new PrivateChannel('privatechat.' . $this->post->talk_id . '.private');
     }
 }

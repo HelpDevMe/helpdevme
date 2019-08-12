@@ -13,38 +13,44 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5>Total</h5>
             <span>
-                @budget(['budget' => $post->budget])
-                @endbudget
+                @include('shared.budget', ['budget' => $post->budget])
             </span>
         </div>
     </div>
 </div>
 <h2 class="text-muted font-weight-light h4 mt-5">Selecione o método de pagamento que deseja utilizar</h2>
-<div class="card mb-3">
+<div class="card mb-4">
     <div class="card-body">
         <div class="row align-items-center">
             <div class="col">
-                <h4 class="m-0">Saldo</h4>
+                <h4 class="m-0">Transferência</h4>
             </div>
-            <div class="col"></div>
+            <div class="col text-center">
+                <h5>Seu Saldo</h5>
+                @include('shared.budget', ['budget' => auth()->user()->amount])
+                <br>
+                @if (auth()->user()->amount < $post->budget)
+                    <a href="{{ route('finances.fund') }}" class="btn btn-sm btn-primary">Adicionar Saldo</a>
+                @endif
+            </div>
             <div class="col text-right">
-                <div class="form-group">
-                    <form action="{{ route('payments.paypal.pay') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $post->id }}">
-                        <input type="hidden" name="budget" value="{{ $post->budget }}">
-                        <input type="hidden" name="title" value="{{ $post->talk->question->title }}">
-                        <button type="submit" class="btn btn-success px-5">Pagar</button>
-                    </form>
-                </div>
+                @if (auth()->user()->amount >= $post->budget)
+                    <div class="form-group">
+                        <form action="{{ route('payments.transfer') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $post->id }}">
+                            <button type="submit" class="btn btn-success px-5">Pagar</button>
+                        </form>
+                    </div>
+                @endif
                 <h5 class="text-success">
-                    @budget(['budget' => $post->budget])
-                    @endbudget
+                    @include('shared.budget', ['budget' => $post->budget])
                 </h5>
             </div>
         </div>
     </div>
 </div>
+
 <div class="card">
     <div class="card-body">
         <div class="row align-items-center">
@@ -69,8 +75,7 @@
                     </form>
                 </div>
                 <h5 class="text-success">
-                    @budget(['budget' => $post->budget])
-                    @endbudget
+                        @include('shared.budget', ['budget' => $post->budget])
                 </h5>
             </div>
         </div>

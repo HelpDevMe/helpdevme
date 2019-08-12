@@ -51,7 +51,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {
         $request->validate([
             'body' => 'required'
         ]);
@@ -64,17 +64,12 @@ class PostController extends Controller
 
         $this->authorize('store-comment', $talk);
 
-        Post::updateOrCreate(
-            [
-                'talk_id' => $talk->id,
-                'user_id' => auth()->id()
-            ],
-            [
-                'body'=> $request->body,
-                'budget'=> $request->budget,
-                'question_id' => $request->question_id
-            ]
-        );
+        Post::create([
+            'talk_id' => $talk->id,
+            'user_id' => auth()->id(),
+            'body' => $request->body,
+            'budget' => $request->budget
+        ]);
 
         return back()->with('success', 'Mensagem enviada!');
     }
@@ -88,7 +83,7 @@ class PostController extends Controller
     public function show($id)
     {
         $question = Question::findOrFail($id);
-        
+
         return view('posts.show', compact('question'));
     }
 
@@ -153,7 +148,6 @@ class PostController extends Controller
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
-        $alert->question_id = $question->id;
         $alert->body = 'Proposta Aceita';
         $alert->type = Post::types['alert'];
         $alert->status = Post::status['accept'];
@@ -176,7 +170,7 @@ class PostController extends Controller
 
         $post->status = Post::status['refused'];
         $post->update();
-        
+
         $talk = $post->talk;
         $talk->status = Talk::status['inactive'];
         $talk->update();
@@ -184,7 +178,6 @@ class PostController extends Controller
         $alert = new Post;
         $alert->talk_id = $post->talk->id;
         $alert->user_id = auth()->id();
-        $alert->question_id = $question->id;
         $alert->body = 'Proposta Recusada';
         $alert->type = Post::types['alert'];
         $alert->status = Post::status['refused'];

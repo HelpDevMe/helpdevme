@@ -15,15 +15,13 @@
     <h1 class="display-4">Finanças</h1>
     <div class="text-right">
         <h2 class="text-success">
-            @budget(['budget' => auth()->user()->amount])
-            @endbudget
+            @include('shared.budget', ['budget' => auth()->user()->amount])
         </h2>
         <span>Saldo Atual</span>
     </div>
 </div>
 <div class="row mt-3 mb-5">
     <div class="col text-right">
-        {{-- <a href="#" class="btn btn-secondary">Opções de Saque</a> --}}
         <a href="{{ route('finances.fund') }}" class="btn btn-success">Adicionar Crédito</a>
     </div>
 </div>
@@ -71,8 +69,7 @@
                         <td class="text-right">
                             <span
                                 class="{{ $finance->type == App\Finance::types['received'] || $finance->type == App\Finance::types['fund'] ? 'text-success' : 'text-danger' }}">
-                                @budget(['budget' => $finance->budget])
-                                @endbudget
+                                @include('shared.budget', ['budget' => $finance->budget])
                             </span>
                         </td>
                     </tr>
