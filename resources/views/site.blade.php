@@ -5,7 +5,7 @@
     <div class="col">
         <article>
             <header class="mb-5">
-                <h1 class="display-1">Help Dev - Compartilhando Conhecimento</h1>
+                <h1 class="display-4">Help Dev - Compartilhando Conhecimento</h1>
                 <p class="lead">Quantas vezes n&oacute;s Dev's ficamos desesperados atr&aacute;s de uma solu&ccedil;&atilde;o para uma d&uacute;vida?</p>
             </header>
             <p class="card card-body">No stackoverflow n&atilde;o encontramos algo espec&iacute;fico e para fazer a nossa pr&oacute;pria pergunta &eacute; meio que "burocratico" e demora muito para se ter uma resposta.</p>
