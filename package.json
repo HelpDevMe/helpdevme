@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "start": "npm run prod",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -13,7 +14,6 @@
         "axios": "^0.18.1",
         "bootstrap": "^4.3.1",
         "cross-env": "^5.1",
-        "jquery": "^3.2",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.5",
         "popper.js": "^1.14.5",
