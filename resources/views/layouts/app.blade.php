@@ -2,6 +2,26 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-100">
 
 <head>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NPNFJ97');
+    </script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -21,6 +41,11 @@
 </head>
 
 <body class="bg-light h-100">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NPNFJ97" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="app" class="d-flex flex-column justify-content-between h-100">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top shadow-sm">
             <div class="container-fluid">
@@ -28,17 +53,14 @@
                     @svg('logo-helpdev')
                     <span class="ml-2">{{ config('app.name', 'HelpDev.me') }}</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="@lang('layouts.navbar.toggle_navigation')">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="@lang('layouts.navbar.toggle_navigation')">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav text-center">
                         <li class="nav-item">
-                            <a class="nav-link"
-                                href="{{ route('questions.index') }}">@lang('layouts.navbar.questions')</a>
+                            <a class="nav-link" href="{{ route('questions.index') }}">@lang('layouts.navbar.questions')</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}">@lang('layouts.navbar.users')</a>
@@ -61,16 +83,7 @@
                         </li>
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown"
-                                class="nav-link dropdown-toggle d-flex justify-content-center"
-                                title="Minha Conta"
-                                href="#"
-                                role="button"
-                                v-b-tooltip.hover
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex justify-content-center" title="Minha Conta" href="#" role="button" v-b-tooltip.hover data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @include('shared.avatar', ['user' => auth()->user()])
                                 <span class="pl-3 d-md-none d-block">{{ Auth::user()->name }}</span>
                             </a>
@@ -106,22 +119,11 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdownTalks"
-                                role="button"
-                                data-toggle="dropdown"
-                                v-b-tooltip.hover
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                class="nav-link dropdown-toggle d-flex justify-content-center"
-                                href="#"
-                                title="@lang('layouts.navbar.posts')"
-                            >
+                            <a id="navbarDropdownTalks" role="button" data-toggle="dropdown" v-b-tooltip.hover aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle d-flex justify-content-center" href="#" title="@lang('layouts.navbar.posts')">
                                 <i class="fas fa-comments fa-2x"></i>
                                 <span class="pl-3 d-md-none d-block">Conversas</span>
                             </a>
-                            <div
-                                class="dropdown-menu dropdown-menu-right my-0 py-0"
-                                aria-labelledby="navbarDropdownTalks">
+                            <div class="dropdown-menu dropdown-menu-right my-0 py-0" aria-labelledby="navbarDropdownTalks">
                                 <list-chat></list-chat>
                                 <a class="btn btn-link btn-block" href="{{ route('talks.index') }}">Ver Tudo</a>
                             </div>
